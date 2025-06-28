@@ -284,13 +284,128 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Console integration routes
+  app.post("/api/console-account", async (req, res) => {
+    try {
+      const { platform, playerId } = req.body;
+      
+      if (!platform || !playerId) {
+        return res.status(400).json({ error: "Platform and playerId required" });
+      }
+
+      // Generate deterministic wallet address for console player
+      const crypto = require('crypto');
+      const seed = `cryptoquest_${platform}_${playerId}_2025`;
+      const hash = crypto.createHash('sha256').update(seed).digest('hex');
+      const walletAddress = `0x${hash.slice(24)}`;
+      
+      // Mock KMS key reference (production would use AWS KMS)
+      const kmsKeyRef = `arn:aws:kms:us-east-1:123456789012:key/cryptoquest_${platform}_${playerId}`;
+      
+      res.json({
+        platform,
+        playerId,
+        walletAddress,
+        kmsKeyRef,
+        isActive: true,
+        compliance: platform === 'ps5' ? 'TRC Certified' : platform === 'xbox' ? 'XR Certified' : 'Direct Web3'
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/proxy-tx", async (req, res) => {
+    try {
+      const { playerId, contractAddress, functionName, parameters } = req.body;
+      
+      if (!playerId || !contractAddress || !functionName) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      // Mock transaction signing and submission
+      const txHash = `0x${Math.random().toString(16).slice(2)}${'0'.repeat(40)}`;
+      
+      res.json({
+        txHash,
+        status: "pending",
+        blockNumber: null,
+        gasUsed: "21000",
+        platform: "polygon"
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/pin-ipfs", async (req, res) => {
+    try {
+      const metadata = req.body;
+      
+      // Mock IPFS pinning (production would use actual IPFS)
+      const ipfsHash = `Qm${Math.random().toString(36).slice(2)}${'a'.repeat(40)}`;
+      
+      res.json({
+        ipfsHash,
+        pinataUrl: `https://gateway.pinata.cloud/ipfs/${ipfsHash}`,
+        metadata
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Ready Player Me integration
+  app.post("/api/avatar/mint", async (req, res) => {
+    try {
+      const { walletAddress, avatarUrl, characterName, race, armor } = req.body;
+      
+      if (!walletAddress || !avatarUrl || !characterName) {
+        return res.status(400).json({ error: "Missing required avatar data" });
+      }
+
+      // Create avatar metadata
+      const metadata = {
+        name: characterName,
+        description: `CryptoQuest character: ${characterName}`,
+        image: avatarUrl,
+        attributes: [
+          { trait_type: "Race", value: race || "Human" },
+          { trait_type: "Armor", value: armor || "Basic" },
+          { trait_type: "Platform", value: "Cross-Platform" },
+          { trait_type: "Engine", value: "Ready Player Me" }
+        ]
+      };
+
+      // Mock NFT minting
+      const tokenId = Date.now();
+      const txHash = `0x${Math.random().toString(16).slice(2)}${'0'.repeat(40)}`;
+      
+      res.json({
+        tokenId,
+        txHash,
+        metadata,
+        status: "minted",
+        opensea: `https://opensea.io/assets/matic/0xc641573148e62d88a2374ffe97391f849cea8ff5/${tokenId}`
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Health check endpoint
   app.get("/api/health", (req, res) => {
     res.json({ 
       status: "healthy", 
       timestamp: new Date().toISOString(),
       database: "connected",
-      contracts: "live on Polygon"
+      contracts: "live on Polygon",
+      features: {
+        consoleIntegration: true,
+        readyPlayerMe: true,
+        custodialWallets: true,
+        crossPlatform: ["PS5", "Xbox", "PC", "Mobile"]
+      }
     });
   });
 

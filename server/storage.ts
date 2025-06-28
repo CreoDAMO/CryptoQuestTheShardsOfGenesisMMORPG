@@ -105,7 +105,7 @@ export class DatabaseStorage implements IStorage {
   async createPlayer(insertPlayer: InsertPlayer): Promise<Player> {
     const [player] = await db
       .insert(players)
-      .values(insertPlayer)
+      .values(insertPlayer as any)
       .returning();
     return player;
   }
@@ -113,7 +113,7 @@ export class DatabaseStorage implements IStorage {
   async updatePlayer(id: number, updates: Partial<InsertPlayer>): Promise<Player> {
     const [player] = await db
       .update(players)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({ ...updates, updatedAt: new Date() } as any)
       .where(eq(players.id, id))
       .returning();
     return player;
@@ -273,10 +273,7 @@ export class DatabaseStorage implements IStorage {
   async createNftCollection(insertNft: InsertNftCollection): Promise<NftCollection> {
     const [nft] = await db
       .insert(nftCollections)
-      .values({
-        ...insertNft,
-        metadata: insertNft.metadata || null,
-      })
+      .values([insertNft] as any)
       .returning();
     return nft;
   }
@@ -293,7 +290,7 @@ export class DatabaseStorage implements IStorage {
   async createDaoProposal(insertProposal: InsertDaoProposal): Promise<DaoProposal> {
     const [proposal] = await db
       .insert(daoProposals)
-      .values(insertProposal)
+      .values([insertProposal] as any)
       .returning();
     return proposal;
   }

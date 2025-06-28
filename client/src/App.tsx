@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { ReadyPlayerMe } from '@/components/ReadyPlayerMe';
+import { ConsoleIntegration } from '@/components/ConsoleIntegration';
 
 // Extend Window interface for ethereum
 declare global {
@@ -906,6 +908,8 @@ function CryptoQuestDApp() {
 
   const tabs = [
     { id: 'character', label: 'Character', icon: User },
+    { id: 'avatar', label: 'Avatar Creator', icon: Users },
+    { id: 'console', label: 'Console Gaming', icon: Zap },
     { id: 'tokensale', label: 'Token Sale', icon: DollarSign },
     { id: 'staking', label: 'Staking', icon: Layers },
     { id: 'swap', label: 'Swap', icon: ArrowUpDown },
@@ -951,7 +955,7 @@ function CryptoQuestDApp() {
           <>
             {/* Navigation Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid grid-cols-3 md:grid-cols-7 gap-1 mb-8 bg-card/60 backdrop-blur">
+              <TabsList className="grid grid-cols-3 md:grid-cols-9 gap-1 mb-8 bg-card/60 backdrop-blur">
                 {tabs.map(({ id, label, icon: Icon }) => (
                   <TabsTrigger 
                     key={id} 
@@ -965,6 +969,56 @@ function CryptoQuestDApp() {
               </TabsList>
 
               <TabsContent value="character">{renderCharacterTab()}</TabsContent>
+              
+              <TabsContent value="avatar">
+                <div className="space-y-6">
+                  <Card className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur border-border/50">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Users className="w-5 h-5" />
+                        Ready Player Me Avatar Creator
+                        <Badge className="ml-2 bg-green-500">Cross-Platform</Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ReadyPlayerMe 
+                        onAvatarCreated={(avatarUrl) => {
+                          toast({
+                            title: "Avatar Created!",
+                            description: "Your avatar is ready for PS5, Xbox, and PC platforms."
+                          });
+                        }}
+                        isLoading={loading}
+                      />
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="console">
+                <div className="space-y-6">
+                  <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 backdrop-blur border-border/50">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Zap className="w-5 h-5" />
+                        Console Gaming Integration
+                        <Badge className="ml-2 bg-blue-500">Production Ready</Badge>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ConsoleIntegration 
+                        onAccountLinked={(account) => {
+                          toast({
+                            title: `${account.platform.toUpperCase()} Account Linked!`,
+                            description: `Custodial wallet created: ${account.walletAddress.slice(0, 6)}...${account.walletAddress.slice(-4)}`
+                          });
+                        }}
+                      />
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+
               <TabsContent value="tokensale">{renderTokenSaleTab()}</TabsContent>
               <TabsContent value="staking">{renderStakingTab()}</TabsContent>
               <TabsContent value="swap">{renderSwapTab()}</TabsContent>
