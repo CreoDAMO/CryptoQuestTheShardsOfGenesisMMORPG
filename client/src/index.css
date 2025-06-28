@@ -102,6 +102,84 @@
     0%, 100% { box-shadow: 0 0 10px hsl(247, 83%, 67%, 0.5); }
     50% { box-shadow: 0 0 20px hsl(247, 83%, 67%, 0.8); }
   }
+
+  /* CryptoQuest specific styles */
+  .logo-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+  
+  .logo-text {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+    background-size: 300% 300%;
+    animation: gradient 3s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+  }
+  
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .stat-card {
+    background: linear-gradient(135deg, rgba(103, 58, 183, 0.2), rgba(63, 81, 181, 0.2));
+    border: 1px solid rgba(103, 58, 183, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(103, 58, 183, 0.4);
+  }
+
+  .contract-card {
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.3), rgba(91, 33, 182, 0.3));
+    border: 1px solid rgba(139, 69, 19, 0.3);
+    backdrop-filter: blur(10px);
+  }
+
+  .contract-card:hover {
+    border-color: rgba(139, 69, 19, 0.6);
+    box-shadow: 0 8px 32px rgba(139, 69, 19, 0.2);
+  }
+
+  .neon-border {
+    border: 2px solid transparent;
+    background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff) border-box;
+    border-radius: 8px;
+  }
+
+  .crypto-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .token-card {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .staking-card {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+
+  .gaming-pattern {
+    background-image: 
+      radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.1) 2px, transparent 0),
+      radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.05) 2px, transparent 0);
+    background-size: 100px 100px;
+  }
 }
 
 .font-inter {
