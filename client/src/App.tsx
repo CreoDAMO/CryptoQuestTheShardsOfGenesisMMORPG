@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ReadyPlayerMe } from '@/components/ReadyPlayerMe';
 import { ConsoleIntegration } from '@/components/ConsoleIntegration';
+import { AdvancedGameEngine } from '@/components/gaming/AdvancedGameEngine';
+import { CloudGamingInterface } from '@/components/gaming/CloudGamingInterface';
+import { SocialGamingHub } from '@/components/gaming/SocialGamingHub';
+import { AIGamingAssistant } from '@/components/gaming/AIGamingAssistant';
 
 // Extend Window interface for ethereum
 declare global {
@@ -22,7 +26,7 @@ import {
   Users, Sword, Shield, Zap, Heart, Star, Package, Scroll, 
   Hammer, DollarSign, Clock, TrendingUp, Award, Vote, Timer, 
   Image, User, Wallet, CheckCircle, XCircle, AlertTriangle,
-  PlusCircle, Plus, ArrowUpDown, Layers, Coins, TrendingDown
+  PlusCircle, Plus, ArrowUpDown, Layers, Coins, TrendingDown, Gamepad2
 } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
@@ -910,6 +914,7 @@ function CryptoQuestDApp() {
     { id: 'character', label: 'Character', icon: User },
     { id: 'avatar', label: 'Avatar Creator', icon: Users },
     { id: 'console', label: 'Console Gaming', icon: Zap },
+    { id: 'gaming', label: 'Gaming Hub', icon: Gamepad2 },
     { id: 'tokensale', label: 'Token Sale', icon: DollarSign },
     { id: 'staking', label: 'Staking', icon: Layers },
     { id: 'swap', label: 'Swap', icon: ArrowUpDown },
@@ -1016,6 +1021,87 @@ function CryptoQuestDApp() {
                       />
                     </CardContent>
                   </Card>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="gaming">
+                <div className="space-y-6">
+                  <Card className="bg-gradient-to-r from-purple-600/20 to-cyan-600/20 backdrop-blur border-border/50">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Gamepad2 className="w-5 h-5" />
+                        Revolutionary Gaming Hub
+                        <Badge className="ml-2 bg-gradient-to-r from-purple-500 to-cyan-500">Industry Disruption</Badge>
+                      </CardTitle>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Advanced gaming features that combine PS5, Xbox, PC, and mobile capabilities in React
+                      </p>
+                    </CardHeader>
+                  </Card>
+
+                  <Tabs defaultValue="engine" className="w-full">
+                    <TabsList className="grid w-full grid-cols-4">
+                      <TabsTrigger value="engine">Game Engine</TabsTrigger>
+                      <TabsTrigger value="cloud">Cloud Gaming</TabsTrigger>
+                      <TabsTrigger value="social">Social Hub</TabsTrigger>
+                      <TabsTrigger value="ai">AI Assistant</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="engine" className="space-y-6">
+                      <AdvancedGameEngine 
+                        onPerformanceUpdate={(metrics) => {
+                          if (metrics.fps < 30) {
+                            toast({
+                              title: "Performance Alert",
+                              description: "Frame rate dropped below 30 FPS. Consider optimizing settings.",
+                              variant: "destructive"
+                            });
+                          }
+                        }}
+                        onHapticFeedback={(intensity, duration) => {
+                          console.log(`Haptic feedback: ${intensity} intensity for ${duration}ms`);
+                        }}
+                      />
+                    </TabsContent>
+                    
+                    <TabsContent value="cloud" className="space-y-6">
+                      <CloudGamingInterface 
+                        onStreamingStateChange={(state) => {
+                          if (state.isStreaming) {
+                            toast({
+                              title: "Cloud Gaming Active",
+                              description: `Streaming at ${state.quality} with ${state.frameRate}fps`
+                            });
+                          }
+                        }}
+                      />
+                    </TabsContent>
+                    
+                    <TabsContent value="social" className="space-y-6">
+                      <SocialGamingHub />
+                    </TabsContent>
+                    
+                    <TabsContent value="ai" className="space-y-6">
+                      <AIGamingAssistant 
+                        onOptimizationApplied={(optimization) => {
+                          toast({
+                            title: "AI Optimization Applied",
+                            description: optimization.title,
+                            duration: 3000
+                          });
+                        }}
+                        onInsightGenerated={(insight) => {
+                          if (insight.priority === 'high') {
+                            toast({
+                              title: "AI Insight",
+                              description: insight.title,
+                              duration: 5000
+                            });
+                          }
+                        }}
+                      />
+                    </TabsContent>
+                  </Tabs>
                 </div>
               </TabsContent>
 
