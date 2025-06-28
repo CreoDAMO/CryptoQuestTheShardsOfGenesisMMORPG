@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,9 +10,10 @@ import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AlertTriangle, Shield, Upload, Settings, Code, Zap, Globe, Lock, DollarSign, TrendingUp } from 'lucide-react';
+import { AlertTriangle, Shield, Upload, Settings, Code, Zap, Globe, Lock, DollarSign, TrendingUp, Wallet } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
+import { MetaMaskIntegration } from './MetaMaskIntegration';
 
 interface ContractUpgrade {
   id: string;
@@ -55,6 +56,8 @@ export function AdminPanel() {
   const [selectedContract, setSelectedContract] = useState<string>('');
   const [fundingAmount, setFundingAmount] = useState<string>('');
   const [tokenAddress, setTokenAddress] = useState<string>('');
+  const [isWalletConnected, setIsWalletConnected] = useState<boolean>(false);
+  const [walletAddress, setWalletAddress] = useState<string>('');
   const [deploymentConfig, setDeploymentConfig] = useState<DeploymentConfig>({
     network: 'testnet',
     gasPrice: '30',
@@ -64,6 +67,45 @@ export function AdminPanel() {
     verifyContract: true,
     enableProxy: true
   });
+
+  useEffect(() => {
+    checkWalletConnection();
+    
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+      window.ethereum.on('chainChanged', () => window.location.reload());
+    }
+
+    return () => {
+      if (window.ethereum?.removeListener) {
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      }
+    };
+  }, []);
+
+  const checkWalletConnection = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length > 0) {
+          setIsWalletConnected(true);
+          setWalletAddress(accounts[0]);
+        }
+      } catch (error) {
+        console.error('Error checking wallet connection:', error);
+      }
+    }
+  };
+
+  const handleAccountsChanged = (accounts: string[]) => {
+    if (accounts.length === 0) {
+      setIsWalletConnected(false);
+      setWalletAddress('');
+    } else {
+      setIsWalletConnected(true);
+      setWalletAddress(accounts[0]);
+    }
+  };
 
   const { data: contractUpgrades, isLoading: upgradesLoading } = useQuery({
     queryKey: ['/api/admin/contract-upgrades'],
@@ -235,15 +277,58 @@ export function AdminPanel() {
     scanTokenMutation.mutate(tokenAddress);
   };
 
+  if (!isWalletConnected) {
+    return (
+      <div className="space-y-6">
+        <div className="border-b border-gray-200 dark:border-gray-800 pb-4">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Ultimate Gaming Industry Control Center
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
+            Revolutionary platform management system that changes gaming forever
+          </p>
+        </div>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Wallet className="w-5 h-5" />
+              Wallet Connection Required
+            </CardTitle>
+            <CardDescription>
+              Connect your MetaMask wallet to access the Admin Control Center and all revolutionary blockchain features
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <MetaMaskIntegration />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="border-b border-gray-200 dark:border-gray-800 pb-4">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Ultimate Gaming Industry Control Center
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">
-          Revolutionary platform management system that changes gaming forever
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Ultimate Gaming Industry Control Center
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Revolutionary platform management system that changes gaming forever
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Badge variant="default" className="bg-green-600">
+              <Wallet className="w-3 h-3 mr-1" />
+              Connected
+            </Badge>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {walletAddress.substring(0, 6)}...{walletAddress.substring(38)}
+            </div>
+          </div>
+        </div>
       </div>
 
       <Tabs defaultValue="funding" className="space-y-6">
