@@ -9,6 +9,7 @@ import { ARVRInterface } from '@/components/metaverse/ARVRInterface';
 import { LanguageWrappers } from '@/components/metaverse/LanguageWrappers';
 import { CoinbaseIntegration } from '@/components/coinbase/CoinbaseIntegration';
 import { CoinbaseWagmiProvider } from '@/components/coinbase/WagmiProvider';
+import { AggLayerIntegration } from '@/components/agglayer/AggLayerIntegration';
 
 // Extend Window interface for ethereum
 declare global {
@@ -1044,7 +1045,7 @@ function CryptoQuestDApp() {
                   </Card>
 
                   <Tabs defaultValue="engine" className="w-full">
-                    <TabsList className="grid w-full grid-cols-7">
+                    <TabsList className="grid w-full grid-cols-8">
                       <TabsTrigger value="engine">Game Engine</TabsTrigger>
                       <TabsTrigger value="cloud">Cloud Gaming</TabsTrigger>
                       <TabsTrigger value="social">Social Hub</TabsTrigger>
@@ -1052,6 +1053,7 @@ function CryptoQuestDApp() {
                       <TabsTrigger value="metaverse">AR/VR/XR</TabsTrigger>
                       <TabsTrigger value="languages">Multi-Language</TabsTrigger>
                       <TabsTrigger value="payments">CQT Payments</TabsTrigger>
+                      <TabsTrigger value="agglayer">AggLayer</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value="engine" className="space-y-6">
@@ -1121,6 +1123,10 @@ function CryptoQuestDApp() {
                       <CoinbaseWagmiProvider>
                         <CoinbaseIntegration />
                       </CoinbaseWagmiProvider>
+                    </TabsContent>
+                    
+                    <TabsContent value="agglayer" className="space-y-6">
+                      <AggLayerIntegration />
                     </TabsContent>
                   </Tabs>
                 </div>

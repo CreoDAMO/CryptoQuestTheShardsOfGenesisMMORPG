@@ -738,6 +738,253 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // AggLayer Cross-Chain Integration
+  app.get("/api/agglayer/chains", (req, res) => {
+    res.json({
+      supportedChains: [
+        {
+          id: 'polygon-pos',
+          name: 'Polygon PoS',
+          chainId: 137,
+          icon: '🔮',
+          tvl: '$1.2B',
+          status: 'active',
+          type: 'EVM Sidechain',
+          bridgeContract: '0x8484Ef722627bf18ca5Ae6BcF031c23E6e922B30',
+          features: ['unified-bridge', 'native-tokens', 'zk-security']
+        },
+        {
+          id: 'polygon-zkevm',
+          name: 'Polygon zkEVM',
+          chainId: 1101,
+          icon: '⚡',
+          tvl: '$85M',
+          status: 'active',
+          type: 'ZK-Rollup',
+          bridgeContract: '0x2a3DD3EB832aF982ec71669E178424b10Dca2EDe',
+          features: ['zk-proofs', 'evm-equivalent', 'shared-sequencing']
+        },
+        {
+          id: 'base',
+          name: 'Base',
+          chainId: 8453,
+          icon: '🔵',
+          tvl: '$2.8B',
+          status: 'connected',
+          type: 'Optimistic Rollup',
+          bridgeContract: '0x49048044D57e1C92A77f79988d21Fa8fAF74E97e',
+          features: ['coinbase-infrastructure', 'low-fees', 'fast-finality']
+        },
+        {
+          id: 'x-layer',
+          name: 'X Layer',
+          chainId: 196,
+          icon: '❌',
+          tvl: '$120M',
+          status: 'connected',
+          type: 'ZK-Rollup',
+          bridgeContract: '0x1234567890123456789012345678901234567890',
+          features: ['okx-integration', 'gaming-optimized', 'institutional-grade']
+        },
+        {
+          id: 'astar',
+          name: 'Astar zkEVM',
+          chainId: 3776,
+          icon: '⭐',
+          tvl: '$45M',
+          status: 'connected',
+          type: 'ZK-Rollup',
+          bridgeContract: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
+          features: ['polkadot-connection', 'wasm-support', 'cross-consensus']
+        }
+      ],
+      totalTVL: '$4.25B',
+      aggregationFeatures: {
+        unifiedLiquidity: true,
+        nativeTokens: true,
+        zkSecurity: true,
+        sharedSequencing: false,
+        chainAggregation: false
+      }
+    });
+  });
+
+  app.post("/api/agglayer/bridge", async (req, res) => {
+    try {
+      const { fromChain, toChain, asset, amount, userAddress } = req.body;
+      
+      // Generate bridge transaction ID
+      const bridgeId = `bridge_${Date.now()}`;
+      const txHash = `0x${Math.random().toString(16).substr(2, 64)}`;
+      
+      // Store bridge transaction
+      await storage.createTokenTransaction({
+        walletAddress: userAddress,
+        transactionType: 'cross_chain_bridge',
+        amount: parseFloat(amount),
+        status: 'pending',
+        txHash: txHash,
+        contractAddress: '0x8484Ef722627bf18ca5Ae6BcF031c23E6e922B30'
+      });
+
+      res.json({
+        success: true,
+        bridgeId,
+        txHash,
+        fromChain,
+        toChain,
+        asset,
+        amount,
+        status: 'pending',
+        estimatedTime: '2-5 minutes',
+        bridgeType: 'unified-bridge',
+        fees: {
+          bridgeFee: '0.1%',
+          gasFee: 'sponsored',
+          total: `${(parseFloat(amount) * 0.001).toFixed(4)} ${asset}`
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ 
+        success: false, 
+        error: "Bridge transaction failed", 
+        details: (error as Error).message 
+      });
+    }
+  });
+
+  app.get("/api/agglayer/liquidity", (req, res) => {
+    res.json({
+      unifiedLiquidity: {
+        totalTVL: '$4.25B',
+        assets: [
+          {
+            symbol: 'CQT',
+            totalAmount: '50M',
+            usdValue: '$6.25M',
+            chains: ['polygon-pos', 'base', 'polygon-zkevm'],
+            price: 0.125,
+            change24h: '+5.2%'
+          },
+          {
+            symbol: 'ETH',
+            totalAmount: '125K',
+            usdValue: '$427.5M',
+            chains: ['polygon-pos', 'base', 'polygon-zkevm', 'x-layer'],
+            price: 3420,
+            change24h: '+2.1%'
+          },
+          {
+            symbol: 'MATIC',
+            totalAmount: '850M',
+            usdValue: '$782M',
+            chains: ['polygon-pos', 'polygon-zkevm'],
+            price: 0.92,
+            change24h: '+1.8%'
+          },
+          {
+            symbol: 'USDC',
+            totalAmount: '1.2B',
+            usdValue: '$1.2B',
+            chains: ['polygon-pos', 'base', 'polygon-zkevm', 'x-layer', 'astar'],
+            price: 1.00,
+            change24h: '+0.1%'
+          }
+        ],
+        liquidityDistribution: {
+          'polygon-pos': '32%',
+          'base': '28%',
+          'polygon-zkevm': '18%',
+          'x-layer': '12%',
+          'astar': '10%'
+        }
+      }
+    });
+  });
+
+  app.post("/api/agglayer/gaming-action", async (req, res) => {
+    try {
+      const { actionType, userAddress, targetChains, cost } = req.body;
+      
+      const actionId = `action_${Date.now()}`;
+      
+      // Define gaming action benefits
+      const actionBenefits = {
+        'cross-guild': {
+          title: 'Cross-Chain Guild Formation',
+          benefits: ['Unified guild treasury', 'Cross-chain governance', 'Shared rewards'],
+          rewards: '150 CQT + Exclusive NFT'
+        },
+        'multi-chain-quest': {
+          title: 'Multi-Chain Quest Line',
+          benefits: ['Higher rewards', 'Unique NFTs', 'Cross-chain achievements'],
+          rewards: '75 CQT + Quest Badge'
+        },
+        'unified-marketplace': {
+          title: 'Unified Gaming Marketplace',
+          benefits: ['No wrapped tokens', 'Instant settlements', 'Lower fees'],
+          rewards: 'Trading Fee Discount'
+        }
+      };
+
+      const action = actionBenefits[actionType as keyof typeof actionBenefits];
+      
+      if (!action) {
+        return res.status(400).json({ error: "Invalid action type" });
+      }
+
+      res.json({
+        success: true,
+        actionId,
+        actionType,
+        title: action.title,
+        status: 'activated',
+        targetChains,
+        cost,
+        benefits: action.benefits,
+        rewards: action.rewards,
+        activationTime: new Date().toISOString(),
+        validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+      });
+    } catch (error) {
+      res.status(500).json({ 
+        success: false, 
+        error: "Gaming action failed", 
+        details: (error as Error).message 
+      });
+    }
+  });
+
+  app.get("/api/agglayer/bridge-history/:address", async (req, res) => {
+    try {
+      const { address } = req.params;
+      const transactions = await storage.getTokenTransactions(address);
+      
+      const bridgeTransactions = transactions
+        .filter(tx => tx.transactionType === 'cross_chain_bridge')
+        .map(tx => ({
+          id: tx.id,
+          txHash: tx.txHash,
+          amount: tx.amount,
+          status: tx.status,
+          timestamp: tx.createdAt,
+          bridgeType: 'unified-bridge',
+          estimatedTime: '2-5 minutes'
+        }));
+
+      res.json({
+        address,
+        totalBridges: bridgeTransactions.length,
+        transactions: bridgeTransactions
+      });
+    } catch (error) {
+      res.status(500).json({ 
+        error: "Failed to fetch bridge history", 
+        details: (error as Error).message 
+      });
+    }
+  });
+
   app.get("/api/health", (req, res) => {
     res.json({ 
       status: "healthy", 
@@ -753,6 +1000,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
           arVrXr: true,
           virtualWorlds: 4,
           languageWrappers: ["Python", "Rust", "C++", "WebAssembly"]
+        },
+        agglayer: {
+          crossChainBridge: true,
+          unifiedLiquidity: true,
+          connectedChains: 5,
+          zkSecurity: true,
+          nativeTokens: true
+        },
+        coinbase: {
+          cqtToken: "0x9d1075b41cd80ab08179f36bc17a7ff8708748ba",
+          baseNetwork: true,
+          agentKit: true,
+          onchainKit: true
         }
       }
     });
