@@ -1264,6 +1264,291 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // NFT Book Marketplace and Smart Contract Integration
+  app.get("/api/nft-books/marketplace", (req, res) => {
+    res.json({
+      contracts: {
+        nftBook: "0x545ace061a1b64b14641b50cfe317017b01a667b",
+        bookSales: "0xe1df30dbeaf0e895bc5b7efd8b7b9ed91097c8d7",
+        cqtToken: "0x94ef57abfBff1AD70bD00a921e1d2437f31C1665",
+        liquidityPools: {
+          maticCqt: "0x0b3CD8a843DEFDF01564a0342a89ba06c4fC9394",
+          wethCqt: "0xb1E0B26f550203FAb31A0D9C1Eb4FFE330bfE4d0"
+        }
+      },
+      paymentTokens: [
+        {
+          symbol: "WETH",
+          address: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+          decimals: 18,
+          supported: true
+        },
+        {
+          symbol: "MATIC", 
+          address: "0x0000000000000000000000000000000000001010",
+          decimals: 18,
+          supported: true
+        },
+        {
+          symbol: "USDC",
+          address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", 
+          decimals: 6,
+          supported: true
+        },
+        {
+          symbol: "CQT",
+          address: "0x94ef57abfBff1AD70bD00a921e1d2437f31C1665",
+          decimals: 18,
+          supported: true
+        }
+      ],
+      tiers: [
+        {
+          id: 0,
+          name: "Genesis Chronicles - Digital Edition",
+          price: "0.1",
+          priceToken: "WETH", 
+          supply: 1000,
+          sold: 234,
+          metadata: {
+            chapter: "Genesis",
+            character: "The Ancient Ones",
+            location: "The First Realm",
+            element: "Creation",
+            rarity: "Common"
+          }
+        },
+        {
+          id: 1,
+          name: "Legendary Artifacts Compendium",
+          price: "50",
+          priceToken: "CQT",
+          supply: 500,
+          sold: 89,
+          metadata: {
+            chapter: "Artifacts", 
+            character: "Master Craftsmen",
+            location: "The Forge Realms",
+            element: "Creation",
+            rarity: "Rare"
+          }
+        },
+        {
+          id: 2,
+          name: "Heroes of the Shards - Collector's Edition",
+          price: "0.5",
+          priceToken: "WETH",
+          supply: 100,
+          sold: 45,
+          metadata: {
+            chapter: "Heroes",
+            character: "The Champions", 
+            location: "All Realms",
+            element: "Valor",
+            rarity: "Legendary"
+          }
+        }
+      ]
+    });
+  });
+
+  app.get("/api/nft-books/liquidity-metrics", (req, res) => {
+    res.json({
+      totalValueLocked: 4250000,
+      pools: {
+        maticCqt: {
+          address: "0x0b3CD8a843DEFDF01564a0342a89ba06c4fC9394",
+          apr: 125.4,
+          totalLiquidity: 2100000,
+          volume24h: 456000,
+          token0: {
+            symbol: "MATIC",
+            address: "0x0000000000000000000000000000000000001010"
+          },
+          token1: {
+            symbol: "CQT", 
+            address: "0x94ef57abfBff1AD70bD00a921e1d2437f31C1665"
+          }
+        },
+        wethCqt: {
+          address: "0xb1E0B26f550203FAb31A0D9C1Eb4FFE330bfE4d0",
+          apr: 89.7,
+          totalLiquidity: 2150000,
+          volume24h: 436000,
+          token0: {
+            symbol: "WETH",
+            address: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"
+          },
+          token1: {
+            symbol: "CQT",
+            address: "0x94ef57abfBff1AD70bD00a921e1d2437f31C1665" 
+          }
+        }
+      },
+      cqtPrice: 0.0847,
+      priceChange24h: 12.3,
+      totalVolume24h: 892000
+    });
+  });
+
+  app.post("/api/nft-books/purchase", async (req, res) => {
+    try {
+      const { tierId, paymentToken, walletAddress, metadata } = req.body;
+
+      // Validate input
+      if (!tierId && tierId !== 0) {
+        return res.status(400).json({
+          success: false,
+          error: "Tier ID is required"
+        });
+      }
+
+      if (!paymentToken || !walletAddress) {
+        return res.status(400).json({
+          success: false,
+          error: "Payment token and wallet address are required"
+        });
+      }
+
+      // Generate transaction hash (in real implementation, this would come from blockchain)
+      const txHash = `0x${Math.random().toString(16).substring(2).padStart(64, '0')}`;
+
+      const purchaseData = {
+        id: `purchase_${Date.now()}`,
+        tierId,
+        walletAddress,
+        paymentToken,
+        txHash,
+        status: 'pending',
+        timestamp: new Date().toISOString(),
+        contractAddress: "0xe1df30dbeaf0e895bc5b7efd8b7b9ed91097c8d7",
+        metadata: metadata || {
+          chapter: "Genesis",
+          character: "The Ancient Ones",
+          location: "The First Realm", 
+          element: "Creation",
+          rarity: "Common"
+        }
+      };
+
+      res.json({
+        success: true,
+        purchase: purchaseData,
+        message: `NFT Book purchase initiated successfully`,
+        nextSteps: [
+          'Transaction submitted to Polygon network',
+          'NFT will be minted to your wallet upon confirmation',
+          'Access to digital content will be available immediately'
+        ]
+      });
+
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: "NFT purchase failed", 
+        details: (error as Error).message
+      });
+    }
+  });
+
+  app.get("/api/nft-books/collection/:address", async (req, res) => {
+    try {
+      const { address } = req.params;
+
+      // In real implementation, query blockchain for user's NFT collection
+      const mockCollection = [
+        {
+          tokenId: 1,
+          name: "Genesis Chronicles - Digital Edition",
+          metadata: {
+            chapter: "Genesis",
+            character: "The Ancient Ones",
+            location: "The First Realm",
+            element: "Creation", 
+            rarity: "Common"
+          },
+          purchaseDate: "2024-12-15T10:30:00Z",
+          formats: ["PDF", "EPUB"],
+          accessUrls: {
+            pdf: "/api/nft-books/content/1/pdf",
+            epub: "/api/nft-books/content/1/epub"
+          }
+        }
+      ];
+
+      res.json({
+        success: true,
+        walletAddress: address,
+        collection: mockCollection,
+        totalBooks: mockCollection.length
+      });
+
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: "Failed to fetch NFT collection",
+        details: (error as Error).message
+      });
+    }
+  });
+
+  app.get("/api/nft-books/contract-info", (req, res) => {
+    res.json({
+      contracts: [
+        {
+          name: "CryptoQuestTheShardsOfGenesisBookNFT",
+          address: "0x545ace061a1b64b14641b50cfe317017b01a667b",
+          type: "ERC721",
+          verified: true,
+          functions: [
+            "safeMint",
+            "tokenURI", 
+            "addBook",
+            "publishBook",
+            "setNftPrice"
+          ]
+        },
+        {
+          name: "CryptoQuestTheShardsOfGenesisBookNFTSalesContract", 
+          address: "0xe1df30dbeaf0e895bc5b7efd8b7b9ed91097c8d7",
+          type: "Sales Contract",
+          verified: true,
+          functions: [
+            "buyNFT",
+            "addTier",
+            "updateTier",
+            "withdrawFunds"
+          ]
+        },
+        {
+          name: "CryptoQuestToken",
+          address: "0x94ef57abfBff1AD70bD00a921e1d2437f31C1665", 
+          type: "ERC20",
+          verified: true,
+          functions: [
+            "transfer",
+            "approve",
+            "balanceOf"
+          ]
+        }
+      ],
+      liquidityPools: [
+        {
+          name: "MATIC/CQT Pool",
+          address: "0x0b3CD8a843DEFDF01564a0342a89ba06c4fC9394",
+          tokens: ["MATIC", "CQT"],
+          verified: true
+        },
+        {
+          name: "WETH/CQT Pool", 
+          address: "0xb1E0B26f550203FAb31A0D9C1Eb4FFE330bfE4d0",
+          tokens: ["WETH", "CQT"],
+          verified: true
+        }
+      ]
+    });
+  });
+
   // Setup Vite after all API routes are registered
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);

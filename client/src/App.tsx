@@ -11,6 +11,7 @@ import { CoinbaseIntegration } from '@/components/coinbase/CoinbaseIntegration';
 import { CoinbaseWagmiProvider } from '@/components/coinbase/WagmiProvider';
 import { AggLayerIntegration } from '@/components/agglayer/AggLayerIntegration';
 import { GrantProposal } from '@/components/GrantProposal';
+import { NFTBookMarketplace } from '@/components/NFTBookMarketplace';
 
 // Extend Window interface for ethereum
 declare global {
@@ -1046,7 +1047,7 @@ function CryptoQuestDApp() {
                   </Card>
 
                   <Tabs defaultValue="engine" className="w-full">
-                    <TabsList className="grid w-full grid-cols-9">
+                    <TabsList className="grid w-full grid-cols-10">
                       <TabsTrigger value="engine">Game Engine</TabsTrigger>
                       <TabsTrigger value="cloud">Cloud Gaming</TabsTrigger>
                       <TabsTrigger value="social">Social Hub</TabsTrigger>
@@ -1056,6 +1057,7 @@ function CryptoQuestDApp() {
                       <TabsTrigger value="payments">CQT Payments</TabsTrigger>
                       <TabsTrigger value="agglayer">AggLayer</TabsTrigger>
                       <TabsTrigger value="grants">Grant Strategy</TabsTrigger>
+                      <TabsTrigger value="nftbooks">NFT Books</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value="engine" className="space-y-6">
@@ -1133,6 +1135,10 @@ function CryptoQuestDApp() {
                     
                     <TabsContent value="grants" className="space-y-6">
                       <GrantProposal />
+                    </TabsContent>
+                    
+                    <TabsContent value="nftbooks" className="space-y-6">
+                      <NFTBookMarketplace />
                     </TabsContent>
                   </Tabs>
                 </div>
