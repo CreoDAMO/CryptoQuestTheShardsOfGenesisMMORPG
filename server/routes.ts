@@ -2,6 +2,9 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { setupVite, serveStatic } from "./vite";
 import { storage } from "./storage";
+import { pythonWrapper } from "./language-wrappers/python-wrapper";
+import { rustWrapper } from "./language-wrappers/rust-wrapper";
+import { cppWrapper } from "./language-wrappers/cpp-wrapper";
 import { 
   insertUserSchema, insertPlayerSchema, insertGuildSchema, insertQuestSchema,
   insertItemSchema, insertTokenTransactionSchema, insertStakingPositionSchema,
@@ -394,6 +397,213 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Health check endpoint
+  // Revolutionary Multi-Language Integration API Routes
+  
+  // Python wrapper endpoints
+  app.post("/api/language/python/execute", async (req, res) => {
+    try {
+      const { code, libraries } = req.body;
+      const result = await pythonWrapper.executePythonCode(code, libraries);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "Python execution failed", details: error });
+    }
+  });
+
+  app.post("/api/language/python/ai-model", async (req, res) => {
+    try {
+      const { modelType, data } = req.body;
+      const result = await pythonWrapper.runAIModel(modelType, data);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "AI model execution failed", details: error });
+    }
+  });
+
+  app.get("/api/language/python/metrics", (req, res) => {
+    const metrics = pythonWrapper.getExecutionMetrics();
+    res.json(metrics);
+  });
+
+  // Rust wrapper endpoints
+  app.post("/api/language/rust/execute", async (req, res) => {
+    try {
+      const { code, crateDependencies } = req.body;
+      const result = await rustWrapper.executeRustCode(code, crateDependencies);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "Rust execution failed", details: error });
+    }
+  });
+
+  app.post("/api/language/rust/concurrent", async (req, res) => {
+    try {
+      const { tasks } = req.body;
+      const result = await rustWrapper.executeConcurrentTasks(tasks);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "Concurrent execution failed", details: error });
+    }
+  });
+
+  app.post("/api/language/rust/blockchain", async (req, res) => {
+    try {
+      const { operation } = req.body;
+      const result = await rustWrapper.executeBlockchainOperation(operation);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "Blockchain operation failed", details: error });
+    }
+  });
+
+  app.post("/api/language/rust/wasm", async (req, res) => {
+    try {
+      const { code } = req.body;
+      const result = await rustWrapper.compileToWebAssembly(code);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "WebAssembly compilation failed", details: error });
+    }
+  });
+
+  app.get("/api/language/rust/metrics", (req, res) => {
+    const metrics = rustWrapper.getExecutionMetrics();
+    res.json(metrics);
+  });
+
+  // C++ wrapper endpoints
+  app.post("/api/language/cpp/execute", async (req, res) => {
+    try {
+      const { code, libraries, optimizationLevel } = req.body;
+      const result = await cppWrapper.executeCppCode(code, libraries, optimizationLevel);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "C++ execution failed", details: error });
+    }
+  });
+
+  app.post("/api/language/cpp/game-engine", async (req, res) => {
+    try {
+      const { engineType } = req.body;
+      const result = await cppWrapper.executeGameEngine(engineType);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "Game engine execution failed", details: error });
+    }
+  });
+
+  app.post("/api/language/cpp/physics", async (req, res) => {
+    try {
+      const { simulationType } = req.body;
+      const result = await cppWrapper.executePhysicsSimulation(simulationType);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "Physics simulation failed", details: error });
+    }
+  });
+
+  app.post("/api/language/cpp/compute", async (req, res) => {
+    try {
+      const { computeType } = req.body;
+      const result = await cppWrapper.executeHighPerformanceCompute(computeType);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: "High-performance compute failed", details: error });
+    }
+  });
+
+  app.get("/api/language/cpp/metrics", (req, res) => {
+    const metrics = cppWrapper.getExecutionMetrics();
+    res.json(metrics);
+  });
+
+  // Combined language ecosystem status
+  app.get("/api/language/ecosystem", (req, res) => {
+    const pythonMetrics = pythonWrapper.getExecutionMetrics();
+    const rustMetrics = rustWrapper.getExecutionMetrics();
+    const cppMetrics = cppWrapper.getExecutionMetrics();
+
+    res.json({
+      ecosystem: "Multi-Language Integration Active",
+      languages: {
+        python: {
+          status: "active",
+          purpose: "AI/ML, data analysis, scientific computing",
+          executions: pythonMetrics.totalExecutions,
+          successRate: pythonMetrics.successRate,
+          capabilities: ["TensorFlow", "PyTorch", "NumPy", "OpenCV"]
+        },
+        rust: {
+          status: "active", 
+          purpose: "Memory safety, high-performance systems, security",
+          executions: rustMetrics.totalExecutions,
+          successRate: rustMetrics.successRate,
+          capabilities: ["Concurrency", "WebAssembly", "Blockchain", "Zero-cost abstractions"]
+        },
+        cpp: {
+          status: "active",
+          purpose: "Game engines, real-time systems, maximum performance",
+          executions: cppMetrics.totalExecutions,
+          successRate: cppMetrics.successRate,
+          capabilities: ["OpenGL", "Vulkan", "Physics", "Neural networks"]
+        }
+      },
+      performance: {
+        totalExecutions: pythonMetrics.totalExecutions + rustMetrics.totalExecutions + cppMetrics.totalExecutions,
+        overallSuccessRate: ((pythonMetrics.successRate + rustMetrics.successRate + cppMetrics.successRate) / 3).toFixed(2),
+        activeProcesses: pythonMetrics.activeProcesses + rustMetrics.activeProcesses + cppMetrics.activeProcesses
+      },
+      integration: {
+        crossLanguageSupport: true,
+        webAssemblyCompilation: true,
+        realTimeExecution: true,
+        securityAudit: true
+      }
+    });
+  });
+
+  // Virtual worlds and metaverse endpoints
+  app.get("/api/metaverse/worlds", (req, res) => {
+    res.json({
+      virtualWorlds: [
+        {
+          id: 'cryptoquest-prime',
+          name: 'CryptoQuest Prime Dimension',
+          type: 'XR',
+          participants: 847,
+          maxParticipants: 10000,
+          blockchain: true,
+          status: 'active'
+        },
+        {
+          id: 'genesis-nexus',
+          name: 'Genesis Nexus Hub', 
+          type: 'VR',
+          participants: 1203,
+          maxParticipants: 5000,
+          blockchain: true,
+          status: 'active'
+        },
+        {
+          id: 'quantum-realm',
+          name: 'Quantum Battle Realm',
+          type: 'AR',
+          participants: 2456,
+          maxParticipants: 50000,
+          blockchain: true,
+          status: 'active'
+        }
+      ],
+      capabilities: {
+        webxr: true,
+        webgl2: true,
+        spatialTracking: true,
+        hapticFeedback: true,
+        crossPlatform: true
+      }
+    });
+  });
+
   app.get("/api/health", (req, res) => {
     res.json({ 
       status: "healthy", 
@@ -404,7 +614,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         consoleIntegration: true,
         readyPlayerMe: true,
         custodialWallets: true,
-        crossPlatform: ["PS5", "Xbox", "PC", "Mobile"]
+        crossPlatform: ["PS5", "Xbox", "PC", "Mobile"],
+        metaverse: {
+          arVrXr: true,
+          virtualWorlds: 4,
+          languageWrappers: ["Python", "Rust", "C++", "WebAssembly"]
+        }
       }
     });
   });

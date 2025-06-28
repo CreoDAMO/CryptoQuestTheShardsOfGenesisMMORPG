@@ -5,6 +5,8 @@ import { AdvancedGameEngine } from '@/components/gaming/AdvancedGameEngine';
 import { CloudGamingInterface } from '@/components/gaming/CloudGamingInterface';
 import { SocialGamingHub } from '@/components/gaming/SocialGamingHub';
 import { AIGamingAssistant } from '@/components/gaming/AIGamingAssistant';
+import { ARVRInterface } from '@/components/metaverse/ARVRInterface';
+import { LanguageWrappers } from '@/components/metaverse/LanguageWrappers';
 
 // Extend Window interface for ethereum
 declare global {
@@ -1040,11 +1042,13 @@ function CryptoQuestDApp() {
                   </Card>
 
                   <Tabs defaultValue="engine" className="w-full">
-                    <TabsList className="grid w-full grid-cols-4">
+                    <TabsList className="grid w-full grid-cols-6">
                       <TabsTrigger value="engine">Game Engine</TabsTrigger>
                       <TabsTrigger value="cloud">Cloud Gaming</TabsTrigger>
                       <TabsTrigger value="social">Social Hub</TabsTrigger>
                       <TabsTrigger value="ai">AI Assistant</TabsTrigger>
+                      <TabsTrigger value="metaverse">AR/VR/XR</TabsTrigger>
+                      <TabsTrigger value="languages">Multi-Language</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value="engine" className="space-y-6">
@@ -1100,6 +1104,14 @@ function CryptoQuestDApp() {
                           }
                         }}
                       />
+                    </TabsContent>
+                    
+                    <TabsContent value="metaverse" className="space-y-6">
+                      <ARVRInterface />
+                    </TabsContent>
+                    
+                    <TabsContent value="languages" className="space-y-6">
+                      <LanguageWrappers />
                     </TabsContent>
                   </Tabs>
                 </div>
