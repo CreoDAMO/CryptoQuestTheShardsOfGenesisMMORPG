@@ -52,7 +52,7 @@ export class StripeService {
     }
     
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2023-10-16',
+      apiVersion: '2024-06-20',
     });
   }
 
@@ -123,51 +123,70 @@ export class StripeService {
   }
 
   // Merchandise Store Payments
-  async createMerchQuote(
+  async createMerchPayment(
     items: { itemId: string; quantity: number; variant?: any }[],
     userEmail: string
-  ): Promise<StrikeQuote> {
+  ): Promise<StripePaymentIntent> {
     try {
       const total = this.calculateMerchTotal(items);
       
-      const quoteData = {
+      const paymentIntent = await this.stripe.paymentIntents.create({
+        amount: Math.round(total * 100), // Convert to cents
+        currency: 'usd',
         description: `CryptoQuest Merchandise Order - ${items.length} items`,
-        amount: {
-          currency: 'USD',
-          amount: total.toString()
+        metadata: {
+          userEmail,
+          items: JSON.stringify(items)
         }
-      };
-
-      const quote = await this.makeRequest('/quotes', {
-        method: 'POST',
-        body: JSON.stringify(quoteData)
       });
 
-      return quote;
+      return {
+        paymentIntentId: paymentIntent.id,
+        amount: total,
+        currency: 'usd',
+        status: paymentIntent.status as any,
+        clientSecret: paymentIntent.client_secret!,
+        description: paymentIntent.description || ''
+      };
     } catch (error) {
-      console.error('Strike merch quote error:', error);
-      return this.getMockMerchQuote(items);
+      console.error('Stripe merch payment error:', error);
+      throw error;
     }
   }
 
   // Payment Status Tracking
-  async getInvoiceStatus(invoiceId: string): Promise<StrikeInvoice> {
+  async getSubscriptionStatus(subscriptionId: string): Promise<StripeSubscription> {
     try {
-      const invoice = await this.makeRequest(`/invoices/${invoiceId}`);
-      return invoice;
+      const subscription = await this.stripe.subscriptions.retrieve(subscriptionId);
+      
+      return {
+        subscriptionId: subscription.id,
+        customerId: subscription.customer as string,
+        status: subscription.status as any,
+        currentPeriodEnd: new Date(subscription.current_period_end * 1000).toISOString(),
+        planId: subscription.metadata?.planId || 'unknown'
+      };
     } catch (error) {
-      console.error('Strike invoice status error:', error);
-      return this.getMockInvoiceStatus(invoiceId);
+      console.error('Stripe subscription status error:', error);
+      throw error;
     }
   }
 
-  async getQuoteStatus(quoteId: string): Promise<StrikeQuote> {
+  async getPaymentIntentStatus(paymentIntentId: string): Promise<StripePaymentIntent> {
     try {
-      const quote = await this.makeRequest(`/quotes/${quoteId}`);
-      return quote;
+      const paymentIntent = await this.stripe.paymentIntents.retrieve(paymentIntentId);
+      
+      return {
+        paymentIntentId: paymentIntent.id,
+        amount: paymentIntent.amount / 100, // Convert from cents
+        currency: paymentIntent.currency,
+        status: paymentIntent.status as any,
+        clientSecret: paymentIntent.client_secret!,
+        description: paymentIntent.description || ''
+      };
     } catch (error) {
-      console.error('Strike quote status error:', error);
-      return this.getMockQuoteStatus(quoteId);
+      console.error('Stripe payment intent status error:', error);
+      throw error;
     }
   }
 
@@ -333,65 +352,10 @@ export class StripeService {
     }, 0);
   }
 
-  // Mock responses for development/fallback
-  private getMockSubscriptionInvoice(planId: string): StrikeInvoice {
-    const plan = this.getSubscriptionPlan(planId);
-    return {
-      invoiceId: `mock_inv_${Date.now()}`,
-      amount: {
-        amount: plan?.price.toString() || '9.99',
-        currency: 'USD'
-      },
-      state: 'UNPAID',
-      description: `CryptoQuest ${plan?.name || 'Basic'} Subscription`,
-      issuerId: 'mock_issuer',
-      receiverId: 'mock_receiver',
-      created: new Date().toISOString(),
-      correlationId: `sub_${Date.now()}`
-    };
-  }
-
-  private getMockMerchQuote(items: { itemId: string; quantity: number }[]): StrikeQuote {
-    const total = this.calculateMerchTotal(items);
-    return {
-      quoteId: `mock_quote_${Date.now()}`,
-      description: `CryptoQuest Merchandise Order - ${items.length} items`,
-      lnInvoice: 'mock_lightning_invoice_string',
-      amount: {
-        amount: total.toString(),
-        currency: 'USD'
-      },
-      conversionRate: {
-        amount: '1.0',
-        sourceCurrency: 'USD',
-        targetCurrency: 'BTC'
-      },
-      expiration: new Date(Date.now() + 15 * 60 * 1000).toISOString()
-    };
-  }
-
-  private getMockInvoiceStatus(invoiceId: string): StrikeInvoice {
-    return {
-      invoiceId,
-      amount: { amount: '19.99', currency: 'USD' },
-      state: 'UNPAID',
-      description: 'Mock Invoice',
-      issuerId: 'mock_issuer',
-      receiverId: 'mock_receiver',
-      created: new Date().toISOString()
-    };
-  }
-
-  private getMockQuoteStatus(quoteId: string): StrikeQuote {
-    return {
-      quoteId,
-      description: 'Mock Quote',
-      lnInvoice: 'mock_lightning_invoice',
-      amount: { amount: '49.99', currency: 'USD' },
-      conversionRate: { amount: '1.0', sourceCurrency: 'USD', targetCurrency: 'BTC' },
-      expiration: new Date(Date.now() + 15 * 60 * 1000).toISOString()
-    };
+  // Webhook handling
+  constructWebhookEvent(body: string, signature: string, endpointSecret: string) {
+    return this.stripe.webhooks.constructEvent(body, signature, endpointSecret);
   }
 }
 
-export const strikeService = new StrikeService();
+export const stripeService = new StripeService();

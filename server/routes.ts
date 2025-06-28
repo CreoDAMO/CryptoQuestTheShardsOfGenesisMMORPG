@@ -4,6 +4,7 @@ import { setupVite, serveStatic } from "./vite";
 import { storage } from "./storage";
 import { moralisService } from "./services/moralis-service";
 import { aiService } from "./services/ai-service";
+import { stripeService } from "./services/stripe-service";
 import { pythonWrapper } from "./language-wrappers/python-wrapper";
 import { rustWrapper } from "./language-wrappers/rust-wrapper";
 import { cppWrapper } from "./language-wrappers/cpp-wrapper";
