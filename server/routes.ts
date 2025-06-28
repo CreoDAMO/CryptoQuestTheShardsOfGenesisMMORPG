@@ -604,6 +604,140 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // CQT Token and BASE Network Integration
+  app.get("/api/coinbase/cqt-info", (req, res) => {
+    res.json({
+      token: {
+        name: "CryptoQuest Token",
+        symbol: "CQT",
+        contractAddress: "0x9d1075b41cd80ab08179f36bc17a7ff8708748ba",
+        network: "BASE",
+        chainId: 8453,
+        decimals: 18,
+        totalSupply: "1000000000",
+        status: "live"
+      },
+      baseNetwork: {
+        name: "Base Mainnet",
+        chainId: 8453,
+        rpcUrl: "https://mainnet.base.org",
+        blockExplorer: "https://basescan.org",
+        nativeCurrency: {
+          name: "Ethereum",
+          symbol: "ETH",
+          decimals: 18
+        }
+      },
+      gamingIntegration: {
+        enabledFeatures: [
+          "character_upgrades",
+          "item_purchases", 
+          "guild_memberships",
+          "quest_unlocks",
+          "nft_minting",
+          "tournament_entries"
+        ],
+        paymentMethods: ["onchainkit", "smart_wallet", "gasless_transactions"],
+        agentKitSupport: true
+      }
+    });
+  });
+
+  app.post("/api/coinbase/gaming-payment", async (req, res) => {
+    try {
+      const { type, amount, playerAddress, description } = req.body;
+      
+      // Simulate payment processing (in production, integrate with actual payment logic)
+      const paymentId = `payment_${Date.now()}`;
+      const txHash = `0x${Math.random().toString(16).substr(2, 64)}`;
+      
+      // Store payment in database
+      await storage.createTokenTransaction({
+        walletAddress: playerAddress,
+        transactionType: 'gaming_payment',
+        amount: parseFloat(amount),
+        status: 'pending',
+        txHash: txHash,
+        contractAddress: '0x9d1075b41cd80ab08179f36bc17a7ff8708748ba'
+      });
+
+      res.json({
+        success: true,
+        paymentId,
+        txHash,
+        amount,
+        type,
+        description,
+        status: 'pending',
+        network: 'BASE',
+        estimatedConfirmationTime: '2-5 seconds'
+      });
+    } catch (error) {
+      res.status(500).json({ 
+        success: false, 
+        error: "Payment processing failed", 
+        details: error.message 
+      });
+    }
+  });
+
+  app.get("/api/coinbase/payment-history/:address", async (req, res) => {
+    try {
+      const { address } = req.params;
+      const transactions = await storage.getTokenTransactions(address);
+      
+      res.json({
+        address,
+        totalTransactions: transactions.length,
+        transactions: transactions.map(tx => ({
+          id: tx.id,
+          type: tx.transactionType,
+          amount: tx.amount,
+          status: tx.status,
+          txHash: tx.txHash,
+          timestamp: tx.createdAt,
+          blockNumber: tx.blockNumber
+        }))
+      });
+    } catch (error) {
+      res.status(500).json({ 
+        error: "Failed to fetch payment history", 
+        details: error.message 
+      });
+    }
+  });
+
+  app.post("/api/coinbase/smart-wallet", async (req, res) => {
+    try {
+      const { userAddress, action, parameters } = req.body;
+      
+      // Simulate smart wallet operations
+      const walletId = `smart_wallet_${Date.now()}`;
+      
+      res.json({
+        success: true,
+        walletId,
+        userAddress,
+        action,
+        parameters,
+        features: {
+          gasless: true,
+          batchTransactions: true,
+          socialRecovery: true,
+          multiSig: false
+        },
+        status: 'active',
+        network: 'BASE'
+      });
+    } catch (error) {
+      res.status(500).json({ 
+        success: false, 
+        error: "Smart wallet operation failed", 
+        details: error.message 
+      });
+    }
+  });
+
   app.get("/api/health", (req, res) => {
     res.json({ 
       status: "healthy", 

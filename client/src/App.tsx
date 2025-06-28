@@ -7,6 +7,8 @@ import { SocialGamingHub } from '@/components/gaming/SocialGamingHub';
 import { AIGamingAssistant } from '@/components/gaming/AIGamingAssistant';
 import { ARVRInterface } from '@/components/metaverse/ARVRInterface';
 import { LanguageWrappers } from '@/components/metaverse/LanguageWrappers';
+import { CoinbaseIntegration } from '@/components/coinbase/CoinbaseIntegration';
+import { CoinbaseWagmiProvider } from '@/components/coinbase/WagmiProvider';
 
 // Extend Window interface for ethereum
 declare global {
@@ -1042,13 +1044,14 @@ function CryptoQuestDApp() {
                   </Card>
 
                   <Tabs defaultValue="engine" className="w-full">
-                    <TabsList className="grid w-full grid-cols-6">
+                    <TabsList className="grid w-full grid-cols-7">
                       <TabsTrigger value="engine">Game Engine</TabsTrigger>
                       <TabsTrigger value="cloud">Cloud Gaming</TabsTrigger>
                       <TabsTrigger value="social">Social Hub</TabsTrigger>
                       <TabsTrigger value="ai">AI Assistant</TabsTrigger>
                       <TabsTrigger value="metaverse">AR/VR/XR</TabsTrigger>
                       <TabsTrigger value="languages">Multi-Language</TabsTrigger>
+                      <TabsTrigger value="payments">CQT Payments</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value="engine" className="space-y-6">
@@ -1112,6 +1115,12 @@ function CryptoQuestDApp() {
                     
                     <TabsContent value="languages" className="space-y-6">
                       <LanguageWrappers />
+                    </TabsContent>
+                    
+                    <TabsContent value="payments" className="space-y-6">
+                      <CoinbaseWagmiProvider>
+                        <CoinbaseIntegration />
+                      </CoinbaseWagmiProvider>
                     </TabsContent>
                   </Tabs>
                 </div>
