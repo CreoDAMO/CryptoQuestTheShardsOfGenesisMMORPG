@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { Wallet, Download, Shield, CheckCircle, AlertTriangle, ExternalLink, Chrome, Globe } from 'lucide-react';
+import { Wallet, Download, Shield, CheckCircle, AlertTriangle, ExternalLink, Chrome, Globe, Zap } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface MetaMaskState {
@@ -17,6 +17,16 @@ interface MetaMaskState {
   networkName: string;
 }
 
+interface WalletProvider {
+  info: {
+    uuid: string;
+    name: string;
+    icon: string;
+    rdns: string;
+  };
+  provider: any;
+}
+
 interface WalletOption {
   name: string;
   icon: string;
@@ -24,6 +34,7 @@ interface WalletOption {
   description: string;
   features: string[];
   supported: boolean;
+  rdns?: string;
 }
 
 export function MetaMaskIntegration() {
@@ -38,6 +49,8 @@ export function MetaMaskIntegration() {
   });
   const [isConnecting, setIsConnecting] = useState(false);
   const [showInstallGuide, setShowInstallGuide] = useState(false);
+  const [detectedWallets, setDetectedWallets] = useState<WalletProvider[]>([]);
+  const [selectedProvider, setSelectedProvider] = useState<WalletProvider | null>(null);
 
   const walletOptions: WalletOption[] = [
     {
@@ -46,7 +59,8 @@ export function MetaMaskIntegration() {
       downloadUrl: "https://metamask.io/download/",
       description: "The most popular Ethereum wallet with full DApp support",
       features: ["Hardware wallet support", "Mobile app", "Browser extension", "DeFi integration"],
-      supported: true
+      supported: true,
+      rdns: "io.metamask"
     },
     {
       name: "Coinbase Wallet",
@@ -54,7 +68,8 @@ export function MetaMaskIntegration() {
       downloadUrl: "https://www.coinbase.com/wallet",
       description: "Secure wallet by Coinbase with built-in DApp browser",
       features: ["NFT support", "DApp browser", "Mobile first", "Easy onboarding"],
-      supported: true
+      supported: true,
+      rdns: "com.coinbase.wallet"
     },
     {
       name: "WalletConnect",
@@ -62,7 +77,8 @@ export function MetaMaskIntegration() {
       downloadUrl: "https://walletconnect.com/",
       description: "Connect any wallet that supports WalletConnect protocol",
       features: ["Multi-wallet support", "QR code connection", "Mobile wallets", "Cross-platform"],
-      supported: true
+      supported: true,
+      rdns: "com.walletconnect"
     },
     {
       name: "Brave Wallet",
@@ -70,9 +86,53 @@ export function MetaMaskIntegration() {
       downloadUrl: "https://brave.com/wallet/",
       description: "Built-in wallet for Brave browser users",
       features: ["Privacy focused", "Built-in browser", "No extension needed", "Crypto rewards"],
-      supported: false
+      supported: false,
+      rdns: "com.brave.wallet"
     }
   ];
+
+  // EIP-6963 wallet detection
+  const detectWallets = () => {
+    const providers: WalletProvider[] = [];
+    
+    // Listen for EIP-6963 announcements
+    const handleAnnouncement = (event: any) => {
+      if (event.detail?.info && event.detail?.provider) {
+        providers.push({
+          info: event.detail.info,
+          provider: event.detail.provider
+        });
+        setDetectedWallets([...providers]);
+      }
+    };
+
+    window.addEventListener('eip6963:announceProvider', handleAnnouncement);
+    
+    // Request wallet announcements
+    window.dispatchEvent(new Event('eip6963:requestProvider'));
+    
+    // Fallback to window.ethereum for legacy detection
+    if (typeof window.ethereum !== 'undefined') {
+      const legacyProvider: WalletProvider = {
+        info: {
+          uuid: 'legacy-metamask',
+          name: 'MetaMask (Legacy)',
+          icon: '🦊',
+          rdns: 'io.metamask'
+        },
+        provider: window.ethereum
+      };
+      
+      if (!providers.some(p => p.info.rdns === 'io.metamask')) {
+        providers.push(legacyProvider);
+        setDetectedWallets([...providers]);
+      }
+    }
+
+    return () => {
+      window.removeEventListener('eip6963:announceProvider', handleAnnouncement);
+    };
+  };
 
   const networkConfigs = {
     '0x89': { name: 'Polygon', color: 'bg-purple-500' },
@@ -82,6 +142,7 @@ export function MetaMaskIntegration() {
   };
 
   useEffect(() => {
+    const cleanup = detectWallets();
     checkMetaMaskStatus();
     
     if (window.ethereum) {
@@ -92,6 +153,7 @@ export function MetaMaskIntegration() {
     }
 
     return () => {
+      cleanup?.();
       if (window.ethereum?.removeListener) {
         window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
         window.ethereum.removeListener('chainChanged', handleChainChanged);
@@ -202,21 +264,24 @@ export function MetaMaskIntegration() {
     }
   };
 
-  const connectMetaMask = async () => {
-    if (!metaMaskState.isInstalled) {
+  const connectWallet = async (provider?: WalletProvider) => {
+    const targetProvider = provider?.provider || window.ethereum;
+    
+    if (!targetProvider) {
       setShowInstallGuide(true);
       return;
     }
 
     setIsConnecting(true);
     try {
-      const accounts = await window.ethereum.request({
+      // EIP-1102 compliant connection request
+      const accounts = await targetProvider.request({
         method: 'eth_requestAccounts'
       });
       
       if (accounts.length > 0) {
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        const balance = await window.ethereum.request({
+        const chainId = await targetProvider.request({ method: 'eth_chainId' });
+        const balance = await targetProvider.request({
           method: 'eth_getBalance',
           params: [accounts[0], 'latest']
         });
@@ -233,16 +298,33 @@ export function MetaMaskIntegration() {
           networkName
         });
 
+        if (provider) {
+          setSelectedProvider(provider);
+        }
+
         toast({
           title: "Wallet Connected Successfully",
-          description: `Connected to ${accounts[0].substring(0, 6)}...${accounts[0].substring(38)}`,
+          description: `Connected to ${provider?.info.name || 'MetaMask'}: ${accounts[0].substring(0, 6)}...${accounts[0].substring(38)}`,
         });
       }
     } catch (error: any) {
-      console.error('Error connecting to MetaMask:', error);
+      console.error('Error connecting to wallet:', error);
+      
+      // Enhanced error handling
+      let errorMessage = "Failed to connect to wallet";
+      if (error.code === 4001) {
+        errorMessage = "Connection rejected by user";
+      } else if (error.code === -32002) {
+        errorMessage = "Connection request already pending";
+      } else if (error.code === -32603) {
+        errorMessage = "Internal wallet error";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Connection Failed",
-        description: error.message || "Failed to connect to MetaMask",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
@@ -505,8 +587,34 @@ export function MetaMaskIntegration() {
             </div>
           </div>
 
+          {detectedWallets.length > 0 && !metaMaskState.isConnected && (
+            <div className="space-y-3 mb-4">
+              <div className="text-sm font-medium">Detected Wallets:</div>
+              <div className="grid gap-2">
+                {detectedWallets.map((wallet) => (
+                  <Button
+                    key={wallet.info.uuid}
+                    onClick={() => connectWallet(wallet)}
+                    disabled={isConnecting}
+                    variant="outline"
+                    className="flex items-center gap-3 justify-start h-12"
+                  >
+                    <img src={wallet.info.icon} alt={wallet.info.name} className="w-6 h-6" />
+                    <div className="text-left">
+                      <div className="font-medium">{wallet.info.name}</div>
+                      <div className="text-xs text-gray-500">
+                        {wallet.info.rdns}
+                      </div>
+                    </div>
+                    <Zap className="w-4 h-4 ml-auto" />
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="flex gap-3">
-            {!metaMaskState.isInstalled ? (
+            {!metaMaskState.isInstalled && detectedWallets.length === 0 ? (
               <Button 
                 onClick={() => setShowInstallGuide(true)}
                 className="flex-1"
@@ -517,13 +625,13 @@ export function MetaMaskIntegration() {
               </Button>
             ) : !metaMaskState.isConnected ? (
               <Button 
-                onClick={connectMetaMask}
+                onClick={() => connectWallet()}
                 disabled={isConnecting}
                 className="flex-1"
                 size="lg"
               >
                 <Wallet className="w-4 h-4 mr-2" />
-                {isConnecting ? "Connecting..." : "Connect Wallet"}
+                {isConnecting ? "Connecting..." : "Connect Legacy Wallet"}
               </Button>
             ) : (
               <>
@@ -549,8 +657,15 @@ export function MetaMaskIntegration() {
           </div>
 
           {metaMaskState.isConnected && (
-            <div className="text-xs text-gray-600 dark:text-gray-400 text-center">
-              You now have access to: Admin Control Center, NFT Marketplace, Token Operations, DAO Governance, and all blockchain features
+            <div className="space-y-2">
+              <div className="text-xs text-gray-600 dark:text-gray-400 text-center">
+                You now have access to: Admin Control Center, NFT Marketplace, Token Operations, DAO Governance, and all blockchain features
+              </div>
+              {selectedProvider && (
+                <div className="text-xs text-center text-blue-600 dark:text-blue-400">
+                  Connected via {selectedProvider.info.name} using EIP-6963 standard
+                </div>
+              )}
             </div>
           )}
         </CardContent>
