@@ -10,6 +10,7 @@ import { LanguageWrappers } from '@/components/metaverse/LanguageWrappers';
 import { CoinbaseIntegration } from '@/components/coinbase/CoinbaseIntegration';
 import { CoinbaseWagmiProvider } from '@/components/coinbase/WagmiProvider';
 import { AggLayerIntegration } from '@/components/agglayer/AggLayerIntegration';
+import { GrantProposal } from '@/components/GrantProposal';
 
 // Extend Window interface for ethereum
 declare global {
@@ -1045,7 +1046,7 @@ function CryptoQuestDApp() {
                   </Card>
 
                   <Tabs defaultValue="engine" className="w-full">
-                    <TabsList className="grid w-full grid-cols-8">
+                    <TabsList className="grid w-full grid-cols-9">
                       <TabsTrigger value="engine">Game Engine</TabsTrigger>
                       <TabsTrigger value="cloud">Cloud Gaming</TabsTrigger>
                       <TabsTrigger value="social">Social Hub</TabsTrigger>
@@ -1054,6 +1055,7 @@ function CryptoQuestDApp() {
                       <TabsTrigger value="languages">Multi-Language</TabsTrigger>
                       <TabsTrigger value="payments">CQT Payments</TabsTrigger>
                       <TabsTrigger value="agglayer">AggLayer</TabsTrigger>
+                      <TabsTrigger value="grants">Grant Strategy</TabsTrigger>
                     </TabsList>
                     
                     <TabsContent value="engine" className="space-y-6">
@@ -1127,6 +1129,10 @@ function CryptoQuestDApp() {
                     
                     <TabsContent value="agglayer" className="space-y-6">
                       <AggLayerIntegration />
+                    </TabsContent>
+                    
+                    <TabsContent value="grants" className="space-y-6">
+                      <GrantProposal />
                     </TabsContent>
                   </Tabs>
                 </div>

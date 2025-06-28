@@ -985,6 +985,251 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Grant Strategy and Investment Tracking
+  app.get("/api/grants/portfolio", (req, res) => {
+    res.json({
+      totalTarget: 10000000,
+      totalSecured: 1000000,
+      portfolioProgress: 10,
+      grants: [
+        {
+          id: 'base-ecosystem',
+          name: 'Base Ecosystem Fund',
+          organization: 'Coinbase',
+          amount: 2000000,
+          status: 'active',
+          progress: 85,
+          description: 'CQT token live on BASE with Coinbase AgentKit integration',
+          features: ['CQT Token Integration', 'OnchainKit Support', 'Smart Wallets', 'Gasless Transactions'],
+          submissionDate: '2024-06-15',
+          expectedDecision: '2025-01-15'
+        },
+        {
+          id: 'game7-grants',
+          name: 'Game7 Grants Program',
+          organization: 'Game7',
+          amount: 2000000,
+          status: 'submitted',
+          progress: 75,
+          description: 'Revolutionary gaming hub with AR/VR/XR metaverse capabilities',
+          features: ['Gaming Engine', 'Cloud Gaming', 'Social Hub', 'AI Assistant'],
+          submissionDate: '2024-07-01',
+          expectedDecision: '2025-02-01'
+        },
+        {
+          id: 'polygon-grants',
+          name: 'Polygon Ecosystem Grant',
+          organization: 'Polygon',
+          amount: 1000000,
+          status: 'approved',
+          progress: 100,
+          description: '13+ verified smart contracts with AggLayer cross-chain integration',
+          features: ['Smart Contracts', 'AggLayer Bridge', 'Cross-Chain Gaming', 'Unified Liquidity'],
+          approvalDate: '2024-05-20',
+          disbursementSchedule: 'Milestone-based'
+        },
+        {
+          id: 'epic-megagrants',
+          name: 'Epic MegaGrants',
+          organization: 'Epic Games',
+          amount: 500000,
+          status: 'submitted',
+          progress: 60,
+          description: 'Unreal Engine 5 integration with console gaming',
+          features: ['Unreal Engine 5', 'Console Integration', 'Ray Tracing', 'MetaHuman'],
+          submissionDate: '2024-08-10',
+          expectedDecision: '2025-01-30'
+        }
+      ],
+      fundingMilestones: [
+        {
+          milestone: '$1M - Foundation',
+          targetAmount: 1000000,
+          currentAmount: 1000000,
+          completed: true,
+          completionDate: '2024-05-20'
+        },
+        {
+          milestone: '$3M - Platform',
+          targetAmount: 3000000,
+          currentAmount: 1000000,
+          completed: false,
+          estimatedCompletion: '2025-02-15'
+        },
+        {
+          milestone: '$5M - Ecosystem',
+          targetAmount: 5000000,
+          currentAmount: 1000000,
+          completed: false,
+          estimatedCompletion: '2025-06-30'
+        },
+        {
+          milestone: '$10M - Revolution',
+          targetAmount: 10000000,
+          currentAmount: 1000000,
+          completed: false,
+          estimatedCompletion: '2025-12-31'
+        }
+      ]
+    });
+  });
+
+  app.get("/api/grants/market-analysis", (req, res) => {
+    res.json({
+      marketValuation: {
+        currentValuation: 50000000,
+        targetValuation: 500000000,
+        projectedGrowth: 1000,
+        lastUpdated: new Date().toISOString()
+      },
+      marketMetrics: {
+        totalAddressableMarket: 200000000000,
+        blockchainGamingMarket: 65000000000,
+        crossChainDeFiTvl: 4250000000,
+        projectedMarketShare: 0.025
+      },
+      competitiveAnalysis: {
+        directCompetitors: ['Axie Infinity', 'Decentraland', 'The Sandbox'],
+        competitiveAdvantages: [
+          'Console-quality gaming in React',
+          'Multi-language execution environment',
+          'Cross-chain unified liquidity',
+          'Enterprise-grade security',
+          'Industry-forcing capabilities'
+        ],
+        marketDifferentiators: [
+          'PS5/Xbox/PC cross-platform support',
+          'AR/VR/XR metaverse integration',
+          'Coinbase infrastructure leverage',
+          'Polygon AggLayer connectivity'
+        ]
+      },
+      revenueStreams: [
+        {
+          stream: 'Transaction Fees',
+          projectedAnnualRevenue: 15000000,
+          growthRate: 0.25
+        },
+        {
+          stream: 'NFT Sales',
+          projectedAnnualRevenue: 25000000,
+          growthRate: 0.40
+        },
+        {
+          stream: 'Platform Licensing',
+          projectedAnnualRevenue: 10000000,
+          growthRate: 0.35
+        },
+        {
+          stream: 'Staking Rewards',
+          projectedAnnualRevenue: 8000000,
+          growthRate: 0.20
+        }
+      ]
+    });
+  });
+
+  app.post("/api/grants/submit-application", async (req, res) => {
+    try {
+      const { grantId, organizationName, requestedAmount, applicationData } = req.body;
+
+      const applicationId = `app_${Date.now()}`;
+      
+      // Simulate application submission processing
+      const application = {
+        id: applicationId,
+        grantId,
+        organizationName,
+        requestedAmount,
+        status: 'submitted',
+        submissionDate: new Date().toISOString(),
+        estimatedDecisionDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+        applicationData: {
+          projectDescription: applicationData?.projectDescription || 'CryptoQuest: Revolutionary blockchain MMORPG',
+          technicalSpecifications: applicationData?.technicalSpecifications || 'Multi-platform gaming with cross-chain capabilities',
+          teamExperience: applicationData?.teamExperience || 'CreoDAMO Inc. - Blockchain gaming pioneers',
+          fundingJustification: applicationData?.fundingJustification || 'Strategic ecosystem development and market expansion'
+        }
+      };
+
+      res.json({
+        success: true,
+        application,
+        message: `Grant application ${applicationId} submitted successfully to ${organizationName}`,
+        nextSteps: [
+          'Application review (30-45 days)',
+          'Technical evaluation',
+          'Partnership assessment',
+          'Final decision notification'
+        ]
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: "Failed to submit grant application",
+        details: (error as Error).message
+      });
+    }
+  });
+
+  app.get("/api/grants/investment-metrics", (req, res) => {
+    res.json({
+      currentMetrics: {
+        platformValuation: '$50M',
+        monthlyActiveUsers: 125000,
+        totalValueLocked: '$4.25B',
+        crossChainTransactions: 89000,
+        nftTradingVolume: '$2.3M',
+        stakingParticipation: '68%'
+      },
+      growthProjections: {
+        userGrowth: {
+          current: 125000,
+          sixMonths: 500000,
+          oneYear: 1200000,
+          growthRate: '40% monthly'
+        },
+        revenueGrowth: {
+          currentMonthly: '$650K',
+          projectedMonthly: '$4.2M',
+          annualTarget: '$58M',
+          growthRate: '35% monthly'
+        },
+        marketExpansion: {
+          currentMarkets: ['Polygon', 'Base', 'Web'],
+          targetMarkets: ['Console', 'Mobile', 'AR/VR', 'Multi-Chain'],
+          expansionTimeline: '6-12 months'
+        }
+      },
+      strategicPartners: [
+        {
+          partner: 'Coinbase',
+          relationship: 'Infrastructure Provider',
+          value: 'BASE network integration, AgentKit, OnchainKit',
+          status: 'Active'
+        },
+        {
+          partner: 'Polygon',
+          relationship: 'Blockchain Platform',
+          value: '13+ smart contracts, AggLayer integration',
+          status: 'Active'
+        },
+        {
+          partner: 'Epic Games',
+          relationship: 'Gaming Engine',
+          value: 'Unreal Engine 5, MetaHuman, console optimization',
+          status: 'In Progress'
+        },
+        {
+          partner: 'Unity Technologies',
+          relationship: 'Gaming Platform',
+          value: 'Cross-platform development, social impact',
+          status: 'Planning'
+        }
+      ]
+    });
+  });
+
   app.get("/api/health", (req, res) => {
     res.json({ 
       status: "healthy", 
@@ -1013,6 +1258,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           baseNetwork: true,
           agentKit: true,
           onchainKit: true
+        },
+        grantStrategy: {
+          totalFundingTarget: 10000000,
+          currentlySecured: 1000000,
+          activeApplications: 4,
+          approvedGrants: 1,
+          strategicPositioning: "industry-forcing"
         }
       }
     });
