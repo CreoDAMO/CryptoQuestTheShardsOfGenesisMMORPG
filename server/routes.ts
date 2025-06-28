@@ -15,12 +15,6 @@ import {
 export async function registerRoutes(app: Express): Promise<Server> {
   const server = createServer(app);
 
-  if (process.env.NODE_ENV === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
-  }
-
   // User routes
   app.get("/api/users/:id", async (req, res) => {
     const id = parseInt(req.params.id, 10);
@@ -1269,6 +1263,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     });
   });
+
+  // Setup Vite after all API routes are registered
+  if (process.env.NODE_ENV === "development") {
+    await setupVite(app, server);
+  } else {
+    serveStatic(app);
+  }
 
   return server;
 }
