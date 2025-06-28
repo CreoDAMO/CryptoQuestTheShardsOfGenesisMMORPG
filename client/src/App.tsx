@@ -13,6 +13,7 @@ import { AggLayerIntegration } from '@/components/agglayer/AggLayerIntegration';
 import { GrantProposal } from '@/components/GrantProposal';
 import { NFTBookMarketplace } from '@/components/NFTBookMarketplace';
 import { AdminPanel } from '@/components/AdminPanel';
+import { EnhancedAdminPanel } from '@/components/EnhancedAdminPanel';
 
 // Extend Window interface for ethereum
 declare global {
