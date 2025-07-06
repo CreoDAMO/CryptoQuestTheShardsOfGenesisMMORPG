@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { GameDashboard } from '@/components/game/GameDashboard';
-import { Bot, CreditCard, Gamepad2 } from 'lucide-react';
+import { ArbitrageDashboard } from '@/components/arbitrage/ArbitrageDashboard';
+import { Bot, CreditCard, Gamepad2, TrendingUp } from 'lucide-react';
 
 // Simplified AgentKit Component
 function AgentKitDemo() {
@@ -133,7 +134,7 @@ function SuperPayDemo() {
 }
 
 export default function HomePage() {
-  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay'>('game');
+  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage'>('game');
 
   const renderView = () => {
     switch (activeView) {
@@ -141,6 +142,8 @@ export default function HomePage() {
         return <AgentKitDemo />;
       case 'superpay':
         return <SuperPayDemo />;
+      case 'arbitrage':
+        return <ArbitrageDashboard />;
       default:
         return <GameDashboard />;
     }
@@ -183,6 +186,17 @@ export default function HomePage() {
           >
             <CreditCard className="w-4 h-4" />
             SuperPay
+          </button>
+          <button
+            onClick={() => setActiveView('arbitrage')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === 'arbitrage' 
+                ? 'bg-purple-600 text-white' 
+                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <TrendingUp className="w-4 h-4" />
+            CQT Bot
           </button>
         </div>
       </div>
