@@ -11,11 +11,14 @@
     "db:push": "drizzle-kit push"
   },
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.840.0",
     "@biconomy/account": "^4.5.7",
     "@biconomy/bundler": "^3.1.4",
     "@biconomy/core-types": "^3.1.4",
     "@biconomy/modules": "^3.1.4",
     "@biconomy/paymaster": "^3.1.4",
+    "@clerk/nextjs": "^6.23.3",
+    "@coinbase/coinbase-sdk": "^0.25.0",
     "@coinbase/onchainkit": "^0.38.15",
     "@coinbase/wallet-sdk": "^4.3.4",
     "@hookform/resolvers": "^3.10.0",
@@ -68,6 +71,8 @@
     "input-otp": "^1.4.2",
     "lucide-react": "^0.453.0",
     "memorystore": "^1.6.7",
+    "mongodb": "^6.17.0",
+    "mongoose": "^8.16.1",
     "next": "^15.3.5",
     "next-themes": "^0.4.6",
     "passport": "^0.7.0",
