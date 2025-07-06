@@ -1,0 +1,189 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 271 91% 65%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 271 91% 65%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    
+    /* Gaming-specific colors */
+    --gaming-primary: 271 91% 65%;
+    --gaming-secondary: 195 100% 50%;
+    --gaming-accent: 60 100% 50%;
+    --gaming-neon: 142 100% 50%;
+    --gaming-danger: 0 100% 50%;
+    --gaming-warning: 35 100% 50%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 271 91% 65%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 271 91% 65%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    
+    /* Gaming-specific colors for dark mode */
+    --gaming-primary: 271 91% 65%;
+    --gaming-secondary: 195 100% 50%;
+    --gaming-accent: 60 100% 50%;
+    --gaming-neon: 142 100% 50%;
+    --gaming-danger: 0 100% 50%;
+    --gaming-warning: 35 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Gaming-specific utilities */
+@layer utilities {
+  .gaming-gradient {
+    background: linear-gradient(135deg, 
+      hsl(var(--gaming-primary)) 0%,
+      hsl(var(--gaming-secondary)) 50%,
+      hsl(var(--gaming-accent)) 100%
+    );
+  }
+  
+  .gaming-glow {
+    box-shadow: 0 0 20px hsl(var(--gaming-primary) / 0.3);
+  }
+  
+  .gaming-neon {
+    text-shadow: 0 0 5px hsl(var(--gaming-neon)),
+                 0 0 10px hsl(var(--gaming-neon)),
+                 0 0 15px hsl(var(--gaming-neon));
+  }
+  
+  .gaming-card {
+    background: linear-gradient(135deg, 
+      hsl(var(--card)) 0%,
+      hsl(var(--card) / 0.8) 100%
+    );
+    border: 1px solid hsl(var(--gaming-primary) / 0.3);
+    backdrop-filter: blur(20px);
+  }
+  
+  .gaming-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .gaming-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px hsl(var(--gaming-primary) / 0.2);
+  }
+  
+  .gaming-text-gradient {
+    background: linear-gradient(45deg, 
+      hsl(var(--gaming-primary)),
+      hsl(var(--gaming-secondary))
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Animation keyframes for gaming effects */
+@keyframes gaming-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes gaming-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes gaming-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gaming-glow {
+  0%, 100% { box-shadow: 0 0 20px hsl(var(--gaming-primary) / 0.3); }
+  50% { box-shadow: 0 0 30px hsl(var(--gaming-primary) / 0.6); }
+}
+
+.animate-gaming-pulse {
+  animation: gaming-pulse 2s ease-in-out infinite;
+}
+
+.animate-gaming-float {
+  animation: gaming-float 3s ease-in-out infinite;
+}
+
+.animate-gaming-rotate {
+  animation: gaming-rotate 2s linear infinite;
+}
+
+.animate-gaming-glow {
+  animation: gaming-glow 2s ease-in-out infinite;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--gaming-primary));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--gaming-secondary));
+}
