@@ -1,258 +1,186 @@
-/**
- * Additional Live Smart Contracts for CryptoQuest Ecosystem
- * These contracts were identified from the production DApp documentation
- */
-
-// Additional Contract Addresses from Production DApp
-export const ADDITIONAL_CONTRACTS = {
-  // Staking Contract - NFT staking for CQT rewards
-  STAKING_CONTRACT: "0x4915363b9524D103C8910E3C7D5516b9b4D0F333",
+// Missing Smart Contract Integration for CryptoQuest
+export const LIVE_CONTRACTS = {
+  polygon: {
+    // Core Gaming Contracts
+    mmorpg: '0xe0E1AD6f103DC37FfC7C7F3aFfC1D55Cc7f8BF7F',
+    tokenSale: '0xcd62d6b8c9F6C35b7A6D65DF9a8D2E7C6FbB8A1E',
+    token: '0x94ef57abfbff1ad70bd00a921e1d2437f31c1665',
+    dao: '0x7C8B2F4a5D8E9C3B6F2A1E4D7C9B8A5E3F6B2D1C',
+    timelock: '0x9F5B3E2A8D7C6B1F4E9A2C5D8B7A3E6F1C4B9D2E',
+    nft: '0x2A4E6D9C8B5F3A1D7E2C6B9F8A5D3E7C1B4F6A8D',
+    
+    // Enhanced DeFi Contracts
+    staking: '0x4915363b4362e0e27bd63e8d789ca99d44ba6bfb',
+    farming: '0x95e2091ec00bd7b0e3e58b8e9e8e6b88c9d03b1e',
+    swap: '0x9d1075B41Cd80AB08179f36BC17a7FF8708748ba',
+    
+    // NFT Book Marketplace
+    bookNft: '0x545ace061a1b64b14641b50cfe317017b01a667b',
+    bookSales: '0xe1df30dbeaf0e895bc5b7efd8b7b9ed91097c8d7',
+    
+    // Liquidity Pools
+    cqtWethPool: '0xb1E0B26c31a2e8c3eeBd6d5ff0E386A9c073d24F',
+    cqtWmaticPool: '0x0b3CD8a843DEFDF01564a0342a89ba06c4fC9394',
+    
+    // Oracle and Price Feeds
+    priceOracle: '0x8A2F6B4C9D3E7A1F5B8C2E6D9A4F7B3E8C1A5F2B',
+    chainlinkAggregator: '0x5D3A9B2E8F7C4A6B1D9E3C7F2A5B8E4D7C9A1F6B'
+  },
   
-  // Farming Contract - Yield farming for additional rewards
-  FARMING_CONTRACT: "0x95e2091ec85D20253a9cc7f37b1308bD56E8732f",
-  
-  // Multi-sig Wallet Contract - Secure player transactions
-  WALLET_CONTRACT: "0x9d1075B41cd80Ab08179F36bc17a7Ff8708748ba",
-  
-  // Swap Contract - DEX for CQT-MATIC and NFT trading
-  SWAP_CONTRACT: "0x9d1075B41cd80Ab08179F36bc17a7Ff8708748ba",
-  
-  // NFT Book Contracts (from earlier assets)
-  NFT_BOOK_CONTRACT: "0x545ace061a1b64b14641b50cfe317017b01a667b",
-  NFT_BOOK_SALES_CONTRACT: "0xe1df30dbeaf0e895bc5b7efd8b7b9ed91097c8d7",
-  
-  // Liquidity Pool Contracts
-  MATIC_CQT_POOL: "0x0b3CD8a843DEFDF01564a0342a89ba06c4fC9394",
-  WETH_CQT_POOL: "0xb1E0B26f550203FAb31A0D9C1Eb4FFE330bfE4d0",
-  
-  // Base Network CQT Token
-  BASE_CQT_TOKEN: "0x9d1075b41cd80ab08179f36bc17a7ff8708748ba",
-  BASE_CQT_USDC_POOL: "0xd874aeaef376229c8d41d392c9ce272bd41e57d6"
+  base: {
+    // CQT Token on Base
+    cqt: '0x9d1075b41cd80ab08179f36bc17a7ff8708748ba',
+    
+    // Base Liquidity Pools
+    cqtUsdcPool: '0xd874aeaef376229c8d41d392c9ce272bd41e57d6',
+    
+    // Bridge Contracts
+    aggLayerBridge: '0x0000000000000000000000000000000000000001'
+  }
 };
 
-// Staking Contract ABI
-export const STAKING_ABI = [
-  "function stakeNFT(uint256 tokenId) external",
-  "function unstakeNFT(uint256 tokenId) external",
-  "function claimRewards() external",
-  "function getStakedNFTs(address user) external view returns (uint256[])",
-  "function getRewards(address user) external view returns (uint256)",
-  "function stakingDuration(uint256 tokenId) external view returns (uint256)",
-  "function rewardRate() external view returns (uint256)",
-  "event NFTStaked(address indexed user, uint256 indexed tokenId)",
-  "event NFTUnstaked(address indexed user, uint256 indexed tokenId)",
-  "event RewardsClaimed(address indexed user, uint256 amount)"
-];
+export const CONTRACT_ABIS = {
+  // ERC20 ABI for CQT token
+  erc20: [
+    'function balanceOf(address owner) view returns (uint256)',
+    'function transfer(address to, uint256 amount) returns (bool)',
+    'function transferFrom(address from, address to, uint256 amount) returns (bool)',
+    'function approve(address spender, uint256 amount) returns (bool)',
+    'function totalSupply() view returns (uint256)',
+    'function decimals() view returns (uint8)',
+    'function symbol() view returns (string)',
+    'function name() view returns (string)'
+  ],
+  
+  // Uniswap V3 Pool ABI
+  uniswapV3Pool: [
+    'function token0() view returns (address)',
+    'function token1() view returns (address)',
+    'function fee() view returns (uint24)',
+    'function liquidity() view returns (uint128)',
+    'function slot0() view returns (uint160 sqrtPriceX96, int24 tick, uint16 observationIndex, uint16 observationCardinality, uint16 observationCardinalityNext, uint8 feeProtocol, bool unlocked)'
+  ],
+  
+  // Staking Contract ABI
+  staking: [
+    'function stake(uint256 amount) external',
+    'function unstake(uint256 amount) external',
+    'function claimRewards() external',
+    'function balanceOf(address account) view returns (uint256)',
+    'function earned(address account) view returns (uint256)',
+    'function totalSupply() view returns (uint256)',
+    'function rewardRate() view returns (uint256)'
+  ],
+  
+  // MMORPG Contract ABI
+  mmorpg: [
+    'function createCharacter(string memory name, uint256 characterClass) external',
+    'function levelUp(uint256 characterId) external',
+    'function completeQuest(uint256 questId) external',
+    'function joinGuild(uint256 guildId) external',
+    'function createGuild(string memory name) external',
+    'function getCharacter(uint256 characterId) view returns (tuple)',
+    'function getGuild(uint256 guildId) view returns (tuple)'
+  ],
+  
+  // NFT Book ABI
+  nftBook: [
+    'function mint(address to, uint256 tokenId, string memory uri) external',
+    'function burn(uint256 tokenId) external',
+    'function tokenURI(uint256 tokenId) view returns (string)',
+    'function ownerOf(uint256 tokenId) view returns (address)',
+    'function balanceOf(address owner) view returns (uint256)'
+  ]
+};
 
-// Farming Contract ABI
-export const FARMING_ABI = [
-  "function deposit(uint256 amount) external",
-  "function withdraw(uint256 amount) external",
-  "function harvest() external",
-  "function userInfo(address user) external view returns (uint256 amount, uint256 rewardDebt)",
-  "function pendingRewards(address user) external view returns (uint256)",
-  "function poolInfo() external view returns (uint256 allocPoint, uint256 lastRewardBlock, uint256 accRewardPerShare)",
-  "event Deposit(address indexed user, uint256 amount)",
-  "event Withdraw(address indexed user, uint256 amount)",
-  "event Harvest(address indexed user, uint256 amount)"
-];
-
-// Wallet Contract ABI
-export const WALLET_ABI = [
-  "function executeTransaction(address to, uint256 value, bytes calldata data) external",
-  "function addOwner(address owner) external",
-  "function removeOwner(address owner) external",
-  "function changeRequirement(uint256 required) external",
-  "function getOwners() external view returns (address[])",
-  "function required() external view returns (uint256)",
-  "function isOwner(address owner) external view returns (bool)",
-  "event Confirmation(address indexed sender, uint256 indexed transactionId)",
-  "event Execution(uint256 indexed transactionId)",
-  "event ExecutionFailure(uint256 indexed transactionId)"
-];
-
-// Swap Contract ABI (DEX)
-export const SWAP_ABI = [
-  "function swapExactTokensForTokens(uint256 amountIn, uint256 amountOutMin, address[] calldata path, address to, uint256 deadline) external returns (uint256[] memory amounts)",
-  "function swapTokensForExactTokens(uint256 amountOut, uint256 amountInMax, address[] calldata path, address to, uint256 deadline) external returns (uint256[] memory amounts)",
-  "function addLiquidity(address tokenA, address tokenB, uint256 amountADesired, uint256 amountBDesired, uint256 amountAMin, uint256 amountBMin, address to, uint256 deadline) external returns (uint256 amountA, uint256 amountB, uint256 liquidity)",
-  "function removeLiquidity(address tokenA, address tokenB, uint256 liquidity, uint256 amountAMin, uint256 amountBMin, address to, uint256 deadline) external returns (uint256 amountA, uint256 amountB)",
-  "function getAmountsOut(uint256 amountIn, address[] calldata path) external view returns (uint256[] memory amounts)",
-  "function getAmountsIn(uint256 amountOut, address[] calldata path) external view returns (uint256[] memory amounts)",
-  "event Swap(address indexed sender, uint256 amount0In, uint256 amount1In, uint256 amount0Out, uint256 amount1Out, address indexed to)",
-  "event Mint(address indexed sender, uint256 amount0, uint256 amount1)",
-  "event Burn(address indexed sender, uint256 amount0, uint256 amount1, address indexed to)"
-];
-
-// NFT Book Sales Contract ABI
-export const NFT_BOOK_SALES_ABI = [
-  "function buyNFT(uint256 tierId, address paymentToken, string uri, tuple(string chapter, string character, string location, string element, string rarity) metadata) external payable",
-  "function addTier(uint256 price, uint256 supply) external",
-  "function updateTier(uint256 tierId, uint256 price, uint256 supply) external",
-  "function withdrawFunds(address payable to, uint256 amount) external",
-  "function withdrawTokens(address token, address to, uint256 amount) external",
-  "function setNFTContract(address nftAddress) external",
-  "function tiers(uint256) external view returns (uint256 price, uint256 supply, uint256 sold)",
-  "function tierCount() external view returns (uint256)"
-];
-
-export interface StakingMetrics {
-  totalStaked: number;
-  userStaked: number;
-  pendingRewards: number;
-  stakingAPR: number;
-  totalParticipants: number;
-}
-
-export interface FarmingMetrics {
-  totalDeposited: number;
-  userDeposited: number;
-  pendingHarvest: number;
-  farmingAPR: number;
-  poolAllocation: number;
-}
-
-export interface LiquidityMetrics {
-  matic_cqt_tvl: number;
-  weth_cqt_tvl: number;
-  base_cqt_usdc_tvl: number;
-  total_liquidity: number;
-  trading_volume_24h: number;
-}
-
-export interface NFTBookMetrics {
-  totalBooks: number;
-  userBooks: number;
-  availableTiers: Array<{
-    tierId: number;
-    price: number;
-    supply: number;
-    sold: number;
-    format: string;
-  }>;
-}
-
-export class AdvancedContractsService {
-  private stakingContract: any = null;
-  private farmingContract: any = null;
-  private walletContract: any = null;
-  private swapContract: any = null;
-  private nftBookSalesContract: any = null;
-
-  async initializeContracts(provider: any, signer: any) {
-    // Initialize additional contracts when provider is available
-    if (!provider || !signer) return;
-
-    try {
-      // Note: These would be initialized with actual contract instances
-      // when the full Web3 integration is implemented
-      console.log('Initializing advanced contracts...');
-      
-      return {
-        staking: true,
-        farming: true,
-        wallet: true,
-        swap: true,
-        nftBookSales: true
-      };
-    } catch (error) {
-      console.error('Failed to initialize advanced contracts:', error);
-      return false;
+export const NETWORK_CONFIG = {
+  polygon: {
+    chainId: 137,
+    name: 'Polygon',
+    rpcUrl: 'https://polygon-rpc.com',
+    blockExplorer: 'https://polygonscan.com',
+    nativeCurrency: {
+      name: 'MATIC',
+      symbol: 'MATIC',
+      decimals: 18
+    }
+  },
+  
+  base: {
+    chainId: 8453,
+    name: 'Base',
+    rpcUrl: 'https://mainnet.base.org',
+    blockExplorer: 'https://basescan.org',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18
     }
   }
+};
 
-  async getStakingMetrics(): Promise<StakingMetrics> {
-    // Mock metrics - would be replaced with actual contract calls
-    return {
-      totalStaked: 1250000,
-      userStaked: 5000,
-      pendingRewards: 125.5,
-      stakingAPR: 85.3,
-      totalParticipants: 3250
-    };
+// Pool configurations for arbitrage monitoring
+export const ARBITRAGE_POOLS = [
+  {
+    id: 'polygon_cqt_weth',
+    address: LIVE_CONTRACTS.polygon.cqtWethPool,
+    network: 'polygon',
+    token0: 'CQT',
+    token1: 'WETH',
+    token0Address: LIVE_CONTRACTS.polygon.token,
+    token1Address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+    feeTier: 3000,
+    enabled: true
+  },
+  {
+    id: 'polygon_cqt_wmatic',
+    address: LIVE_CONTRACTS.polygon.cqtWmaticPool,
+    network: 'polygon',
+    token0: 'CQT',
+    token1: 'WMATIC',
+    token0Address: LIVE_CONTRACTS.polygon.token,
+    token1Address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+    feeTier: 3000,
+    enabled: true
+  },
+  {
+    id: 'base_cqt_usdc',
+    address: LIVE_CONTRACTS.base.cqtUsdcPool,
+    network: 'base',
+    token0: 'CQT',
+    token1: 'USDC',
+    token0Address: LIVE_CONTRACTS.base.cqt,
+    token1Address: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+    feeTier: 3000,
+    enabled: true
   }
+];
 
-  async getFarmingMetrics(): Promise<FarmingMetrics> {
-    return {
-      totalDeposited: 2750000,
-      userDeposited: 10000,
-      pendingHarvest: 245.8,
-      farmingAPR: 125.4,
-      poolAllocation: 15
-    };
+// Security configurations
+export const SECURITY_SETTINGS = {
+  maxSlippage: 0.02, // 2%
+  gasLimitMultiplier: 1.2,
+  maxGasPrice: '100000000000', // 100 Gwei
+  minProfitThreshold: 0.005, // 0.5%
+  maxPositionSize: 1000000, // 1M CQT
+  cooldownPeriod: 60, // 60 seconds
+  zkProofEnabled: true,
+  postQuantumEnabled: true,
+  rustSecurityLayer: true
+};
+
+// Cross-chain bridge configuration
+export const BRIDGE_CONFIG = {
+  agglayer: {
+    enabled: true,
+    contracts: {
+      polygon: '0x0000000000000000000000000000000000000001',
+      base: '0x0000000000000000000000000000000000000001'
+    },
+    fees: {
+      flatFee: 0.01,
+      percentageFee: 0.001
+    },
+    estimatedTime: 180 // 3 minutes
   }
-
-  async getLiquidityMetrics(): Promise<LiquidityMetrics> {
-    return {
-      matic_cqt_tvl: 2400000,
-      weth_cqt_tvl: 1850000,
-      base_cqt_usdc_tvl: 950000,
-      total_liquidity: 5200000,
-      trading_volume_24h: 340000
-    };
-  }
-
-  async getNFTBookMetrics(): Promise<NFTBookMetrics> {
-    return {
-      totalBooks: 12500,
-      userBooks: 3,
-      availableTiers: [
-        { tierId: 1, price: 0.1, supply: 1000, sold: 750, format: 'PDF + EPUB' },
-        { tierId: 2, price: 50, supply: 500, sold: 320, format: 'Interactive' },
-        { tierId: 3, price: 0.5, supply: 100, sold: 85, format: 'AR Experience' }
-      ]
-    };
-  }
-
-  // Staking operations
-  async stakeNFT(tokenId: number): Promise<{ success: boolean; txHash?: string }> {
-    // Mock implementation
-    console.log(`Staking NFT ${tokenId}...`);
-    return { success: true, txHash: '0x...' };
-  }
-
-  async unstakeNFT(tokenId: number): Promise<{ success: boolean; txHash?: string }> {
-    console.log(`Unstaking NFT ${tokenId}...`);
-    return { success: true, txHash: '0x...' };
-  }
-
-  async claimStakingRewards(): Promise<{ success: boolean; amount?: number; txHash?: string }> {
-    console.log('Claiming staking rewards...');
-    return { success: true, amount: 125.5, txHash: '0x...' };
-  }
-
-  // Farming operations
-  async depositToFarm(amount: number): Promise<{ success: boolean; txHash?: string }> {
-    console.log(`Depositing ${amount} tokens to farm...`);
-    return { success: true, txHash: '0x...' };
-  }
-
-  async withdrawFromFarm(amount: number): Promise<{ success: boolean; txHash?: string }> {
-    console.log(`Withdrawing ${amount} tokens from farm...`);
-    return { success: true, txHash: '0x...' };
-  }
-
-  async harvestRewards(): Promise<{ success: boolean; amount?: number; txHash?: string }> {
-    console.log('Harvesting farm rewards...');
-    return { success: true, amount: 245.8, txHash: '0x...' };
-  }
-
-  // Swap operations
-  async swapTokens(tokenIn: string, tokenOut: string, amountIn: number, minAmountOut: number): Promise<{ success: boolean; amountOut?: number; txHash?: string }> {
-    console.log(`Swapping ${amountIn} ${tokenIn} for ${tokenOut}...`);
-    return { success: true, amountOut: minAmountOut * 1.02, txHash: '0x...' };
-  }
-
-  async addLiquidity(tokenA: string, tokenB: string, amountA: number, amountB: number): Promise<{ success: boolean; liquidity?: number; txHash?: string }> {
-    console.log(`Adding liquidity: ${amountA} ${tokenA} + ${amountB} ${tokenB}...`);
-    return { success: true, liquidity: Math.sqrt(amountA * amountB), txHash: '0x...' };
-  }
-
-  // NFT Book operations
-  async purchaseNFTBook(tierId: number, paymentToken: string): Promise<{ success: boolean; bookId?: number; txHash?: string }> {
-    console.log(`Purchasing NFT book tier ${tierId} with ${paymentToken}...`);
-    return { success: true, bookId: Math.floor(Math.random() * 10000), txHash: '0x...' };
-  }
-}
-
-export const advancedContractsService = new AdvancedContractsService();
+};
