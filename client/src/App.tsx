@@ -3,7 +3,8 @@ import { GameDashboard } from '@/components/game/GameDashboard';
 import { ArbitrageDashboard } from '@/components/arbitrage/ArbitrageDashboard';
 import { AgentDashboard } from '@/components/agentkit/AgentDashboard';
 import { SuperPayDashboard } from '@/components/superpay/SuperPayDashboard';
-import { Bot, CreditCard, Gamepad2, TrendingUp } from 'lucide-react';
+import { RTXDashboard } from '@/components/nvidia/RTXDashboard';
+import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles } from 'lucide-react';
 import { Toaster } from "@/components/ui/toaster";
 
 // Simplified AgentKit Component
@@ -135,7 +136,7 @@ function SuperPayDemo() {
 }
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage'>('game');
+  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage' | 'rtx'>('game');
 
   const renderView = () => {
     switch (activeView) {
@@ -145,6 +146,8 @@ export default function App() {
         return <SuperPayDemo />;
       case 'arbitrage':
         return <ArbitrageDashboard />;
+      case 'rtx':
+        return <RTXDashboard />;
       default:
         return <GameDashboard />;
     }
@@ -198,6 +201,17 @@ export default function App() {
           >
             <TrendingUp className="w-4 h-4" />
             CQT Bot
+          </button>
+          <button
+            onClick={() => setActiveView('rtx')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === 'rtx' 
+                ? 'bg-purple-600 text-white' 
+                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <Sparkles className="w-4 h-4" />
+            RTX Gaming
           </button>
         </div>
       </div>

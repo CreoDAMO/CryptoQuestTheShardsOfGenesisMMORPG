@@ -400,6 +400,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
           break;
 
         case 'status':
+          const statusOpportunities = generateArbitrageOpportunities();
           const [miningMetrics, gamingMetrics, cloudUsage] = await Promise.all([
             mockNvidiaCloudService.getMiningMetrics(),
             mockNvidiaCloudService.getGamingAIMetrics(),
@@ -411,9 +412,10 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
             data: {
               arbitrage: {
                 totalProfit: 15420.85,
-                activeOpportunities: opportunities.length,
+                activeOpportunities: statusOpportunities.length,
                 successRate: 94.7,
                 liquidityProvided: 7500000000000,
+                miningRewards: 3.45,
                 gasOptimization: 87.3
               },
               mining: miningMetrics,
