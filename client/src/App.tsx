@@ -5,6 +5,7 @@ import { AgentDashboard } from '@/components/agentkit/AgentDashboard';
 import { SuperPayDashboard } from '@/components/superpay/SuperPayDashboard';
 import { RTXDashboard } from '@/components/nvidia/RTXDashboard';
 import { DeFiDashboard } from '@/components/defi/DeFiDashboard';
+import { CryptoQuestHeaderLogo } from '@/components/brand/CryptoQuestLogo';
 import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins } from 'lucide-react';
 import { Toaster } from "@/components/ui/toaster";
 
@@ -158,6 +159,11 @@ export default function App() {
 
   return (
     <main className="min-h-screen">
+      {/* Logo Header */}
+      <div className="fixed top-4 left-4 z-50">
+        <CryptoQuestHeaderLogo />
+      </div>
+
       {/* Navigation */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
         <div className="flex gap-2 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-full p-2">
@@ -215,6 +221,17 @@ export default function App() {
           >
             <Sparkles className="w-4 h-4" />
             RTX Gaming
+          </button>
+          <button
+            onClick={() => setActiveView('defi')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === 'defi' 
+                ? 'bg-purple-600 text-white' 
+                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <Coins className="w-4 h-4" />
+            DeFi Hub
           </button>
           <button
             onClick={() => setActiveView('defi')}
