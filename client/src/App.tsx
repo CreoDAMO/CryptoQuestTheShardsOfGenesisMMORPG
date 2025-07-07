@@ -177,13 +177,13 @@ export default function App() {
   return (
     <MobileOptimizedLayout currentView={activeView} onViewChange={setActiveView}>
       <main className="min-h-screen">
-        {/* Logo Header - Desktop only */}
-        <div className="fixed top-4 left-4 z-50 hidden md:block">
+        {/* Logo Header - Always visible */}
+        <div className="fixed top-4 left-4 z-50">
           <CryptoQuestHeaderLogo />
         </div>
 
         {/* Navigation - Desktop only */}
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block">
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 hidden md:block">
           <div className="flex gap-2 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-full p-2">
             <button
               onClick={() => setActiveView('whitepaper')}
