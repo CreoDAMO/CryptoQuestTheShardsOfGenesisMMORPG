@@ -1,0 +1,108 @@
+{
+  "name": "CryptoQuest: The Shards of Genesis",
+  "short_name": "CryptoQuest",
+  "description": "Revolutionary Blockchain MMORPG with AI-powered features and holographic visualization",
+  "version": "2.0.0",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#8b5cf6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["games", "finance", "entertainment"],
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "AI Control Center",
+      "url": "/?view=ai",
+      "description": "Access the autonomous AI system"
+    },
+    {
+      "name": "Game Hub",
+      "url": "/?view=game",
+      "description": "Play CryptoQuest MMORPG"
+    },
+    {
+      "name": "DeFi Hub",
+      "url": "/?view=defi",
+      "description": "Access DeFi features"
+    },
+    {
+      "name": "Admin Dashboard",
+      "url": "/?view=admin",
+      "description": "Administrative controls"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-1.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshots/mobile-1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "features": [
+    "AI-powered autonomous system",
+    "Holographic visualization",
+    "Multi-chain DeFi operations",
+    "Real-time arbitrage trading",
+    "Cross-platform gaming",
+    "Voice AI interactions"
+  ]
+}

@@ -9,6 +9,8 @@ import { WhitePaperDashboard } from '@/components/whitepaper/WhitePaperDashboard
 import { HolographicEngine } from '@/components/holographic/HolographicEngine';
 import { AdminDashboard } from '@/components/admin/AdminDashboard';
 import { UniswapV4Dashboard } from '@/components/advanced/UniswapV4Dashboard';
+import { AIControlCenter } from '@/components/ai/AIControlCenter';
+import { MobileOptimizedLayout } from '@/components/mobile/MobileOptimizedLayout';
 import { CryptoQuestHeaderLogo } from '@/components/brand/CryptoQuestLogo';
 import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins, BookOpen, Eye, Shield, Layers } from 'lucide-react';
 import { Toaster } from "@/components/ui/toaster";
@@ -142,7 +144,7 @@ function SuperPayDemo() {
 }
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'v4defi'>('game');
+  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'v4defi' | 'ai'>('game');
 
   const renderView = () => {
     switch (activeView) {
@@ -160,6 +162,8 @@ export default function App() {
         return <AdminDashboard />;
       case 'v4defi':
         return <UniswapV4Dashboard />;
+      case 'ai':
+        return <AIControlCenter />;
       case 'rtx':
         return <RTXDashboard />;
       case 'defi':
@@ -170,27 +174,39 @@ export default function App() {
   };
 
   return (
-    <main className="min-h-screen">
-      {/* Logo Header */}
-      <div className="fixed top-4 left-4 z-50">
-        <CryptoQuestHeaderLogo />
-      </div>
+    <MobileOptimizedLayout currentView={activeView} onViewChange={setActiveView}>
+      <main className="min-h-screen">
+        {/* Logo Header - Desktop only */}
+        <div className="fixed top-4 left-4 z-50 hidden md:block">
+          <CryptoQuestHeaderLogo />
+        </div>
 
-      {/* Navigation */}
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="flex gap-2 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-full p-2">
-          <button
-            onClick={() => setActiveView('game')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeView === 'game' 
-                ? 'bg-purple-600 text-white' 
-                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
-            }`}
-          >
-            <Gamepad2 className="w-4 h-4" />
-            Game Hub
-          </button>
-          <button
+        {/* Navigation - Desktop only */}
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block">
+          <div className="flex gap-2 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-full p-2">
+            <button
+              onClick={() => setActiveView('game')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeView === 'game' 
+                  ? 'bg-purple-600 text-white' 
+                  : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+              }`}
+            >
+              <Gamepad2 className="w-4 h-4" />
+              Game Hub
+            </button>
+            <button
+              onClick={() => setActiveView('ai')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeView === 'ai' 
+                  ? 'bg-purple-600 text-white' 
+                  : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+              }`}
+            >
+              <Bot className="w-4 h-4" />
+              AI Control
+            </button>
+            <button
             onClick={() => setActiveView('agent')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               activeView === 'agent' 
@@ -300,5 +316,6 @@ export default function App() {
       {/* Toast notifications */}
       <Toaster />
     </main>
+    </MobileOptimizedLayout>
   );
 }
