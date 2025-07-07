@@ -145,7 +145,7 @@ function SuperPayDemo() {
 }
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'v4defi' | 'ai'>('game');
+  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'v4defi' | 'ai'>('whitepaper');
 
   const renderView = () => {
     switch (activeView) {
@@ -185,6 +185,28 @@ export default function App() {
         {/* Navigation - Desktop only */}
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block">
           <div className="flex gap-2 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-full p-2">
+            <button
+              onClick={() => setActiveView('whitepaper')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeView === 'whitepaper' 
+                  ? 'bg-purple-600 text-white' 
+                  : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+              }`}
+            >
+              <BookOpen className="w-4 h-4" />
+              White Paper
+            </button>
+            <button
+              onClick={() => setActiveView('v4defi')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeView === 'v4defi' 
+                  ? 'bg-purple-600 text-white' 
+                  : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+              }`}
+            >
+              <Layers className="w-4 h-4" />
+              V4 DeFi
+            </button>
             <button
               onClick={() => setActiveView('game')}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
@@ -263,17 +285,6 @@ export default function App() {
             DeFi Hub
           </button>
           <button
-            onClick={() => setActiveView('whitepaper')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeView === 'whitepaper' 
-                ? 'bg-purple-600 text-white' 
-                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
-            }`}
-          >
-            <BookOpen className="w-4 h-4" />
-            White Paper
-          </button>
-          <button
             onClick={() => setActiveView('holographic')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               activeView === 'holographic' 
@@ -283,17 +294,6 @@ export default function App() {
           >
             <Eye className="w-4 h-4" />
             Holographic
-          </button>
-          <button
-            onClick={() => setActiveView('v4defi')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeView === 'v4defi' 
-                ? 'bg-purple-600 text-white' 
-                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
-            }`}
-          >
-            <Layers className="w-4 h-4" />
-            V4 DeFi
           </button>
           <button
             onClick={() => setActiveView('admin')}
