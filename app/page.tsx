@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { GameDashboard } from '@/components/game/GameDashboard';
 import { ArbitrageDashboard } from '@/components/arbitrage/ArbitrageDashboard';
+import { EnhancedDeFiDashboard } from '@/components/enhanced/EnhancedDeFiDashboard';
 import { Bot, CreditCard, Gamepad2, TrendingUp } from 'lucide-react';
 
 // Simplified AgentKit Component
@@ -134,7 +135,7 @@ function SuperPayDemo() {
 }
 
 export default function HomePage() {
-  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage'>('game');
+  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage' | 'defi'>('game');
 
   const renderView = () => {
     switch (activeView) {
@@ -144,6 +145,8 @@ export default function HomePage() {
         return <SuperPayDemo />;
       case 'arbitrage':
         return <ArbitrageDashboard />;
+      case 'defi':
+        return <EnhancedDeFiDashboard />;
       default:
         return <GameDashboard />;
     }
@@ -151,7 +154,7 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen">
-      {/* Navigation */}
+      {/* Enhanced Navigation with DeFi V4 */}
       <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
         <div className="flex gap-2 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-full p-2">
           <button
@@ -164,6 +167,17 @@ export default function HomePage() {
           >
             <Gamepad2 className="w-4 h-4" />
             Game Hub
+          </button>
+          <button
+            onClick={() => setActiveView('defi')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === 'defi' 
+                ? 'bg-purple-600 text-white' 
+                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <TrendingUp className="w-4 h-4" />
+            DeFi V4
           </button>
           <button
             onClick={() => setActiveView('agent')}

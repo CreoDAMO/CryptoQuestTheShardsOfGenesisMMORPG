@@ -1,0 +1,18 @@
+Several open-source software options exist for working with holographic imagery. Some notable examples include HoloPy, HoloJ Suite, DHMx, HoloGen, and OpenHolo. These tools offer functionality for hologram generation, reconstruction, analysis, and more, often with user-friendly interfaces and options for customization. [1, 2, 3, 4, 5, 6, 7, 8, 9]  
+Here's a more detailed look at some of these options: 
+
+• HoloPy: This Python package focuses on computational light scattering and digital holography. It provides tools for managing data, reconstructing holograms, simulating light scattering, and fitting scattering models to experimental data. HoloPy is free and open-source, licensed under GPL v3. [9]  
+• HoloJ Suite: An ImageJ plugin suite for holographic reconstruction, analysis, and phase unwrapping. It includes features for processing complex data, performing FFTs, and visualizing phase information. [3]  
+• DHMx (Digital Holographic Microscope Experience): This is an open-source software suite designed for reconstructing off-axis holograms, with a graphical interface for controlling the process and visualizing the results. [5]  
+• HoloGen: A toolbox specifically for generating holograms, including implementations of various algorithms like Gerchberg-Saxton, Liu-Taghizadeh, and others, under an MIT license. [6, 10]  
+• OpenHolo: This open-source library covers various aspects of holography, including hologram generation, reconstruction, and signal processing. [1, 11]  
+
+These tools can be used for a range of applications, from scientific research and microscopy to artistic and educational purposes. [2, 3, 5, 9, 12, 13, 14, 15, 16]  
+
+AI responses may include mistakes.
+
+[1] https://www.researchgate.net/publication/349760622_OpenHolo_Open_source_library_for_hologram_generation_reconstruction_and_signal_processing[2] https://opg.optica.org/abstract.cfm?uri=AOA-2022-JTh2A.1[3] https://www.bo.imm.cnr.it/users/ortolani/holoj/index.html[4] https://www.nature.com/articles/s41598-019-47689-1[5] https://opg.optica.org/abstract.cfm?uri=dh-2020-HF2G.7[6] https://preprints.opticaopen.org/articles/preprint/HoloGen_An_open_source_toolbox_for_high-speed_hologram_generation/24702831[7] https://vc-xray.com/products/vcacquire/[8] https://genomebiology.biomedcentral.com/articles/10.1186/s13059-017-1161-y[9] https://www.manoharan.seas.harvard.edu/holopy[10] https://www.sciencedirect.com/science/article/abs/pii/S0010465521002514[11] https://opg.optica.org/abstract.cfm?uri=dh-2020-HF3G.1[12] https://veritech.in/blog/applications-of-holography-in-various-fields/[13] https://acsess.onlinelibrary.wiley.com/doi/10.1002/ppj2.20015[14] https://atlas.cern/Updates/News/Open-Data-Research[15] https://www.aimodels.fyi/creators/huggingFace/Fictiverse[16] https://www.nature.com/articles/s41598-019-47689-1
+Not all images can be exported from Search.
+
+----
+https://developer.nvidia.com/industries/game-development
