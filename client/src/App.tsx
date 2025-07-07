@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { GameDashboard } from '@/components/game/GameDashboard';
-import { ArbitrageDashboard } from '@/components/arbitrage/ArbitrageDashboard';
+import { EnhancedArbitrageDashboard } from '@/components/arbitrage/EnhancedArbitrageDashboard';
 import { AgentDashboard } from '@/components/agentkit/AgentDashboard';
 import { SuperPayDashboard } from '@/components/superpay/SuperPayDashboard';
 import { RTXDashboard } from '@/components/nvidia/RTXDashboard';
 import { DeFiDashboard } from '@/components/defi/DeFiDashboard';
+import { WhitePaperDashboard } from '@/components/whitepaper/WhitePaperDashboard';
 import { CryptoQuestHeaderLogo } from '@/components/brand/CryptoQuestLogo';
-import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins } from 'lucide-react';
+import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins, BookOpen } from 'lucide-react';
 import { Toaster } from "@/components/ui/toaster";
 
 // Simplified AgentKit Component
@@ -138,7 +139,7 @@ function SuperPayDemo() {
 }
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage' | 'rtx' | 'defi'>('game');
+  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper'>('game');
 
   const renderView = () => {
     switch (activeView) {
@@ -147,7 +148,9 @@ export default function App() {
       case 'superpay':
         return <SuperPayDemo />;
       case 'arbitrage':
-        return <ArbitrageDashboard />;
+        return <EnhancedArbitrageDashboard />;
+      case 'whitepaper':
+        return <WhitePaperDashboard />;
       case 'rtx':
         return <RTXDashboard />;
       case 'defi':
@@ -234,15 +237,15 @@ export default function App() {
             DeFi Hub
           </button>
           <button
-            onClick={() => setActiveView('defi')}
+            onClick={() => setActiveView('whitepaper')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeView === 'defi' 
+              activeView === 'whitepaper' 
                 ? 'bg-purple-600 text-white' 
                 : 'text-gray-300 hover:bg-slate-700 hover:text-white'
             }`}
           >
-            <Coins className="w-4 h-4" />
-            DeFi Hub
+            <BookOpen className="w-4 h-4" />
+            White Paper
           </button>
         </div>
       </div>
