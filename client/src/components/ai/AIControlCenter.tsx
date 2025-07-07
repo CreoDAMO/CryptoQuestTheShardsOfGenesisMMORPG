@@ -182,6 +182,52 @@ export function AIControlCenter() {
     ));
   };
 
+  const deploySmartContract = async (contractType: string) => {
+    const newDecision: AIDecision = {
+      id: Date.now().toString(),
+      agentId: 'deepseek-engineer',
+      type: 'operational',
+      description: `Deploy ${contractType} smart contract`,
+      reasoning: `AI analysis indicates optimal deployment conditions. Gas fees are low, network congestion minimal, and code has passed all security audits.`,
+      confidence: 0.96,
+      timestamp: new Date(),
+      executed: false
+    };
+    
+    setDecisions(prev => [newDecision, ...prev]);
+  };
+
+  const executeArbitrageTrade = async (opportunity: string) => {
+    const newDecision: AIDecision = {
+      id: Date.now().toString(),
+      agentId: 'grok-analyst',
+      type: 'operational',
+      description: `Execute arbitrage trade: ${opportunity}`,
+      reasoning: `Detected 2.3% arbitrage opportunity between Uniswap and SushiSwap. Expected profit: $847 after gas fees.`,
+      confidence: 0.91,
+      timestamp: new Date(),
+      executed: true,
+      outcome: 'Success: $847 profit realized'
+    };
+    
+    setDecisions(prev => [newDecision, ...prev]);
+  };
+
+  const manageCommunityEvent = async (eventType: string) => {
+    const newDecision: AIDecision = {
+      id: Date.now().toString(),
+      agentId: 'claude-strategist',
+      type: 'strategic',
+      description: `Launch community event: ${eventType}`,
+      reasoning: `Community engagement is at 78% this week. Launching ${eventType} event will boost participation and reward active members.`,
+      confidence: 0.88,
+      timestamp: new Date(),
+      executed: false
+    };
+    
+    setDecisions(prev => [newDecision, ...prev]);
+  };
+
   const generateVideoContent = async (topic: string) => {
     // Simulate video generation
     const newInteraction: AIInteraction = {
@@ -399,6 +445,40 @@ export function AIControlCenter() {
                           {agent.status === 'active' ? <Pause className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
                           {agent.status === 'active' ? 'Pause' : 'Activate'}
                         </Button>
+
+                        {/* Agent-specific operational buttons */}
+                        {agent.id === 'deepseek-engineer' && (
+                          <Button 
+                            size="sm"
+                            onClick={() => deploySmartContract('NFT Collection')}
+                            className="bg-green-600 hover:bg-green-700"
+                          >
+                            <Code className="w-4 h-4 mr-2" />
+                            Deploy Contract
+                          </Button>
+                        )}
+                        
+                        {agent.id === 'grok-analyst' && (
+                          <Button 
+                            size="sm"
+                            onClick={() => executeArbitrageTrade('USDC/USDT 2.3%')}
+                            className="bg-blue-600 hover:bg-blue-700"
+                          >
+                            <TrendingUp className="w-4 h-4 mr-2" />
+                            Execute Trade
+                          </Button>
+                        )}
+                        
+                        {agent.id === 'claude-strategist' && (
+                          <Button 
+                            size="sm"
+                            onClick={() => manageCommunityEvent('Guild Tournament')}
+                            className="bg-yellow-600 hover:bg-yellow-700"
+                          >
+                            <Target className="w-4 h-4 mr-2" />
+                            Launch Event
+                          </Button>
+                        )}
                       </div>
                     </CardContent>
                   </Card>

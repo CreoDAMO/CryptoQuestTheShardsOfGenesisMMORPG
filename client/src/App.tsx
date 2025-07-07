@@ -10,6 +10,7 @@ import { HolographicEngine } from '@/components/holographic/HolographicEngine';
 import { AdminDashboard } from '@/components/admin/AdminDashboard';
 import { UniswapV4Dashboard } from '@/components/advanced/UniswapV4Dashboard';
 import { AIControlCenter } from '@/components/ai/AIControlCenter';
+import { CommunityAIChat } from '@/components/ai/CommunityAIChat';
 import { MobileOptimizedLayout } from '@/components/mobile/MobileOptimizedLayout';
 import { CryptoQuestHeaderLogo } from '@/components/brand/CryptoQuestLogo';
 import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins, BookOpen, Eye, Shield, Layers } from 'lucide-react';
