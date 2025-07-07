@@ -1,28 +1,49 @@
-// Temporary Next.js startup wrapper
-import { spawn } from 'child_process';
+import express, { type Request, Response } from "express";
+import session from "express-session";
+import { createServer } from "http";
+import { setupVite, serveStatic, log } from "./vite";
+import { registerRoutes } from "./routes";
 
-console.log('Starting Next.js development server...');
+const app = express();
+const port = process.env.PORT || 5000;
 
-const nextProcess = spawn('npx', ['next', 'dev', '--port', '5000'], {
-  stdio: 'inherit',
-  cwd: process.cwd()
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Session configuration
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    },
+  }),
+);
+
+// Health check endpoint
+app.get("/api/healthz", (req: Request, res: Response) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-nextProcess.on('error', (error) => {
-  console.error('Failed to start Next.js:', error);
-  process.exit(1);
+const server = createServer(app);
+
+// Register all routes
+registerRoutes(app, server);
+
+// Development vs Production setup
+if (process.env.NODE_ENV === "development") {
+  setupVite(app, server);
+} else {
+  serveStatic(app);
+}
+
+server.listen(port, "0.0.0.0", () => {
+  log(`Server running on port ${port}`);
 });
 
-nextProcess.on('exit', (code) => {
-  console.log(`Next.js process exited with code ${code}`);
-  process.exit(code || 0);
-});
-
-// Handle process termination
-process.on('SIGTERM', () => {
-  nextProcess.kill('SIGTERM');
-});
-
-process.on('SIGINT', () => {
-  nextProcess.kill('SIGINT');
-});
+export default app;

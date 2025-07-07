@@ -7,7 +7,7 @@ import {
   type FarmingPosition, type InsertFarmingPosition, type NftCollection, 
   type InsertNftCollection, type DaoProposal, type InsertDaoProposal,
   type DaoVote, type InsertDaoVote
-} from "@shared/schema";
+} from "../shared/schema.js";
 import { db } from "./db";
 import { eq, and, desc } from "drizzle-orm";
 
