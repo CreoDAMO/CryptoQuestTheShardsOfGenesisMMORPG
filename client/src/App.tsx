@@ -6,8 +6,11 @@ import { SuperPayDashboard } from '@/components/superpay/SuperPayDashboard';
 import { RTXDashboard } from '@/components/nvidia/RTXDashboard';
 import { DeFiDashboard } from '@/components/defi/DeFiDashboard';
 import { WhitePaperDashboard } from '@/components/whitepaper/WhitePaperDashboard';
+import { HolographicEngine } from '@/components/holographic/HolographicEngine';
+import { AdminDashboard } from '@/components/admin/AdminDashboard';
+import { UniswapV4Dashboard } from '@/components/advanced/UniswapV4Dashboard';
 import { CryptoQuestHeaderLogo } from '@/components/brand/CryptoQuestLogo';
-import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins, BookOpen } from 'lucide-react';
+import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins, BookOpen, Eye, Shield, Layers } from 'lucide-react';
 import { Toaster } from "@/components/ui/toaster";
 
 // Simplified AgentKit Component
@@ -139,7 +142,7 @@ function SuperPayDemo() {
 }
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper'>('game');
+  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'v4defi'>('game');
 
   const renderView = () => {
     switch (activeView) {
@@ -151,6 +154,12 @@ export default function App() {
         return <EnhancedArbitrageDashboard />;
       case 'whitepaper':
         return <WhitePaperDashboard />;
+      case 'holographic':
+        return <HolographicEngine />;
+      case 'admin':
+        return <AdminDashboard />;
+      case 'v4defi':
+        return <UniswapV4Dashboard />;
       case 'rtx':
         return <RTXDashboard />;
       case 'defi':
@@ -246,6 +255,39 @@ export default function App() {
           >
             <BookOpen className="w-4 h-4" />
             White Paper
+          </button>
+          <button
+            onClick={() => setActiveView('holographic')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === 'holographic' 
+                ? 'bg-purple-600 text-white' 
+                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <Eye className="w-4 h-4" />
+            Holographic
+          </button>
+          <button
+            onClick={() => setActiveView('v4defi')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === 'v4defi' 
+                ? 'bg-purple-600 text-white' 
+                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <Layers className="w-4 h-4" />
+            V4 DeFi
+          </button>
+          <button
+            onClick={() => setActiveView('admin')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === 'admin' 
+                ? 'bg-purple-600 text-white' 
+                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <Shield className="w-4 h-4" />
+            Admin
           </button>
         </div>
       </div>
