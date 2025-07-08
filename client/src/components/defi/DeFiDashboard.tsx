@@ -19,6 +19,7 @@ import {
   Activity
 } from 'lucide-react';
 import { EnhancedNFTBookMarketplace } from './EnhancedNFTBookMarketplace';
+import { ContractIntegration } from './ContractIntegration';
 
 interface DeFiMetrics {
   staking: {
@@ -56,7 +57,7 @@ interface DeFiMetrics {
 }
 
 export function DeFiDashboard() {
-  const [activeSection, setActiveSection] = useState<'staking' | 'farming' | 'liquidity' | 'nftbooks'>('staking');
+  const [activeSection, setActiveSection] = useState<'staking' | 'farming' | 'liquidity' | 'nftbooks' | 'contracts'>('staking');
   const [loading, setLoading] = useState(false);
   
   const [metrics, setMetrics] = useState<DeFiMetrics>({
@@ -91,6 +92,16 @@ export function DeFiDashboard() {
       ]
     }
   });
+
+  // Live contract addresses for CryptoQuest
+  const LIVE_CONTRACTS = {
+    STAKING: '0x4915363b9524D103C8910E3C7D5516b9b4D0F333',
+    FARMING: '0x95e2091ec85D20253a9cc7f37b1308bD56E8732f',
+    SWAP: '0x9d1075B41cd80Ab08179F36bc17a7Ff8708748ba',
+    CQT_TOKEN: '0x94ef57abfBff1AD70bD00a921e1d2437f31C1665',
+    MARKETPLACE: '0x7E59e3fC320AcfAe0fbd20789348016729B00Edc',
+    MMORPG: '0xC233e56015c1BBCD7fbD58415D11084E7f98f488'
+  };
 
   const [stakingForm, setStakingForm] = useState({
     action: 'stake',
@@ -174,6 +185,25 @@ export function DeFiDashboard() {
 
   const renderStaking = () => (
     <div className="space-y-6">
+      {/* Live Contract Info */}
+      <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-4 mb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-gray-300">Live Staking Contract:</span>
+            <span className="text-sm font-mono text-blue-400">{LIVE_CONTRACTS.STAKING}</span>
+          </div>
+          <a 
+            href={`https://polygonscan.com/address/${LIVE_CONTRACTS.STAKING}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+          >
+            View on Polygonscan →
+          </a>
+        </div>
+      </div>
+
       {/* Staking Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/30 border border-purple-500/20 rounded-xl p-6">
@@ -268,6 +298,25 @@ export function DeFiDashboard() {
 
   const renderFarming = () => (
     <div className="space-y-6">
+      {/* Live Contract Info */}
+      <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-4 mb-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-gray-300">Live Farming Contract:</span>
+            <span className="text-sm font-mono text-green-400">{LIVE_CONTRACTS.FARMING}</span>
+          </div>
+          <a 
+            href={`https://polygonscan.com/address/${LIVE_CONTRACTS.FARMING}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-green-400 hover:text-green-300 transition-colors"
+          >
+            View on Polygonscan →
+          </a>
+        </div>
+      </div>
+
       {/* Farming Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-gradient-to-br from-green-900/30 to-emerald-900/30 border border-green-500/20 rounded-xl p-6">
@@ -546,7 +595,8 @@ export function DeFiDashboard() {
               { id: 'staking', label: 'NFT Staking', icon: Lock },
               { id: 'farming', label: 'Yield Farming', icon: Layers },
               { id: 'liquidity', label: 'Liquidity Pools', icon: BarChart3 },
-              { id: 'nftbooks', label: 'NFT Books', icon: BookOpen }
+              { id: 'nftbooks', label: 'NFT Books', icon: BookOpen },
+              { id: 'contracts', label: 'Live Contracts', icon: Activity }
             ].map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
@@ -570,6 +620,7 @@ export function DeFiDashboard() {
           {activeSection === 'farming' && renderFarming()}
           {activeSection === 'liquidity' && renderLiquidity()}
           {activeSection === 'nftbooks' && <EnhancedNFTBookMarketplace />}
+          {activeSection === 'contracts' && <ContractIntegration />}
         </div>
 
         {/* Total Value Stats */}
