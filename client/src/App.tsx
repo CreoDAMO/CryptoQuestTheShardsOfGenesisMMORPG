@@ -9,6 +9,7 @@ import { WhitePaperDashboard } from '@/components/whitepaper/WhitePaperDashboard
 import { HolographicEngine } from '@/components/holographic/HolographicEngine';
 import { AdminDashboard } from '@/components/admin/AdminDashboard';
 import { UniswapV4Dashboard } from '@/components/advanced/UniswapV4Dashboard';
+import { SECComplianceDashboard } from '@/components/compliance/SECComplianceDashboard';
 import { AIControlCenter } from '@/components/ai/AIControlCenter';
 import { CommunityAIChat } from '@/components/ai/CommunityAIChat';
 import { MobileOptimizedLayout } from '@/components/mobile/MobileOptimizedLayout';
@@ -169,6 +170,8 @@ export default function App() {
         return <RTXDashboard />;
       case 'defi':
         return <DeFiDashboard />;
+      case 'compliance':
+        return <SECComplianceDashboard />;
       default:
         return <GameDashboard />;
     }
@@ -305,6 +308,17 @@ export default function App() {
           >
             <Shield className="w-4 h-4" />
             Admin
+          </button>
+          <button
+            onClick={() => setActiveView('compliance')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === 'compliance' 
+                ? 'bg-purple-600 text-white' 
+                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <Shield className="w-4 h-4" />
+            SEC Compliance
           </button>
         </div>
       </div>

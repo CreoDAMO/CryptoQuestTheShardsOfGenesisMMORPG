@@ -18,6 +18,7 @@ import {
   Award,
   Activity
 } from 'lucide-react';
+import { EnhancedNFTBookMarketplace } from './EnhancedNFTBookMarketplace';
 
 interface DeFiMetrics {
   staking: {
@@ -568,7 +569,7 @@ export function DeFiDashboard() {
           {activeSection === 'staking' && renderStaking()}
           {activeSection === 'farming' && renderFarming()}
           {activeSection === 'liquidity' && renderLiquidity()}
-          {activeSection === 'nftbooks' && renderNFTBooks()}
+          {activeSection === 'nftbooks' && <EnhancedNFTBookMarketplace />}
         </div>
 
         {/* Total Value Stats */}
