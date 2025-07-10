@@ -13,8 +13,20 @@ import {
   Clock,
   TrendingUp,
   Gamepad2,
-  Shield
+  Shield,
+  Play,
+  Pause,
+  RefreshCw
 } from 'lucide-react';
+import { 
+  StreamlitHeader, 
+  StreamlitControls, 
+  StreamlitMetricCard, 
+  StreamlitChartContainer,
+  StreamlitStatus,
+  StreamlitProgress,
+  useStreamlit
+} from '@/components/shared/StreamlitCore';
 
 interface RTXMetrics {
   fps: number;
@@ -47,6 +59,13 @@ export function RTXDashboard() {
   const [reflexEnabled, setReflexEnabled] = useState(true);
   const [aceEnabled, setAceEnabled] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [gameActive, setGameActive] = useState(true);
+  
+  const { config, setConfig, fragments, metrics: streamlitMetrics, addFragment, toggleFragment } = useStreamlit({
+    realTimeEnabled: true,
+    autoRefresh: true,
+    refreshInterval: 1000
+  });
 
   const [metrics, setMetrics] = useState<RTXMetrics>({
     fps: 165,
@@ -89,18 +108,54 @@ export function RTXDashboard() {
   ]);
 
   useEffect(() => {
+    // Initialize Streamlit fragments
+    addFragment({
+      id: 'rtx-performance',
+      title: 'RTX Performance',
+      component: <></>,
+      dependencies: ['gpu'],
+      updateFrequency: 1000,
+      priority: 'high',
+      status: 'active'
+    });
+    
+    addFragment({
+      id: 'dlss-metrics',
+      title: 'DLSS',
+      component: <></>,
+      dependencies: ['dlss'],
+      updateFrequency: 2000,
+      priority: 'high',
+      status: 'active'
+    });
+    
+    addFragment({
+      id: 'ace-npcs',
+      title: 'ACE NPCs',
+      component: <></>,
+      dependencies: ['ai'],
+      updateFrequency: 5000,
+      priority: 'medium',
+      status: 'active'
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!config.realTimeEnabled) return;
+    
     const interval = setInterval(() => {
       // Simulate real-time metrics updates
       setMetrics(prev => ({
         ...prev,
-        fps: prev.fps + (Math.random() - 0.5) * 10,
+        fps: Math.max(30, Math.min(240, prev.fps + (Math.random() - 0.5) * 10)),
         gpuUtilization: Math.max(50, Math.min(95, prev.gpuUtilization + (Math.random() - 0.5) * 5)),
-        latency: Math.max(5, Math.min(15, prev.latency + (Math.random() - 0.5) * 2))
+        latency: Math.max(5, Math.min(15, prev.latency + (Math.random() - 0.5) * 2)),
+        dlssPerformanceGain: Math.max(50, Math.min(120, prev.dlssPerformanceGain + (Math.random() - 0.5) * 5))
       }));
-    }, 2000);
+    }, config.refreshInterval);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [config.realTimeEnabled, config.refreshInterval]);
 
   const toggleRTX = async () => {
     setLoading(true);
@@ -135,42 +190,115 @@ export function RTXDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-900 via-emerald-900 to-slate-900 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full">
-            <Sparkles className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
-            NVIDIA RTX Gaming Hub
-          </h1>
-          <p className="text-xl text-gray-300">Advanced RTX technologies for CryptoQuest</p>
+        <StreamlitHeader
+          title="NVIDIA RTX Gaming Hub"
+          subtitle="Advanced RTX technologies for CryptoQuest with real-time performance monitoring"
+          icon={<Sparkles className="w-8 h-8 text-green-500" />}
+          status={gameActive ? 'active' : 'paused'}
+          metrics={streamlitMetrics}
+        />
+
+        <StreamlitControls
+          config={config}
+          onConfigChange={setConfig}
+          fragments={fragments}
+          onFragmentToggle={toggleFragment}
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <StreamlitMetricCard
+            title="Frame Rate"
+            value={`${Math.round(metrics.fps)} FPS`}
+            change={`${dlssEnabled ? '+' + Math.round(metrics.dlssPerformanceGain) + '%' : 'DLSS OFF'}`}
+            icon={<Monitor className="w-5 h-5" />}
+            trend={metrics.fps > 120 ? 'up' : 'neutral'}
+          />
+          <StreamlitMetricCard
+            title="GPU Utilization"
+            value={`${metrics.gpuUtilization}%`}
+            change={`${metrics.powerConsumption}W`}
+            icon={<Cpu className="w-5 h-5" />}
+            trend={metrics.gpuUtilization > 80 ? 'up' : 'neutral'}
+          />
+          <StreamlitMetricCard
+            title="Latency"
+            value={`${metrics.latency}ms`}
+            change={reflexEnabled ? 'Reflex ON' : 'Reflex OFF'}
+            icon={<Zap className="w-5 h-5" />}
+            trend={metrics.latency < 10 ? 'up' : 'neutral'}
+          />
+          <StreamlitMetricCard
+            title="DLSS Gain"
+            value={`${Math.round(metrics.dlssPerformanceGain)}%`}
+            change={dlssEnabled ? 'Active' : 'Disabled'}
+            icon={<Eye className="w-5 h-5" />}
+            trend="up"
+          />
         </div>
 
-        {/* GPU Information */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-white">GPU Status</h2>
-            <Monitor className="w-6 h-6 text-green-400" />
+        <StreamlitStatus
+          status={rtxEnabled ? 'success' : 'warning'}
+          message={rtxEnabled ? 'RTX Technologies Active' : 'RTX Technologies Disabled'}
+          details={`${capabilities.gpuModel} • Driver ${capabilities.driverVersion} • ${capabilities.tensorCoresAvailable ? 'Tensor Cores Available' : 'No Tensor Cores'}`}
+        />
+
+        <StreamlitChartContainer title="RTX Performance Metrics" controls={
+          <div className="flex gap-2">
+            <button
+              onClick={() => setGameActive(!gameActive)}
+              className={`p-2 rounded-lg ${gameActive ? 'bg-green-600' : 'bg-gray-600'}`}
+            >
+              {gameActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            </button>
+            <button
+              onClick={toggleRTX}
+              className={`p-2 rounded-lg ${rtxEnabled ? 'bg-green-600' : 'bg-red-600'}`}
+              disabled={loading}
+            >
+              <Sparkles className="w-4 h-4" />
+            </button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-              <div className="text-xl font-bold text-green-400">{capabilities.gpuModel}</div>
-              <div className="text-sm text-gray-300">Graphics Card</div>
+        }>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <StreamlitProgress
+                value={metrics.fps}
+                max={240}
+                label="Frame Rate (FPS)"
+                color="green"
+              />
+              <StreamlitProgress
+                value={metrics.gpuUtilization}
+                max={100}
+                label="GPU Utilization (%)"
+                color="blue"
+              />
+              <StreamlitProgress
+                value={100 - metrics.latency}
+                max={100}
+                label="Responsiveness (Lower latency = better)"
+                color="purple"
+              />
             </div>
-            <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-              <div className="text-xl font-bold text-blue-400">{capabilities.driverVersion}</div>
-              <div className="text-sm text-gray-300">Driver Version</div>
-            </div>
-            <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-              <div className="text-xl font-bold text-purple-400">5th Gen</div>
-              <div className="text-sm text-gray-300">Tensor Cores</div>
-            </div>
-            <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-              <div className="text-xl font-bold text-orange-400">RTX Kit</div>
-              <div className="text-sm text-gray-300">Neural Rendering</div>
+            <div className="space-y-4">
+              <div className="bg-slate-700/50 rounded-lg p-4">
+                <h3 className="text-white font-semibold mb-3">RTX Features</h3>
+                <div className="space-y-2">
+                  {rtxFeatures.map((feature, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <span className="text-gray-300 text-sm">{feature.name}</span>
+                      <span className={`text-xs px-2 py-1 rounded ${
+                        feature.enabled ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                      }`}>
+                        {feature.enabled ? feature.performance : 'OFF'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </StreamlitChartContainer>
 
         {/* Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

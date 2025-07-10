@@ -17,8 +17,19 @@ import {
   ExternalLink,
   RefreshCw,
   Star,
-  AlertCircle
+  AlertCircle,
+  Play,
+  Pause
 } from 'lucide-react';
+import { 
+  StreamlitHeader, 
+  StreamlitControls, 
+  StreamlitMetricCard, 
+  StreamlitChartContainer,
+  StreamlitStatus,
+  StreamlitProgress,
+  useStreamlit
+} from '@/components/shared/StreamlitCore';
 
 interface OnRampOption {
   id: string;
@@ -48,24 +59,54 @@ export function OnRamperComponent() {
   const [quote, setQuote] = useState<PurchaseQuote | null>(null);
   const [loading, setLoading] = useState(false);
   const [kycStatus, setKycStatus] = useState<'pending' | 'verified' | 'required'>('required');
+  const [systemActive, setSystemActive] = useState(true);
+  
+  const { config, setConfig, fragments, metrics: streamlitMetrics, addFragment, toggleFragment } = useStreamlit({
+    realTimeEnabled: true,
+    autoRefresh: true,
+    refreshInterval: 3000
+  });
+
+  // Initialize Streamlit fragments
+  useEffect(() => {
+    addFragment({
+      id: 'payment-methods',
+      title: 'Payment Methods',
+      component: <></>,
+      dependencies: ['payments'],
+      updateFrequency: 5000,
+      priority: 'high',
+      status: 'active'
+    });
+    
+    addFragment({
+      id: 'pricing-quotes',
+      title: 'Real-time Pricing',
+      component: <></>,
+      dependencies: ['pricing'],
+      updateFrequency: 3000,
+      priority: 'high',
+      status: 'active'
+    });
+  }, []);
 
   const paymentMethods: OnRampOption[] = [
     {
       id: 'card',
       name: 'Credit/Debit Card',
       type: 'card',
-      fee: 3.5,
+      fee: 3.99,
       minAmount: 10,
       maxAmount: 1000,
-      processingTime: 'Instant',
+      processingTime: '5-10 minutes',
       supported: true,
       popular: true
     },
     {
       id: 'bank',
-      name: 'Bank Transfer (ACH)',
+      name: 'Bank Transfer',
       type: 'bank',
-      fee: 1.0,
+      fee: 1.49,
       minAmount: 25,
       maxAmount: 10000,
       processingTime: '1-3 business days',
@@ -105,16 +146,6 @@ export function OnRamperComponent() {
     { code: 'JPY', name: 'Japanese Yen', symbol: '¥' }
   ];
 
-  const getPaymentMethodIcon = (type: string) => {
-    switch (type) {
-      case 'card': return <CreditCard className="w-5 h-5" />;
-      case 'bank': return <Building2 className="w-5 h-5" />;
-      case 'wire': return <Globe className="w-5 h-5" />;
-      case 'crypto': return <Coins className="w-5 h-5" />;
-      default: return <Wallet className="w-5 h-5" />;
-    }
-  };
-
   const calculateQuote = () => {
     setLoading(true);
     const selectedMethod = paymentMethods.find(m => m.id === selectedPaymentMethod);
@@ -139,282 +170,139 @@ export function OnRamperComponent() {
     }, 1500);
   };
 
+  const generateQuote = () => {
+    calculateQuote();
+  };
+
   useEffect(() => {
     if (amount && parseFloat(amount) > 0) {
       calculateQuote();
     }
   }, [amount, currency, selectedPaymentMethod]);
 
-  const handlePurchase = async () => {
-    if (!quote) return;
-    
-    setLoading(true);
-    try {
-      // Mock purchase flow
-      console.log('Starting purchase flow...', quote);
-      
-      // Simulate KYC if required
-      if (kycStatus === 'required') {
-        setKycStatus('pending');
-        setTimeout(() => setKycStatus('verified'), 3000);
-      }
-      
-      // Simulate payment processing
-      setTimeout(() => {
-        setLoading(false);
-        // Success state would be handled here
-      }, 5000);
-    } catch (error) {
-      console.error('Purchase failed:', error);
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          OnRamper Pro
-        </h1>
-        <p className="text-gray-300">
-          Buy CQT tokens directly with fiat currency using Coinbase OnRamp
-        </p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-slate-900 p-6">
+      <div className="max-w-6xl mx-auto space-y-8">
+        <StreamlitHeader
+          title="OnRamper - Fiat to Crypto"
+          subtitle="Buy crypto instantly with multiple payment methods and real-time pricing"
+          icon={<CreditCard className="w-8 h-8 text-blue-500" />}
+          status={systemActive ? 'active' : 'paused'}
+          metrics={streamlitMetrics}
+        />
 
-      {/* KYC Status */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Shield className="w-5 h-5 text-blue-400" />
-            <span className="text-white font-medium">KYC Verification</span>
-          </div>
-          <div className="flex items-center gap-2">
-            {kycStatus === 'verified' && (
-              <>
-                <CheckCircle className="w-5 h-5 text-green-400" />
-                <span className="text-green-400">Verified</span>
-              </>
-            )}
-            {kycStatus === 'pending' && (
-              <>
-                <Clock className="w-5 h-5 text-yellow-400 animate-spin" />
-                <span className="text-yellow-400">Verifying...</span>
-              </>
-            )}
-            {kycStatus === 'required' && (
-              <>
-                <AlertCircle className="w-5 h-5 text-red-400" />
-                <span className="text-red-400">Required</span>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+        <StreamlitControls
+          config={config}
+          onConfigChange={setConfig}
+          fragments={fragments}
+          onFragmentToggle={toggleFragment}
+        />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Purchase Form */}
-        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 space-y-6">
-          <h3 className="text-xl font-semibold text-white">Purchase CQT Tokens</h3>
-          
-          {/* Amount Input */}
-          <div className="space-y-2">
-            <label className="text-sm text-gray-300">Amount</label>
-            <div className="relative">
-              <select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 bg-transparent text-white border-none outline-none"
-              >
-                {supportedCurrencies.map(curr => (
-                  <option key={curr.code} value={curr.code} className="bg-slate-800">
-                    {curr.code}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-16 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter amount"
-              />
-            </div>
-          </div>
-
-          {/* Payment Methods */}
-          <div className="space-y-3">
-            <label className="text-sm text-gray-300">Payment Method</label>
-            <div className="grid grid-cols-1 gap-3">
-              {paymentMethods.map((method) => (
-                <div
-                  key={method.id}
-                  onClick={() => setSelectedPaymentMethod(method.id)}
-                  className={`relative p-4 rounded-lg border cursor-pointer transition-all ${
-                    selectedPaymentMethod === method.id
-                      ? 'border-blue-500 bg-blue-500/10'
-                      : 'border-slate-600 hover:border-slate-500'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      {getPaymentMethodIcon(method.type)}
-                      <div>
-                        <div className="text-white font-medium flex items-center gap-2">
-                          {method.name}
-                          {method.popular && (
-                            <span className="text-xs bg-yellow-500 text-black px-2 py-1 rounded-full">
-                              Popular
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-sm text-gray-400">
-                          {method.fee}% fee • {method.processingTime}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm text-gray-400">
-                        ${method.minAmount} - ${method.maxAmount.toLocaleString()}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Quote Display */}
-          {quote && (
-            <div className="bg-slate-700/50 rounded-lg p-4 space-y-3">
-              <h4 className="text-white font-medium">Purchase Quote</h4>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Amount</span>
-                  <span className="text-white">{quote.currency} {quote.amount}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Fees</span>
-                  <span className="text-white">{quote.currency} {quote.fees.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between border-t border-slate-600 pt-2">
-                  <span className="text-gray-300">Total</span>
-                  <span className="text-white font-semibold">{quote.currency} {quote.total.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-300">You'll receive</span>
-                  <span className="text-blue-400 font-semibold">{quote.tokenAmount.toFixed(2)} CQT</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Purchase Button */}
-          <button
-            onClick={handlePurchase}
-            disabled={!quote || loading || kycStatus !== 'verified'}
-            className={`w-full py-3 rounded-lg font-medium transition-all ${
-              !quote || loading || kycStatus !== 'verified'
-                ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700'
-            }`}
-          >
-            {loading ? (
-              <div className="flex items-center justify-center gap-2">
-                <RefreshCw className="w-4 h-4 animate-spin" />
-                Processing...
-              </div>
-            ) : kycStatus !== 'verified' ? (
-              'Complete KYC to Purchase'
-            ) : (
-              'Purchase CQT Tokens'
-            )}
-          </button>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <StreamlitMetricCard
+            title="Payment Methods"
+            value={paymentMethods.filter(m => m.supported).length.toString()}
+            change={`${paymentMethods.filter(m => m.popular).length} popular`}
+            icon={<CreditCard className="w-5 h-5" />}
+            trend="up"
+          />
+          <StreamlitMetricCard
+            title="Processing Time"
+            value={paymentMethods.find(m => m.id === selectedPaymentMethod)?.processingTime || 'N/A'}
+            change={`${paymentMethods.find(m => m.id === selectedPaymentMethod)?.fee || 0}% fee`}
+            icon={<Clock className="w-5 h-5" />}
+            trend="neutral"
+          />
+          <StreamlitMetricCard
+            title="KYC Status"
+            value={kycStatus.charAt(0).toUpperCase() + kycStatus.slice(1)}
+            change={kycStatus === 'verified' ? 'Verified' : 'Required'}
+            icon={<Shield className="w-5 h-5" />}
+            trend={kycStatus === 'verified' ? 'up' : 'neutral'}
+          />
+          <StreamlitMetricCard
+            title="Current Rate"
+            value={quote ? `$${quote.rate.toFixed(2)}` : 'Loading...'}
+            change={quote ? `${quote.tokenAmount.toFixed(6)} CQT` : 'N/A'}
+            icon={<TrendingUp className="w-5 h-5" />}
+            trend="up"
+          />
         </div>
 
-        {/* Features & Security */}
-        <div className="space-y-6">
-          {/* Security Features */}
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-white mb-4">Security & Features</h3>
+        <StreamlitStatus
+          status={kycStatus === 'verified' ? 'success' : 'warning'}
+          message={kycStatus === 'verified' ? 'KYC Verified - Ready to Purchase' : 'KYC Required for Large Transactions'}
+          details={`Selected method: ${paymentMethods.find(m => m.id === selectedPaymentMethod)?.name || 'N/A'}`}
+        />
+
+        <StreamlitChartContainer title="Purchase Configuration" controls={
+          <div className="flex gap-2">
+            <button
+              onClick={() => setSystemActive(!systemActive)}
+              className={`p-2 rounded-lg ${systemActive ? 'bg-green-600' : 'bg-gray-600'}`}
+            >
+              {systemActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            </button>
+            <button
+              onClick={() => generateQuote()}
+              className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700"
+              disabled={loading}
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+        }>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <Shield className="w-5 h-5 text-blue-400 mt-0.5" />
-                <div>
-                  <div className="text-white font-medium">Bank-Level Security</div>
-                  <div className="text-sm text-gray-400">
-                    256-bit encryption and regulatory compliance
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Zap className="w-5 h-5 text-green-400 mt-0.5" />
-                <div>
-                  <div className="text-white font-medium">Instant Processing</div>
-                  <div className="text-sm text-gray-400">
-                    Tokens delivered directly to your wallet
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Lock className="w-5 h-5 text-purple-400 mt-0.5" />
-                <div>
-                  <div className="text-white font-medium">KYC Protected</div>
-                  <div className="text-sm text-gray-400">
-                    Identity verification for fraud prevention
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Globe className="w-5 h-5 text-orange-400 mt-0.5" />
-                <div>
-                  <div className="text-white font-medium">Global Support</div>
-                  <div className="text-sm text-gray-400">
-                    Available in 100+ countries worldwide
-                  </div>
+              <StreamlitProgress
+                value={parseFloat(amount) || 0}
+                max={paymentMethods.find(m => m.id === selectedPaymentMethod)?.maxAmount || 1000}
+                label="Amount vs Max Limit"
+                color="blue"
+              />
+              <div className="bg-slate-700/50 rounded-lg p-4">
+                <h3 className="text-white font-semibold mb-3">Payment Methods</h3>
+                <div className="space-y-2">
+                  {paymentMethods.map((method) => (
+                    <div key={method.id} className="flex items-center justify-between">
+                      <span className="text-gray-300 text-sm">{method.name}</span>
+                      <span className={`text-xs px-2 py-1 rounded ${
+                        method.supported ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                      }`}>
+                        {method.supported ? `${method.fee}% fee` : 'Not Available'}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Market Info */}
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-white mb-4">CQT Market Info</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-300">Current Price</span>
-                <span className="text-white">$0.00024</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-300">24h Change</span>
-                <span className="text-green-400">+12.5%</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-300">Market Cap</span>
-                <span className="text-white">$2.4M</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-300">Circulating Supply</span>
-                <span className="text-white">10.2B CQT</span>
-              </div>
+            <div className="space-y-4">
+              {quote && (
+                <div className="bg-slate-700/50 rounded-lg p-4">
+                  <h3 className="text-white font-semibold mb-3">Purchase Quote</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-gray-300">Amount:</span>
+                      <span className="text-white">${quote.amount}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-300">Fees:</span>
+                      <span className="text-white">${quote.fees.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-300">Total:</span>
+                      <span className="text-white font-bold">${quote.total.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-300">You'll receive:</span>
+                      <span className="text-green-400 font-bold">{quote.tokenAmount.toFixed(6)} CQT</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-
-          {/* Supported Networks */}
-          <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-white mb-4">Supported Networks</h3>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-slate-700/50 rounded-lg p-3">
-                <div className="text-white font-medium">Polygon</div>
-                <div className="text-sm text-gray-400">Low fees, fast transactions</div>
-              </div>
-              <div className="bg-slate-700/50 rounded-lg p-3">
-                <div className="text-white font-medium">Base</div>
-                <div className="text-sm text-gray-400">Coinbase L2 solution</div>
-              </div>
-            </div>
-          </div>
-        </div>
+        </StreamlitChartContainer>
       </div>
     </div>
   );

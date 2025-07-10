@@ -12,8 +12,26 @@ import {
   Gamepad2,
   Sparkles,
   Activity,
-  TrendingUp
+  TrendingUp,
+  Play,
+  Pause,
+  Target,
+  Star,
+  Crown,
+  Gem,
+  Flame,
+  Eye,
+  RefreshCw
 } from 'lucide-react';
+import { 
+  StreamlitHeader, 
+  StreamlitControls, 
+  StreamlitMetricCard, 
+  StreamlitChartContainer,
+  StreamlitStatus,
+  StreamlitProgress,
+  useStreamlit
+} from '@/components/shared/StreamlitCore';
 
 interface GameStats {
   level: number;
@@ -44,42 +62,178 @@ export function GameDashboard() {
 
   const [isConnected, setIsConnected] = useState(false);
   const [currentTab, setCurrentTab] = useState('overview');
+  const [realTimeUpdates, setRealTimeUpdates] = useState(true);
+  const [gameActive, setGameActive] = useState(false);
+  
+  const { config, setConfig, fragments, metrics, addFragment, toggleFragment } = useStreamlit({
+    realTimeEnabled: true,
+    autoRefresh: true,
+    refreshInterval: 3000
+  });
 
   useEffect(() => {
     // Mock wallet connection check
     setIsConnected(true);
+    
+    // Initialize Streamlit fragments
+    addFragment({
+      id: 'character-stats',
+      title: 'Character',
+      component: <></>,
+      dependencies: ['gameStats'],
+      updateFrequency: 5000,
+      priority: 'high',
+      status: 'active'
+    });
+    
+    addFragment({
+      id: 'guild-info',
+      title: 'Guild',
+      component: <></>,
+      dependencies: ['guild'],
+      updateFrequency: 10000,
+      priority: 'medium',
+      status: 'active'
+    });
+    
+    addFragment({
+      id: 'marketplace',
+      title: 'Market',
+      component: <></>,
+      dependencies: ['economy'],
+      updateFrequency: 3000,
+      priority: 'high',
+      status: 'active'
+    });
+    
+    addFragment({
+      id: 'achievements',
+      title: 'Achievements',
+      component: <></>,
+      dependencies: ['progress'],
+      updateFrequency: 30000,
+      priority: 'low',
+      status: 'active'
+    });
   }, []);
 
+  // Real-time updates
+  useEffect(() => {
+    if (!config.realTimeEnabled) return;
+    
+    const interval = setInterval(() => {
+      setGameStats(prev => ({
+        ...prev,
+        experience: prev.experience + Math.floor(Math.random() * 100),
+        gold: prev.gold + Math.floor(Math.random() * 50),
+        tokenBalance: prev.tokenBalance + (Math.random() * 5)
+      }));
+    }, config.refreshInterval);
+
+    return () => clearInterval(interval);
+  }, [config.realTimeEnabled, config.refreshInterval]);
+
   const renderOverview = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 border border-purple-500/20 rounded-xl p-6"
-      >
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-white">Character Stats</h3>
-          <Sword className="w-5 h-5 text-purple-400" />
+    <div className="space-y-6">
+      {/* Streamlit Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StreamlitMetricCard
+          title="Character Level"
+          value={gameStats.level}
+          change={`+${Math.floor(Math.random() * 3)} today`}
+          icon={<Crown className="w-5 h-5" />}
+          trend="up"
+        />
+        <StreamlitMetricCard
+          title="Experience Points"
+          value={gameStats.experience.toLocaleString()}
+          change={`+${Math.floor(Math.random() * 500)} XP/hr`}
+          icon={<Star className="w-5 h-5" />}
+          trend="up"
+        />
+        <StreamlitMetricCard
+          title="CQT Balance"
+          value={gameStats.tokenBalance.toFixed(2)}
+          change={`+${(Math.random() * 10).toFixed(1)}%`}
+          icon={<Coins className="w-5 h-5" />}
+          trend="up"
+        />
+        <StreamlitMetricCard
+          title="Guild Rank"
+          value={gameStats.rank}
+          change="↑ 2 positions"
+          icon={<Trophy className="w-5 h-5" />}
+          trend="up"
+        />
+      </div>
+
+      {/* Enhanced Character Stats */}
+      <StreamlitChartContainer title="Character Status" controls={
+        <div className="flex gap-2">
+          <button
+            onClick={() => setGameActive(!gameActive)}
+            className={`p-2 rounded-lg ${gameActive ? 'bg-green-600' : 'bg-gray-600'}`}
+          >
+            {gameActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+          </button>
+          <button
+            onClick={() => setRealTimeUpdates(!realTimeUpdates)}
+            className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </button>
         </div>
-        <div className="space-y-3">
-          <div className="flex justify-between">
-            <span className="text-gray-300">Level</span>
-            <span className="text-white font-bold">{gameStats.level}</span>
+      }>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <StreamlitProgress
+              value={gameStats.health}
+              max={1000}
+              label="Health"
+              color="green"
+            />
+            <StreamlitProgress
+              value={gameStats.mana}
+              max={1500}
+              label="Mana"
+              color="blue"
+            />
+            <StreamlitProgress
+              value={gameStats.experience % 1000}
+              max={1000}
+              label="Experience to Next Level"
+              color="purple"
+            />
           </div>
-          <div className="flex justify-between">
-            <span className="text-gray-300">Experience</span>
-            <span className="text-white font-bold">{gameStats.experience.toLocaleString()}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-300">Health</span>
-            <span className="text-green-400 font-bold">{gameStats.health}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-300">Mana</span>
-            <span className="text-blue-400 font-bold">{gameStats.mana}</span>
+          <div className="space-y-4">
+            <div className="bg-slate-700/50 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-gray-300">Combat Stats</span>
+                <Sword className="w-4 h-4 text-red-400" />
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="text-center">
+                  <div className="text-green-400 font-bold">{gameStats.wins}</div>
+                  <div className="text-gray-400">Wins</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-red-400 font-bold">{gameStats.losses}</div>
+                  <div className="text-gray-400">Losses</div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-slate-700/50 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-gray-300">Guild: {gameStats.guild}</span>
+                <Users className="w-4 h-4 text-purple-400" />
+              </div>
+              <div className="text-sm text-gray-300">
+                Active Members: 247 • Rank: #12
+              </div>
+            </div>
           </div>
         </div>
-      </motion.div>
+      </StreamlitChartContainer>
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -178,34 +332,34 @@ export function GameDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center space-y-4"
-        >
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full">
-            <Gamepad2 className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            CryptoQuest Gaming Hub
-          </h1>
-          <p className="text-xl text-gray-300">The ultimate blockchain MMORPG experience</p>
-        </motion.div>
+        <StreamlitHeader
+          title="CryptoQuest Gaming Hub"
+          subtitle="Advanced Blockchain MMORPG Dashboard with Real-time Analytics"
+          icon={<Gamepad2 className="w-8 h-8 text-purple-500" />}
+          status={gameActive ? 'active' : 'paused'}
+          metrics={metrics}
+        />
 
-        {/* Wallet Status */}
-        <div className="flex justify-center">
-          <div className={`px-6 py-3 rounded-full border ${
-            isConnected 
-              ? 'bg-green-500/20 border-green-500/50 text-green-400' 
-              : 'bg-red-500/20 border-red-500/50 text-red-400'
-          }`}>
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`} />
-              {isConnected ? 'Wallet Connected' : 'Wallet Disconnected'}
-            </div>
-          </div>
-        </div>
+        <StreamlitControls
+          config={config}
+          onConfigChange={setConfig}
+          fragments={fragments}
+          onFragmentToggle={toggleFragment}
+        />
+
+        {!isConnected ? (
+          <StreamlitStatus
+            status="warning"
+            message="Wallet Connection Required"
+            details="Connect your MetaMask wallet to access full gaming features"
+          />
+        ) : (
+          <StreamlitStatus
+            status="success"
+            message="Connected to Polygon Network"
+            details="All gaming features are available"
+          />
+        )}
 
         {/* Navigation Tabs */}
         <div className="flex justify-center">

@@ -9,8 +9,18 @@ import {
   TrendingUp, Zap, Shield, Bot, Cpu, Activity,
   DollarSign, Timer, Target, AlertTriangle,
   CheckCircle, XCircle, Play, Pause, BarChart3,
-  RefreshCw, Settings, Wallet, Network
+  RefreshCw, Settings, Wallet, Network, Sparkles
 } from 'lucide-react';
+import { 
+  StreamlitHeader, 
+  StreamlitControls, 
+  StreamlitMetricCard, 
+  StreamlitChartContainer,
+  StreamlitStatus,
+  StreamlitProgress,
+  StreamlitDataTable,
+  useStreamlit
+} from '@/components/shared/StreamlitCore';
 
 interface ArbitrageOpportunity {
   id: string;
@@ -96,19 +106,66 @@ export function EnhancedArbitrageDashboard() {
   const [opportunities, setOpportunities] = useState(mockOpportunities);
   const [metrics, setMetrics] = useState(mockMetrics);
   const [selectedTab, setSelectedTab] = useState('opportunities');
+  
+  const { config, setConfig, fragments, metrics: streamlitMetrics, addFragment, toggleFragment } = useStreamlit({
+    realTimeEnabled: true,
+    autoRefresh: true,
+    refreshInterval: 2000
+  });
+
+  // Initialize Streamlit fragments
+  useEffect(() => {
+    addFragment({
+      id: 'opportunities',
+      title: 'Opportunities',
+      component: <></>,
+      dependencies: ['arbitrage'],
+      updateFrequency: 2000,
+      priority: 'high',
+      status: 'active'
+    });
+    
+    addFragment({
+      id: 'metrics',
+      title: 'Metrics',
+      component: <></>,
+      dependencies: ['performance'],
+      updateFrequency: 5000,
+      priority: 'high',
+      status: 'active'
+    });
+    
+    addFragment({
+      id: 'security',
+      title: 'Security',
+      component: <></>,
+      dependencies: ['rust-core'],
+      updateFrequency: 10000,
+      priority: 'medium',
+      status: 'active'
+    });
+  }, []);
 
   // Simulate real-time updates
   useEffect(() => {
+    if (!config.realTimeEnabled) return;
+    
     const interval = setInterval(() => {
       setOpportunities(prev => prev.map(opp => ({
         ...opp,
         profitPercentage: opp.profitPercentage + (Math.random() - 0.5) * 0.5,
         confidence: Math.max(70, Math.min(99, opp.confidence + (Math.random() - 0.5) * 5))
       })));
-    }, 3000);
+      
+      setMetrics(prev => ({
+        ...prev,
+        totalArbitrages: prev.totalArbitrages + Math.floor(Math.random() * 2),
+        totalProfit: prev.totalProfit + (Math.random() * 10)
+      }));
+    }, config.refreshInterval);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [config.realTimeEnabled, config.refreshInterval]);
 
   const executeArbitrage = (opportunityId: string) => {
     setOpportunities(prev => prev.map(opp => 
@@ -130,33 +187,57 @@ export function EnhancedArbitrageDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-500 to-blue-500 rounded-full mb-4">
-            <TrendingUp className="w-10 h-10 text-white" />
-          </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
-            CQT Arbitrage Bot Dashboard
-          </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Advanced cross-chain arbitrage system with AI-powered decision making, 
-            Rust security wrapper, and automated liquidity provision
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-6">
-            <Badge variant="outline" className={`${isRunning ? 'bg-green-500/20 text-green-400 border-green-400' : 'bg-red-500/20 text-red-400 border-red-400'}`}>
-              {isRunning ? <Play className="w-4 h-4 mr-2" /> : <Pause className="w-4 h-4 mr-2" />}
-              {isRunning ? 'Running' : 'Paused'}
-            </Badge>
-            <Badge variant="outline" className="bg-blue-500/20 text-blue-400 border-blue-400">
-              <Shield className="w-4 h-4 mr-2" />
-              Rust Security: {metrics.rustSecurity}%
-            </Badge>
-            <Badge variant="outline" className="bg-purple-500/20 text-purple-400 border-purple-400">
-              <Bot className="w-4 h-4 mr-2" />
-              AI Accuracy: {metrics.aiAccuracy}%
-            </Badge>
-          </div>
+        <StreamlitHeader
+          title="CQT Arbitrage Bot Dashboard"
+          subtitle="Advanced cross-chain arbitrage system with AI-powered decision making, Rust security wrapper, and automated liquidity provision"
+          icon={<TrendingUp className="w-8 h-8 text-green-500" />}
+          status={isRunning ? 'active' : 'paused'}
+          metrics={streamlitMetrics}
+        />
+
+        <StreamlitControls
+          config={config}
+          onConfigChange={setConfig}
+          fragments={fragments}
+          onFragmentToggle={toggleFragment}
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <StreamlitMetricCard
+            title="Total Profit"
+            value={`$${metrics.totalProfit.toFixed(2)}`}
+            change={`+${(Math.random() * 10).toFixed(1)}%`}
+            icon={<DollarSign className="w-5 h-5" />}
+            trend="up"
+          />
+          <StreamlitMetricCard
+            title="Success Rate"
+            value={`${metrics.successRate}%`}
+            change="↑ 2.3%"
+            icon={<Target className="w-5 h-5" />}
+            trend="up"
+          />
+          <StreamlitMetricCard
+            title="AI Accuracy"
+            value={`${metrics.aiAccuracy}%`}
+            change="↑ 0.8%"
+            icon={<Bot className="w-5 h-5" />}
+            trend="up"
+          />
+          <StreamlitMetricCard
+            title="Rust Security"
+            value={`${metrics.rustSecurity}%`}
+            change="Optimal"
+            icon={<Shield className="w-5 h-5" />}
+            trend="neutral"
+          />
         </div>
+
+        <StreamlitStatus
+          status={isRunning ? 'success' : 'warning'}
+          message={isRunning ? 'Arbitrage Bot Active' : 'Arbitrage Bot Paused'}
+          details={`Running on ${opportunities.length} opportunities across Polygon and Base networks`}
+        />
 
         {/* Control Panel */}
         <div className="grid md:grid-cols-4 gap-4">
