@@ -1,4 +1,4 @@
-import { Coinbase } from '@coinbase/coinbase-sdk';
+import { Coinbase, Wallet } from '@coinbase/coinbase-sdk';
 
 export class CoinbaseService {
   private coinbase: Coinbase | null = null;
@@ -9,18 +9,20 @@ export class CoinbaseService {
     
     try {
       const apiKey = process.env.COINBASE_API_KEY;
-      if (!apiKey) {
-        throw new Error('COINBASE_API_KEY environment variable is not set');
+      const apiSecret = process.env.COINBASE_API_SECRET;
+      
+      if (!apiKey || !apiSecret) {
+        throw new Error('COINBASE_API_KEY and COINBASE_API_SECRET environment variables are required');
       }
 
       // Initialize Coinbase SDK
       this.coinbase = new Coinbase({
         apiKeyName: apiKey,
-        privateKey: process.env.COINBASE_API_SECRET || '',
+        privateKey: apiSecret,
       });
       
       this.initialized = true;
-      console.log('Coinbase service initialized successfully');
+      console.log('Coinbase CDP service initialized successfully');
     } catch (error) {
       console.error('Failed to initialize Coinbase service:', error);
       throw error;
