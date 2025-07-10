@@ -34,14 +34,18 @@ export function MobileOptimizedLayout({
   }, []);
 
   const navigationItems = [
-    { id: 'game', label: 'Game Hub', icon: '🎮' },
-    { id: 'ai', label: 'AI Control', icon: '🤖' },
-    { id: 'superpay', label: 'SuperPay', icon: '💳' },
-    { id: 'arbitrage', label: 'CQT Bot', icon: '📈' },
+    { id: 'whitepaper', label: 'White Paper', icon: '📖' },
     { id: 'defi', label: 'DeFi Hub', icon: '🪙' },
+    { id: 'game', label: 'Game Hub', icon: '🎮' },
+    { id: 'agent', label: 'AI Agent', icon: '🤖' },
+    { id: 'onramper', label: 'OnRamper', icon: '💳' },
+    { id: 'arbitrage', label: 'CQT Bot', icon: '📈' },
+    { id: 'nvidia', label: 'NVIDIA Cloud', icon: '✨' },
+    { id: 'wallet', label: 'MetaMask', icon: '🦊' },
     { id: 'holographic', label: 'Holographic', icon: '👁️' },
-    { id: 'v4defi', label: 'V4 DeFi', icon: '🔷' },
-    { id: 'admin', label: 'Admin', icon: '🛡️' }
+    { id: 'unified', label: 'Unified Hub', icon: '🧠' },
+    { id: 'blockchain', label: 'Blockchain', icon: '🔗' },
+    { id: 'admin', label: 'Operating Center', icon: '🛡️' }
   ];
 
   const handleInstallApp = async () => {
