@@ -116,7 +116,8 @@ export class CoinbaseService {
       return assets;
     } catch (error) {
       console.error('Error fetching assets:', error);
-      throw error;
+      // Return empty array instead of throwing to prevent crash
+      return [];
     }
   }
 
@@ -130,7 +131,8 @@ export class CoinbaseService {
       return networks;
     } catch (error) {
       console.error('Error fetching networks:', error);
-      throw error;
+      // Return empty array instead of throwing to prevent crash
+      return [];
     }
   }
 
