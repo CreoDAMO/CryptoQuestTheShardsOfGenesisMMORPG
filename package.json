@@ -80,6 +80,7 @@
     "ml-matrix": "^6.12.1",
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.1",
+    "moralis": "^2.27.2",
     "next": "^15.3.5",
     "next-themes": "^0.4.6",
     "openai": "^5.8.2",
