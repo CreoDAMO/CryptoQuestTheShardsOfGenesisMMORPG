@@ -3,12 +3,11 @@ import { GameDashboard } from '@/components/game/GameDashboard';
 import { EnhancedArbitrageDashboard } from '@/components/arbitrage/EnhancedArbitrageDashboard';
 import { AgentDashboard } from '@/components/agentkit/AgentDashboard';
 import { OnRamperComponent } from '@/components/coinbase/OnRamperComponent';
-import { RTXDashboard } from '@/components/nvidia/RTXDashboard';
-import { StreamlitDeFiDashboard } from '@/components/defi/StreamlitDeFiDashboard';
+import { EnhancedNVIDIADashboard } from '@/components/nvidia/EnhancedNVIDIADashboard';
+import { UnifiedDeFiDashboard } from '@/components/defi/UnifiedDeFiDashboard';
 import { WhitePaperDashboard } from '@/components/whitepaper/WhitePaperDashboard';
 import { HolographicEngine } from '@/components/holographic/HolographicEngine';
 import { AdminDashboard } from '@/components/admin/AdminDashboard';
-import { UniswapV4Dashboard } from '@/components/advanced/UniswapV4Dashboard';
 import { SECComplianceDashboard } from '@/components/compliance/SECComplianceDashboard';
 import { AIControlCenter } from '@/components/ai/AIControlCenter';
 import { CommunityAIChat } from '@/components/ai/CommunityAIChat';
@@ -149,7 +148,7 @@ function SuperPayDemo() {
 }
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'game' | 'agent' | 'onramper' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'ai' | 'wallet' | 'blockchain' | 'unified'>('whitepaper');
+  const [activeView, setActiveView] = useState<'game' | 'agent' | 'onramper' | 'arbitrage' | 'nvidia' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'wallet' | 'blockchain' | 'unified'>('whitepaper');
 
   const renderView = () => {
     switch (activeView) {
@@ -165,12 +164,10 @@ export default function App() {
         return <HolographicEngine />;
       case 'admin':
         return <AdminDashboard />;
-      case 'ai':
-        return <AIControlCenter />;
-      case 'rtx':
-        return <RTXDashboard />;
+      case 'nvidia':
+        return <EnhancedNVIDIADashboard />;
       case 'defi':
-        return <StreamlitDeFiDashboard />;
+        return <UnifiedDeFiDashboard />;
       case 'wallet':
         return <MetaMaskIntegration />;
       case 'blockchain':
@@ -226,17 +223,7 @@ export default function App() {
               <Gamepad2 className="w-4 h-4" />
               Game Hub
             </button>
-            <button
-              onClick={() => setActiveView('ai')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeView === 'ai' 
-                  ? 'bg-purple-600 text-white' 
-                  : 'text-gray-300 hover:bg-slate-700 hover:text-white'
-              }`}
-            >
-              <Bot className="w-4 h-4" />
-              AI Control
-            </button>
+
             <button
             onClick={() => setActiveView('agent')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
@@ -271,15 +258,15 @@ export default function App() {
             CQT Bot
           </button>
           <button
-            onClick={() => setActiveView('rtx')}
+            onClick={() => setActiveView('nvidia')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeView === 'rtx' 
+              activeView === 'nvidia' 
                 ? 'bg-purple-600 text-white' 
                 : 'text-gray-300 hover:bg-slate-700 hover:text-white'
             }`}
           >
             <Sparkles className="w-4 h-4" />
-            RTX Gaming
+            NVIDIA Cloud
           </button>
           <button
             onClick={() => setActiveView('wallet')}
