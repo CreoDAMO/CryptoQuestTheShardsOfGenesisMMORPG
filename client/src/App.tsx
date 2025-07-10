@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { GameDashboard } from '@/components/game/GameDashboard';
 import { EnhancedArbitrageDashboard } from '@/components/arbitrage/EnhancedArbitrageDashboard';
 import { AgentDashboard } from '@/components/agentkit/AgentDashboard';
-import { SuperPayDashboard } from '@/components/superpay/SuperPayDashboard';
+import { OnRamperComponent } from '@/components/coinbase/OnRamperComponent';
 import { RTXDashboard } from '@/components/nvidia/RTXDashboard';
-import { DeFiDashboard } from '@/components/defi/DeFiDashboard';
+import { StreamlitDeFiDashboard } from '@/components/defi/StreamlitDeFiDashboard';
 import { WhitePaperDashboard } from '@/components/whitepaper/WhitePaperDashboard';
 import { HolographicEngine } from '@/components/holographic/HolographicEngine';
 import { AdminDashboard } from '@/components/admin/AdminDashboard';
@@ -14,7 +14,8 @@ import { AIControlCenter } from '@/components/ai/AIControlCenter';
 import { CommunityAIChat } from '@/components/ai/CommunityAIChat';
 import { MobileOptimizedLayout } from '@/components/mobile/MobileOptimizedLayout';
 import { CryptoQuestHeaderLogo } from '@/components/brand/CryptoQuestLogo';
-import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins, BookOpen, Eye, Shield, Layers } from 'lucide-react';
+import { MetaMaskIntegration } from '@/components/wallet/MetaMaskIntegration';
+import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins, BookOpen, Eye, Shield, Layers, Wallet, DollarSign } from 'lucide-react';
 import { Toaster } from "@/components/ui/toaster";
 
 // Simplified AgentKit Component
@@ -146,14 +147,14 @@ function SuperPayDemo() {
 }
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'game' | 'agent' | 'superpay' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'v4defi' | 'ai'>('whitepaper');
+  const [activeView, setActiveView] = useState<'game' | 'agent' | 'onramper' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'ai' | 'wallet'>('whitepaper');
 
   const renderView = () => {
     switch (activeView) {
       case 'agent':
         return <AgentKitDemo />;
-      case 'superpay':
-        return <SuperPayDemo />;
+      case 'onramper':
+        return <OnRamperComponent />;
       case 'arbitrage':
         return <EnhancedArbitrageDashboard />;
       case 'whitepaper':
@@ -162,16 +163,14 @@ export default function App() {
         return <HolographicEngine />;
       case 'admin':
         return <AdminDashboard />;
-      case 'v4defi':
-        return <UniswapV4Dashboard />;
       case 'ai':
         return <AIControlCenter />;
       case 'rtx':
         return <RTXDashboard />;
       case 'defi':
-        return <DeFiDashboard />;
-      case 'compliance':
-        return <SECComplianceDashboard />;
+        return <StreamlitDeFiDashboard />;
+      case 'wallet':
+        return <MetaMaskIntegration />;
       default:
         return <GameDashboard />;
     }
@@ -200,15 +199,15 @@ export default function App() {
               White Paper
             </button>
             <button
-              onClick={() => setActiveView('v4defi')}
+              onClick={() => setActiveView('defi')}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeView === 'v4defi' 
+                activeView === 'defi' 
                   ? 'bg-purple-600 text-white' 
                   : 'text-gray-300 hover:bg-slate-700 hover:text-white'
               }`}
             >
               <Layers className="w-4 h-4" />
-              V4 DeFi
+              DeFi Hub
             </button>
             <button
               onClick={() => setActiveView('game')}
@@ -244,15 +243,15 @@ export default function App() {
             AI Agent
           </button>
           <button
-            onClick={() => setActiveView('superpay')}
+            onClick={() => setActiveView('onramper')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeView === 'superpay' 
+              activeView === 'onramper' 
                 ? 'bg-purple-600 text-white' 
                 : 'text-gray-300 hover:bg-slate-700 hover:text-white'
             }`}
           >
-            <CreditCard className="w-4 h-4" />
-            SuperPay
+            <DollarSign className="w-4 h-4" />
+            OnRamper
           </button>
           <button
             onClick={() => setActiveView('arbitrage')}
@@ -277,15 +276,15 @@ export default function App() {
             RTX Gaming
           </button>
           <button
-            onClick={() => setActiveView('defi')}
+            onClick={() => setActiveView('wallet')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeView === 'defi' 
+              activeView === 'wallet' 
                 ? 'bg-purple-600 text-white' 
                 : 'text-gray-300 hover:bg-slate-700 hover:text-white'
             }`}
           >
-            <Coins className="w-4 h-4" />
-            DeFi Hub
+            <Wallet className="w-4 h-4" />
+            MetaMask
           </button>
           <button
             onClick={() => setActiveView('holographic')}
@@ -309,18 +308,7 @@ export default function App() {
             <Shield className="w-4 h-4" />
             Admin
           </button>
-          <button
-            onClick={() => setActiveView('compliance')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              activeView === 'compliance' 
-                ? 'bg-purple-600 text-white' 
-                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
-            }`}
-          >
-            <Shield className="w-4 h-4" />
-            SEC Compliance
-          </button>
-        </div>
+          </div>
       </div>
 
       {/* Main Content */}

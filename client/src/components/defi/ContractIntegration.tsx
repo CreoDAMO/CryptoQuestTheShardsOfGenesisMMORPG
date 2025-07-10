@@ -102,6 +102,13 @@ export const CRYPTOQUEST_CONTRACTS = {
     type: 'ICO',
     description: 'Token sales contract for CQT',
     polygonscan: 'https://polygonscan.com/address/0x8206b3a98dbd4e3cd767e0e5caba6c6af68044c8'
+  },
+  CQT_BASE: {
+    address: '0x9d1075b41cd80ab08179f36bc17a7ff8708748ba',
+    name: 'CQT on BASE',
+    type: 'Token',
+    description: 'CQT token on BASE network',
+    polygonscan: 'https://basescan.org/token/0x9d1075b41cd80ab08179f36bc17a7ff8708748ba#code'
   }
 };
 
@@ -126,7 +133,8 @@ export function ContractIntegration() {
       CQT_MARKETPLACE: { totalValue: 340000, transactionCount: 12876, activeUsers: 4532, contractHealth: 93 },
       CQTSOG_MMORPG: { totalValue: 156000, transactionCount: 23456, activeUsers: 7890, contractHealth: 96 },
       CQT_DAO: { totalValue: 95000, transactionCount: 1234, activeUsers: 567, contractHealth: 99 },
-      CQT_SWAP: { totalValue: 750000, transactionCount: 9876, activeUsers: 2345, contractHealth: 94 }
+      CQT_SWAP: { totalValue: 750000, transactionCount: 9876, activeUsers: 2345, contractHealth: 94 },
+      CQT_BASE: { totalValue: 1200000, transactionCount: 18543, activeUsers: 5678, contractHealth: 98 }
     };
     setContractMetrics(mockMetrics);
   }, []);
