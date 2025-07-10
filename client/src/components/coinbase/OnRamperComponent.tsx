@@ -6,7 +6,7 @@ import {
   Shield, 
   Clock, 
   CheckCircle,
-  Bank,
+  Building2,
   Smartphone,
   Globe,
   Lock,
@@ -108,7 +108,7 @@ export function OnRamperComponent() {
   const getPaymentMethodIcon = (type: string) => {
     switch (type) {
       case 'card': return <CreditCard className="w-5 h-5" />;
-      case 'bank': return <Bank className="w-5 h-5" />;
+      case 'bank': return <Building2 className="w-5 h-5" />;
       case 'wire': return <Globe className="w-5 h-5" />;
       case 'crypto': return <Coins className="w-5 h-5" />;
       default: return <Wallet className="w-5 h-5" />;
