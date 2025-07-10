@@ -7,7 +7,7 @@ import { EnhancedNVIDIADashboard } from '@/components/nvidia/EnhancedNVIDIADashb
 import { UnifiedDeFiDashboard } from '@/components/defi/UnifiedDeFiDashboard';
 import { WhitePaperDashboard } from '@/components/whitepaper/WhitePaperDashboard';
 import { HolographicEngine } from '@/components/holographic/HolographicEngine';
-import { AdminDashboard } from '@/components/admin/AdminDashboard';
+import { OperatingCenterDashboard } from '@/components/admin/OperatingCenterDashboard';
 import { SECComplianceDashboard } from '@/components/compliance/SECComplianceDashboard';
 import { AIControlCenter } from '@/components/ai/AIControlCenter';
 import { CommunityAIChat } from '@/components/ai/CommunityAIChat';
@@ -163,7 +163,7 @@ export default function App() {
       case 'holographic':
         return <HolographicEngine />;
       case 'admin':
-        return <AdminDashboard />;
+        return <OperatingCenterDashboard />;
       case 'nvidia':
         return <EnhancedNVIDIADashboard />;
       case 'defi':
@@ -316,12 +316,12 @@ export default function App() {
             onClick={() => setActiveView('admin')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               activeView === 'admin' 
-                ? 'bg-purple-600 text-white' 
-                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+                ? 'bg-red-600 text-white' 
+                : 'text-gray-300 hover:bg-red-700 hover:text-white'
             }`}
           >
             <Shield className="w-4 h-4" />
-            Admin
+            Operating Center
           </button>
           </div>
       </div>
