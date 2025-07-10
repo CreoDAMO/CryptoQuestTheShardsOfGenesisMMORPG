@@ -8,6 +8,8 @@ import {
   insertFarmingPositionSchema, insertNftCollectionSchema, insertDaoProposalSchema,
   insertDaoVoteSchema
 } from "../shared/schema.js";
+import { moralisService } from "./services/moralis-service.js";
+import { coinbaseService } from "./services/coinbase-service.js";
 
 // Service imports - these need to be adjusted based on actual lib structure
 interface ArbitrageOpportunity {
@@ -556,6 +558,401 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
       });
     } catch (error) {
       res.status(500).json({ success: false, error: 'Failed to generate hologram' });
+    }
+  });
+
+  // ============================================
+  // MORALIS API ROUTES
+  // ============================================
+
+  // Get NFTs for a wallet
+  app.get("/api/moralis/nfts/:walletAddress", async (req, res) => {
+    try {
+      const { walletAddress } = req.params;
+      const { chain = 'polygon' } = req.query;
+      
+      const nfts = await moralisService.getNFTsByWallet(walletAddress, chain as string);
+      
+      res.json({
+        success: true,
+        data: nfts
+      });
+    } catch (error) {
+      console.error('Moralis NFTs error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch NFTs'
+      });
+    }
+  });
+
+  // Get token balances for a wallet
+  app.get("/api/moralis/balances/:walletAddress", async (req, res) => {
+    try {
+      const { walletAddress } = req.params;
+      const { chain = 'polygon' } = req.query;
+      
+      const balances = await moralisService.getTokenBalances(walletAddress, chain as string);
+      
+      res.json({
+        success: true,
+        data: balances
+      });
+    } catch (error) {
+      console.error('Moralis balances error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch balances'
+      });
+    }
+  });
+
+  // Get token price
+  app.get("/api/moralis/price/:tokenAddress", async (req, res) => {
+    try {
+      const { tokenAddress } = req.params;
+      const { chain = 'polygon' } = req.query;
+      
+      const price = await moralisService.getTokenPrice(tokenAddress, chain as string);
+      
+      res.json({
+        success: true,
+        data: price
+      });
+    } catch (error) {
+      console.error('Moralis price error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch price'
+      });
+    }
+  });
+
+  // Get wallet transactions
+  app.get("/api/moralis/transactions/:walletAddress", async (req, res) => {
+    try {
+      const { walletAddress } = req.params;
+      const { chain = 'polygon' } = req.query;
+      
+      const transactions = await moralisService.getWalletTransactions(walletAddress, chain as string);
+      
+      res.json({
+        success: true,
+        data: transactions
+      });
+    } catch (error) {
+      console.error('Moralis transactions error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch transactions'
+      });
+    }
+  });
+
+  // Get wallet net worth
+  app.get("/api/moralis/networth/:walletAddress", async (req, res) => {
+    try {
+      const { walletAddress } = req.params;
+      const { chain = 'polygon' } = req.query;
+      
+      const networth = await moralisService.getWalletNetWorth(walletAddress, chain as string);
+      
+      res.json({
+        success: true,
+        data: networth
+      });
+    } catch (error) {
+      console.error('Moralis networth error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch net worth'
+      });
+    }
+  });
+
+  // Get DeFi positions
+  app.get("/api/moralis/defi/:walletAddress", async (req, res) => {
+    try {
+      const { walletAddress } = req.params;
+      const { chain = 'polygon' } = req.query;
+      
+      const defiPositions = await moralisService.getWalletDefiPositions(walletAddress, chain as string);
+      
+      res.json({
+        success: true,
+        data: defiPositions
+      });
+    } catch (error) {
+      console.error('Moralis DeFi error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch DeFi positions'
+      });
+    }
+  });
+
+  // Get wallet P&L
+  app.get("/api/moralis/pnl/:walletAddress", async (req, res) => {
+    try {
+      const { walletAddress } = req.params;
+      const { chain = 'polygon' } = req.query;
+      
+      const pnl = await moralisService.getWalletPnl(walletAddress, chain as string);
+      
+      res.json({
+        success: true,
+        data: pnl
+      });
+    } catch (error) {
+      console.error('Moralis PnL error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch P&L'
+      });
+    }
+  });
+
+  // ============================================
+  // COINBASE API ROUTES
+  // ============================================
+
+  // Get exchange rates
+  app.get("/api/coinbase/rates", async (req, res) => {
+    try {
+      const rates = await coinbaseService.getExchangeRates();
+      
+      res.json({
+        success: true,
+        data: rates
+      });
+    } catch (error) {
+      console.error('Coinbase rates error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch exchange rates'
+      });
+    }
+  });
+
+  // Get spot price
+  app.get("/api/coinbase/price/:currencyPair", async (req, res) => {
+    try {
+      const { currencyPair } = req.params;
+      
+      const price = await coinbaseService.getSpotPrice(currencyPair);
+      
+      res.json({
+        success: true,
+        data: price
+      });
+    } catch (error) {
+      console.error('Coinbase price error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch spot price'
+      });
+    }
+  });
+
+  // Create wallet
+  app.post("/api/coinbase/wallet", async (req, res) => {
+    try {
+      const { name } = req.body;
+      
+      if (!name) {
+        return res.status(400).json({
+          success: false,
+          error: 'Wallet name is required'
+        });
+      }
+      
+      const wallet = await coinbaseService.createWallet(name);
+      
+      res.json({
+        success: true,
+        data: wallet
+      });
+    } catch (error) {
+      console.error('Coinbase wallet creation error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to create wallet'
+      });
+    }
+  });
+
+  // List wallets
+  app.get("/api/coinbase/wallets", async (req, res) => {
+    try {
+      const wallets = await coinbaseService.listWallets();
+      
+      res.json({
+        success: true,
+        data: wallets
+      });
+    } catch (error) {
+      console.error('Coinbase wallets error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch wallets'
+      });
+    }
+  });
+
+  // Get wallet balance
+  app.get("/api/coinbase/wallet/:walletId/balance", async (req, res) => {
+    try {
+      const { walletId } = req.params;
+      
+      const balance = await coinbaseService.getWalletBalance(walletId);
+      
+      res.json({
+        success: true,
+        data: balance
+      });
+    } catch (error) {
+      console.error('Coinbase balance error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch wallet balance'
+      });
+    }
+  });
+
+  // Create transfer
+  app.post("/api/coinbase/transfer", async (req, res) => {
+    try {
+      const { fromWalletId, toAddress, amount, asset } = req.body;
+      
+      if (!fromWalletId || !toAddress || !amount || !asset) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required fields: fromWalletId, toAddress, amount, asset'
+        });
+      }
+      
+      const transfer = await coinbaseService.transfer(fromWalletId, toAddress, amount, asset);
+      
+      res.json({
+        success: true,
+        data: transfer
+      });
+    } catch (error) {
+      console.error('Coinbase transfer error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to create transfer'
+      });
+    }
+  });
+
+  // Get assets
+  app.get("/api/coinbase/assets", async (req, res) => {
+    try {
+      const assets = await coinbaseService.getAssets();
+      
+      res.json({
+        success: true,
+        data: assets
+      });
+    } catch (error) {
+      console.error('Coinbase assets error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch assets'
+      });
+    }
+  });
+
+  // Get networks
+  app.get("/api/coinbase/networks", async (req, res) => {
+    try {
+      const networks = await coinbaseService.getNetworks();
+      
+      res.json({
+        success: true,
+        data: networks
+      });
+    } catch (error) {
+      console.error('Coinbase networks error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch networks'
+      });
+    }
+  });
+
+  // Stake asset
+  app.post("/api/coinbase/stake", async (req, res) => {
+    try {
+      const { walletId, amount, assetId, mode } = req.body;
+      
+      if (!walletId || !amount || !assetId || !mode) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required fields: walletId, amount, assetId, mode'
+        });
+      }
+      
+      const stakingOperation = await coinbaseService.stakeAsset(walletId, amount, assetId, mode);
+      
+      res.json({
+        success: true,
+        data: stakingOperation
+      });
+    } catch (error) {
+      console.error('Coinbase staking error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to stake asset'
+      });
+    }
+  });
+
+  // Get staking rewards
+  app.get("/api/coinbase/rewards/:walletId/:assetId", async (req, res) => {
+    try {
+      const { walletId, assetId } = req.params;
+      
+      const rewards = await coinbaseService.getStakingRewards(walletId, assetId);
+      
+      res.json({
+        success: true,
+        data: rewards
+      });
+    } catch (error) {
+      console.error('Coinbase rewards error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch staking rewards'
+      });
+    }
+  });
+
+  // Request faucet
+  app.post("/api/coinbase/faucet", async (req, res) => {
+    try {
+      const { walletId, assetId } = req.body;
+      
+      if (!walletId || !assetId) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required fields: walletId, assetId'
+        });
+      }
+      
+      const faucetTransaction = await coinbaseService.faucetRequest(walletId, assetId);
+      
+      res.json({
+        success: true,
+        data: faucetTransaction
+      });
+    } catch (error) {
+      console.error('Coinbase faucet error:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to request faucet'
+      });
     }
   });
 

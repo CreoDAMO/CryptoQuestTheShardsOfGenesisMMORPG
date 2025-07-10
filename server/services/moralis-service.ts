@@ -1,177 +1,191 @@
-import { Request, Response } from 'express';
-
-interface MoralisTokenData {
-  address: string;
-  name: string;
-  symbol: string;
-  decimals: number;
-  logo: string;
-  thumbnail: string;
-  possible_spam: boolean;
-  verified_contract: boolean;
-}
-
-interface MoralisBalanceData {
-  token_address: string;
-  name: string;
-  symbol: string;
-  logo: string;
-  thumbnail: string;
-  decimals: number;
-  balance: string;
-  possible_spam: boolean;
-}
-
-interface MoralisNFTData {
-  token_address: string;
-  token_id: string;
-  owner_of: string;
-  block_number: string;
-  block_number_minted: string;
-  token_hash: string;
-  amount: string;
-  contract_type: string;
-  name: string;
-  symbol: string;
-  token_uri: string;
-  metadata: any;
-  last_token_uri_sync: string;
-  last_metadata_sync: string;
-  minter_address: string;
-}
+import Moralis from 'moralis';
 
 export class MoralisService {
-  private readonly apiKey: string;
-  private readonly baseUrl = 'https://deep-index.moralis.io/api/v2.2';
+  private initialized = false;
 
-  constructor() {
-    this.apiKey = process.env.MORALIS_API || '';
-    if (!this.apiKey) {
-      console.warn('MORALIS_API key not found');
-    }
-  }
-
-  private async makeRequest(endpoint: string, params: Record<string, string> = {}) {
-    const url = new URL(`${this.baseUrl}${endpoint}`);
-    Object.entries(params).forEach(([key, value]) => {
-      url.searchParams.append(key, value);
-    });
-
-    const response = await fetch(url.toString(), {
-      headers: {
-        'X-API-Key': this.apiKey,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Moralis API error: ${response.status} ${response.statusText}`);
-    }
-
-    return response.json();
-  }
-
-  async getTokenBalances(address: string, chain: string = 'polygon'): Promise<MoralisBalanceData[]> {
-    return this.makeRequest(`/${address}/erc20`, { chain });
-  }
-
-  async getNFTBalances(address: string, chain: string = 'polygon'): Promise<MoralisNFTData[]> {
-    return this.makeRequest(`/${address}/nft`, { chain, limit: '100' });
-  }
-
-  async getTokenMetadata(addresses: string[], chain: string = 'polygon'): Promise<MoralisTokenData[]> {
-    return this.makeRequest('/erc20/metadata', { 
-      chain, 
-      addresses: addresses.join(',') 
-    });
-  }
-
-  async getWalletHistory(address: string, chain: string = 'polygon') {
-    return this.makeRequest(`/${address}`, { chain });
-  }
-
-  async getTokenPrice(address: string, chain: string = 'polygon') {
-    return this.makeRequest(`/erc20/${address}/price`, { chain });
-  }
-
-  async getContractEvents(address: string, chain: string = 'polygon') {
-    return this.makeRequest(`/${address}/events`, { 
-      chain,
-      limit: '100'
-    });
-  }
-
-  async analyzePortfolio(address: string, chain: string = 'polygon') {
+  async initialize() {
+    if (this.initialized) return;
+    
     try {
-      const [tokens, nfts, history] = await Promise.all([
-        this.getTokenBalances(address, chain),
-        this.getNFTBalances(address, chain),
-        this.getWalletHistory(address, chain)
-      ]);
+      const apiKey = process.env.MORALIS_API_KEY;
+      if (!apiKey) {
+        throw new Error('MORALIS_API_KEY environment variable is not set');
+      }
 
-      const totalTokens = tokens.length;
-      const totalNFTs = nfts.length;
-      const verifiedTokens = tokens.filter(token => token.verified_contract).length;
-      const spamTokens = tokens.filter(token => token.possible_spam).length;
-
-      return {
-        totalTokens,
-        totalNFTs,
-        verifiedTokens,
-        spamTokens,
-        securityScore: Math.round(((verifiedTokens / totalTokens) * 100) || 0),
-        tokens: tokens.slice(0, 10), // Top 10 tokens
-        nfts: nfts.slice(0, 10), // Top 10 NFTs
-        walletAge: history?.first_transaction || 'Unknown'
-      };
+      await Moralis.start({
+        apiKey: apiKey,
+      });
+      
+      this.initialized = true;
+      console.log('Moralis service initialized successfully');
     } catch (error) {
-      console.error('Portfolio analysis error:', error);
+      console.error('Failed to initialize Moralis service:', error);
       throw error;
     }
   }
 
-  async getGameTokenAnalytics(tokenAddress: string, chain: string = 'polygon') {
+  async getNFTsByWallet(walletAddress: string, chain: string = 'polygon') {
+    await this.initialize();
+    
     try {
-      const [metadata, price, events] = await Promise.all([
-        this.getTokenMetadata([tokenAddress], chain),
-        this.getTokenPrice(tokenAddress, chain),
-        this.getContractEvents(tokenAddress, chain)
-      ]);
-
-      return {
-        token: metadata[0],
-        currentPrice: price,
-        recentActivity: events,
-        liquidityHealth: this.calculateLiquidityHealth(events),
-        trustScore: this.calculateTrustScore(metadata[0], events)
-      };
+      const response = await Moralis.EvmApi.nft.getWalletNFTs({
+        address: walletAddress,
+        chain: chain,
+        format: 'decimal',
+      });
+      
+      return response.toJSON();
     } catch (error) {
-      console.error('Game token analytics error:', error);
+      console.error('Error fetching NFTs:', error);
       throw error;
     }
   }
 
-  private calculateLiquidityHealth(events: any[]): string {
-    const recentEvents = events.filter(event => 
-      Date.now() - new Date(event.block_timestamp).getTime() < 24 * 60 * 60 * 1000
-    );
+  async getTokenBalances(walletAddress: string, chain: string = 'polygon') {
+    await this.initialize();
     
-    if (recentEvents.length > 50) return 'Excellent';
-    if (recentEvents.length > 20) return 'Good';
-    if (recentEvents.length > 5) return 'Moderate';
-    return 'Low';
+    try {
+      const response = await Moralis.EvmApi.token.getWalletTokenBalances({
+        address: walletAddress,
+        chain: chain,
+      });
+      
+      return response.toJSON();
+    } catch (error) {
+      console.error('Error fetching token balances:', error);
+      throw error;
+    }
   }
 
-  private calculateTrustScore(token: MoralisTokenData, events: any[]): number {
-    let score = 0;
+  async getTokenPrice(tokenAddress: string, chain: string = 'polygon') {
+    await this.initialize();
     
-    if (token.verified_contract) score += 30;
-    if (!token.possible_spam) score += 25;
-    if (events.length > 100) score += 20;
-    if (token.logo) score += 15;
-    if (token.decimals === 18) score += 10;
+    try {
+      const response = await Moralis.EvmApi.token.getTokenPrice({
+        address: tokenAddress,
+        chain: chain,
+      });
+      
+      return response.toJSON();
+    } catch (error) {
+      console.error('Error fetching token price:', error);
+      throw error;
+    }
+  }
+
+  async getWalletTransactions(walletAddress: string, chain: string = 'polygon') {
+    await this.initialize();
     
-    return Math.min(score, 100);
+    try {
+      const response = await Moralis.EvmApi.transaction.getWalletTransactions({
+        address: walletAddress,
+        chain: chain,
+        limit: 100,
+      });
+      
+      return response.toJSON();
+    } catch (error) {
+      console.error('Error fetching wallet transactions:', error);
+      throw error;
+    }
+  }
+
+  async getContractNFTs(contractAddress: string, chain: string = 'polygon') {
+    await this.initialize();
+    
+    try {
+      const response = await Moralis.EvmApi.nft.getContractNFTs({
+        address: contractAddress,
+        chain: chain,
+        format: 'decimal',
+      });
+      
+      return response.toJSON();
+    } catch (error) {
+      console.error('Error fetching contract NFTs:', error);
+      throw error;
+    }
+  }
+
+  async getTokenMetadata(tokenAddress: string, chain: string = 'polygon') {
+    await this.initialize();
+    
+    try {
+      const response = await Moralis.EvmApi.token.getTokenMetadata({
+        addresses: [tokenAddress],
+        chain: chain,
+      });
+      
+      return response.toJSON();
+    } catch (error) {
+      console.error('Error fetching token metadata:', error);
+      throw error;
+    }
+  }
+
+  async getWalletDefiPositions(walletAddress: string, chain: string = 'polygon') {
+    await this.initialize();
+    
+    try {
+      const response = await Moralis.EvmApi.wallets.getDefiPositionsByWallet({
+        address: walletAddress,
+        chain: chain,
+      });
+      
+      return response.toJSON();
+    } catch (error) {
+      console.error('Error fetching DeFi positions:', error);
+      throw error;
+    }
+  }
+
+  async getWalletNetWorth(walletAddress: string, chain: string = 'polygon') {
+    await this.initialize();
+    
+    try {
+      const response = await Moralis.EvmApi.wallets.getWalletNetWorth({
+        address: walletAddress,
+        chains: [chain],
+      });
+      
+      return response.toJSON();
+    } catch (error) {
+      console.error('Error fetching wallet net worth:', error);
+      throw error;
+    }
+  }
+
+  async getWalletPnl(walletAddress: string, chain: string = 'polygon') {
+    await this.initialize();
+    
+    try {
+      const response = await Moralis.EvmApi.wallets.getWalletPnl({
+        address: walletAddress,
+        chains: [chain],
+      });
+      
+      return response.toJSON();
+    } catch (error) {
+      console.error('Error fetching wallet PnL:', error);
+      throw error;
+    }
+  }
+
+  async getTokenTransfers(tokenAddress: string, chain: string = 'polygon') {
+    await this.initialize();
+    
+    try {
+      const response = await Moralis.EvmApi.token.getTokenTransfers({
+        address: tokenAddress,
+        chain: chain,
+        limit: 100,
+      });
+      
+      return response.toJSON();
+    } catch (error) {
+      console.error('Error fetching token transfers:', error);
+      throw error;
+    }
   }
 }
 

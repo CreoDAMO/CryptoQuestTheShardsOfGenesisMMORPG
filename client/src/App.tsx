@@ -15,7 +15,8 @@ import { CommunityAIChat } from '@/components/ai/CommunityAIChat';
 import { MobileOptimizedLayout } from '@/components/mobile/MobileOptimizedLayout';
 import { CryptoQuestHeaderLogo } from '@/components/brand/CryptoQuestLogo';
 import { MetaMaskIntegration } from '@/components/wallet/MetaMaskIntegration';
-import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins, BookOpen, Eye, Shield, Layers, Wallet, DollarSign } from 'lucide-react';
+import { BlockchainDashboard } from '@/components/blockchain/BlockchainDashboard';
+import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins, BookOpen, Eye, Shield, Layers, Wallet, DollarSign, Database } from 'lucide-react';
 import { Toaster } from "@/components/ui/toaster";
 
 // Simplified AgentKit Component
@@ -147,7 +148,7 @@ function SuperPayDemo() {
 }
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'game' | 'agent' | 'onramper' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'ai' | 'wallet'>('whitepaper');
+  const [activeView, setActiveView] = useState<'game' | 'agent' | 'onramper' | 'arbitrage' | 'rtx' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'ai' | 'wallet' | 'blockchain'>('whitepaper');
 
   const renderView = () => {
     switch (activeView) {
@@ -171,6 +172,8 @@ export default function App() {
         return <StreamlitDeFiDashboard />;
       case 'wallet':
         return <MetaMaskIntegration />;
+      case 'blockchain':
+        return <BlockchainDashboard />;
       default:
         return <GameDashboard />;
     }
@@ -296,6 +299,17 @@ export default function App() {
           >
             <Eye className="w-4 h-4" />
             Holographic
+          </button>
+          <button
+            onClick={() => setActiveView('blockchain')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === 'blockchain' 
+                ? 'bg-purple-600 text-white' 
+                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <Database className="w-4 h-4" />
+            Blockchain
           </button>
           <button
             onClick={() => setActiveView('admin')}
