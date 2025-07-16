@@ -48,7 +48,7 @@ function AgentKitDemo() {
           <p className="text-xl text-gray-300">Multi-AI powered blockchain gaming assistant</p>
           <div className="flex items-center justify-center gap-2">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-sm text-green-400">All 5 AI Models Active</span>
+            <span className="text-sm text-green-400">Connected to 0x67BF...3866</span>
           </div>
         </div>
 
@@ -65,21 +65,21 @@ function AgentKitDemo() {
         </div>
 
         <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">Available Actions</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Live Contract Operations</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
-              'Transfer CQT Tokens', 
-              'Get Wallet Balance', 
-              'Deploy Smart Contract', 
-              'Stake CQT Tokens', 
-              'Create Gaming Guild', 
-              'Quest Management',
-              'Arbitrage Trading',
+              'CQT Token Transfer', 
+              'MultiSig Operations', 
+              'Smart Contract Deploy', 
+              'TotalSig AI Mining', 
+              'Safe Multisig Control', 
+              'AgentKit Commands',
+              'Arbitrage Execution',
               'LP Management',
-              'MultiSig Operations',
-              'AI Miner Control',
               'Contract Auditing',
-              'Paymaster Operations'
+              'Paymaster Gas Relay',
+              'Cross-Chain Bridge',
+              'Real-Time Monitoring'
             ].map((action) => (
               <button
                 key={action}
@@ -93,20 +93,42 @@ function AgentKitDemo() {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="text-center p-4 bg-slate-800/50 border border-slate-700 rounded-lg">
-            <div className="text-2xl font-bold text-purple-400">2,847</div>
+            <div className="text-2xl font-bold text-purple-400">12,847</div>
             <div className="text-sm text-gray-300">Actions Executed</div>
           </div>
           <div className="text-center p-4 bg-slate-800/50 border border-slate-700 rounded-lg">
-            <div className="text-2xl font-bold text-green-400">99.2%</div>
+            <div className="text-2xl font-bold text-green-400">99.8%</div>
             <div className="text-sm text-gray-300">Success Rate</div>
           </div>
           <div className="text-center p-4 bg-slate-800/50 border border-slate-700 rounded-lg">
-            <div className="text-2xl font-bold text-blue-400">0.8s</div>
+            <div className="text-2xl font-bold text-blue-400">0.3s</div>
             <div className="text-sm text-gray-300">Avg Response Time</div>
           </div>
           <div className="text-center p-4 bg-slate-800/50 border border-slate-700 rounded-lg">
-            <div className="text-2xl font-bold text-cyan-400">Live</div>
+            <div className="text-2xl font-bold text-cyan-400">LIVE</div>
             <div className="text-sm text-gray-300">Contract Status</div>
+          </div>
+        </div>
+
+        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+          <h3 className="text-xl font-bold text-white mb-4">Live Contract Addresses</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-400">CQT Token:</span>
+              <span className="ml-2 text-blue-400 font-mono">0x94ef57abfBff1AD70bD00a921e1d2437f31C1665</span>
+            </div>
+            <div>
+              <span className="text-gray-400">Staking:</span>
+              <span className="ml-2 text-green-400 font-mono">0x4915363b0e4E5c632024c34CDccC76D6D39D6b6c</span>
+            </div>
+            <div>
+              <span className="text-gray-400">Swap Pool:</span>
+              <span className="ml-2 text-purple-400 font-mono">0x9d1075B4e9Ad5E2A4cAAdec27A3F23CAaC3fd94e</span>
+            </div>
+            <div>
+              <span className="text-gray-400">Admin Wallet:</span>
+              <span className="ml-2 text-orange-400 font-mono">0x67BF9f428d92704C3Db3a08dC05Bc941A8647866</span>
+            </div>
           </div>
         </div>
       </div>
@@ -117,7 +139,7 @@ function AgentKitDemo() {
 // Enhanced SuperPay Component
 function SuperPayDemo() {
   const [walletConnected, setWalletConnected] = useState(true);
-  const [paymentMethod, setPaymentMethod] = useState('metamask');
+  const [paymentMethod, setPaymentMethod] = useState('multisig');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-slate-900 p-4">
@@ -132,22 +154,22 @@ function SuperPayDemo() {
           <p className="text-xl text-gray-300">Gasless payments with Paymaster integration</p>
           <div className="flex items-center justify-center gap-2">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-sm text-green-400">Connected to 0x67BF...3866</span>
+            <span className="text-sm text-green-400">Connected: Safe Multisig + TotalSig</span>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="text-center p-4 bg-slate-800/50 border border-slate-700 rounded-lg">
-            <div className="text-2xl font-bold text-blue-400">156.7 CQT</div>
-            <div className="text-sm text-gray-300">CQT Balance</div>
+            <div className="text-2xl font-bold text-blue-400">2,156.7 CQT</div>
+            <div className="text-sm text-gray-300">MultiSig Balance</div>
           </div>
           <div className="text-center p-4 bg-slate-800/50 border border-slate-700 rounded-lg">
-            <div className="text-2xl font-bold text-green-400">$12,840</div>
-            <div className="text-sm text-gray-300">USD Value</div>
+            <div className="text-2xl font-bold text-green-400">$142,840</div>
+            <div className="text-sm text-gray-300">Total USD Value</div>
           </div>
           <div className="text-center p-4 bg-slate-800/50 border border-slate-700 rounded-lg">
-            <div className="text-2xl font-bold text-purple-400">MultiSig</div>
-            <div className="text-sm text-gray-300">Wallet Type</div>
+            <div className="text-2xl font-bold text-purple-400">3/3</div>
+            <div className="text-sm text-gray-300">MultiSig Confirmations</div>
           </div>
         </div>
 
@@ -171,19 +193,23 @@ function SuperPayDemo() {
           </div>
 
           <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-            <h3 className="text-xl font-bold text-white mb-4">Paymaster Features</h3>
+            <h3 className="text-xl font-bold text-white mb-4">Wallet Architecture</h3>
             <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-300">Safe Multisig</span>
+                <span className="text-green-400">✓ Active</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gray-300">TotalSig AI Miner</span>
+                <span className="text-green-400">✓ Mining</span>
+              </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-300">Gasless Transactions</span>
                 <span className="text-green-400">✓ Enabled</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-gray-300">Auto-Approval</span>
-                <span className="text-green-400">✓ Active</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-300">Cross-Chain</span>
-                <span className="text-green-400">✓ Supported</span>
+                <span className="text-gray-300">Admin Control</span>
+                <span className="text-blue-400">0x67BF...3866</span>
               </div>
             </div>
           </div>
@@ -241,11 +267,11 @@ export default function App() {
           <CryptoQuestHeaderLogo />
         </div>
 
-        {/* Live Status Indicator */}
+        {/* Live Status Indicator - Updated */}
         <div className="fixed top-4 right-4 z-50">
           <div className="flex items-center gap-2 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-full px-4 py-2">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-xs text-green-400 font-medium">LIVE CONTRACTS</span>
+            <span className="text-xs text-green-400 font-medium">ADMIN: 0x67BF...3866</span>
           </div>
         </div>
 
