@@ -344,7 +344,7 @@ export function SuperPayDashboard() {
             <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader>
                 <CardTitle className="text-white">Send Payment</CardTitle>
-                <CardDescription>Send crypto payments with gasless transactions</CardDescription>
+                <p className="text-gray-400">Send crypto payments with gasless transactions</p>
               </CardHeader>
               <CardContent>
                 <form className="space-y-4" onSubmit={(e) => {
@@ -474,7 +474,7 @@ export function SuperPayDashboard() {
             <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader>
                 <CardTitle className="text-white">Payment Invoices</CardTitle>
-                <CardDescription>Manage and track payment invoices</CardDescription>
+                <p className="text-gray-400">Manage and track payment invoices</p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -505,7 +505,7 @@ export function SuperPayDashboard() {
             <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader>
                 <CardTitle className="text-white">SuperPay Settings</CardTitle>
-                <CardDescription>Configure your payment preferences</CardDescription>
+                <p className="text-gray-400">Configure your payment preferences</p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
