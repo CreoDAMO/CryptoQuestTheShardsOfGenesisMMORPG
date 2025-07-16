@@ -25,6 +25,9 @@ import {
   Eye,
   BarChart3
 } from 'lucide-react';
+import { UnifiedIntelligenceDashboard } from '../enhanced/UnifiedIntelligenceDashboard';
+import { SmartContractManager } from '../../../components/admin/SmartContractManager';
+import { UnifiedNVIDIAHolographicDashboard } from '../nvidia/UnifiedNVIDIAHolographicDashboard';
 
 interface AdminMetrics {
   agentActions: any[];
@@ -58,7 +61,7 @@ export function AdminDashboard() {
   const fetchAdminData = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const headers = {
         'Content-Type': 'application/json',
@@ -179,7 +182,7 @@ export function AdminDashboard() {
                 {ADMIN_ADDRESS.slice(0, 6)}...{ADMIN_ADDRESS.slice(-4)}
               </Badge>
             </div>
-            
+
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <Switch
@@ -293,6 +296,8 @@ export function AdminDashboard() {
             <TabsTrigger value="superpay" className="text-white">Super Pay</TabsTrigger>
             <TabsTrigger value="aimodels" className="text-white">AI Models</TabsTrigger>
             <TabsTrigger value="contracts" className="text-white">Contracts</TabsTrigger>
+            <TabsTrigger value="nvidia" className="text-white">NVIDIA + Holographic</TabsTrigger>
+            <TabsTrigger value="analytics" className="text-white">Analytics</TabsTrigger>
             <TabsTrigger value="security" className="text-white">Security</TabsTrigger>
           </TabsList>
 
@@ -582,8 +587,16 @@ export function AdminDashboard() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="contracts" className="space-y-6">
+          <TabsContent value="contracts">
             <SmartContractManager />
+          </TabsContent>
+
+          <TabsContent value="nvidia">
+            <UnifiedNVIDIAHolographicDashboard />
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <UnifiedIntelligenceDashboard />
           </TabsContent>
 
           <TabsContent value="security" className="space-y-6">

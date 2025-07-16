@@ -180,7 +180,7 @@ const generateArbitrageOpportunities = (): ArbitrageOpportunity[] => {
 };
 
 export async function registerRoutes(app: Express, server: Server): Promise<void> {
-  
+
   // ============================================
   // GAMING API ROUTES
   // ============================================
@@ -190,11 +190,11 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       const id = parseInt(req.params.id, 10);
       const user = await storage.getUser(id);
-      
+
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
-      
+
       res.json(user);
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
@@ -205,11 +205,11 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       const { address } = req.params;
       const user = await storage.getUserByWallet(address);
-      
+
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
-      
+
       res.json(user);
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
@@ -231,11 +231,11 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       const { address } = req.params;
       const player = await storage.getPlayer(address);
-      
+
       if (!player) {
         return res.status(404).json({ error: "Player not found" });
       }
-      
+
       res.json(player);
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
@@ -361,7 +361,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
       }
 
       const result = await mockAgentService.executeAction(action, params);
-      
+
       res.json({
         success: true,
         data: result
@@ -386,7 +386,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
       switch (action) {
         case 'scan':
           const opportunities = generateArbitrageOpportunities();
-          
+
           const aiRecommendations = await mockNvidiaCloudService.optimizeArbitrageStrategy({
             opportunities,
             currentMarket: 'bullish'
@@ -544,7 +544,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.post("/api/holographic/financial", async (req, res) => {
     try {
       const { priceData, volumeData, visualizationType } = req.body;
-      
+
       const hologramData = {
         width: 256,
         height: 256,
@@ -572,9 +572,9 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       const { walletAddress } = req.params;
       const { chain = 'polygon' } = req.query;
-      
+
       const nfts = await moralisService.getNFTsByWallet(walletAddress, chain as string);
-      
+
       res.json({
         success: true,
         data: nfts
@@ -593,9 +593,9 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       const { walletAddress } = req.params;
       const { chain = 'polygon' } = req.query;
-      
+
       const balances = await moralisService.getTokenBalances(walletAddress, chain as string);
-      
+
       res.json({
         success: true,
         data: balances
@@ -614,9 +614,9 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       const { tokenAddress } = req.params;
       const { chain = 'polygon' } = req.query;
-      
+
       const price = await moralisService.getTokenPrice(tokenAddress, chain as string);
-      
+
       res.json({
         success: true,
         data: price
@@ -635,9 +635,9 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       const { walletAddress } = req.params;
       const { chain = 'polygon' } = req.query;
-      
+
       const transactions = await moralisService.getWalletTransactions(walletAddress, chain as string);
-      
+
       res.json({
         success: true,
         data: transactions
@@ -656,9 +656,9 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       const { walletAddress } = req.params;
       const { chain = 'polygon' } = req.query;
-      
+
       const networth = await moralisService.getWalletNetWorth(walletAddress, chain as string);
-      
+
       res.json({
         success: true,
         data: networth
@@ -677,9 +677,9 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       const { walletAddress } = req.params;
       const { chain = 'polygon' } = req.query;
-      
+
       const defiPositions = await moralisService.getWalletDefiPositions(walletAddress, chain as string);
-      
+
       res.json({
         success: true,
         data: defiPositions
@@ -698,9 +698,9 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       const { walletAddress } = req.params;
       const { chain = 'polygon' } = req.query;
-      
+
       const pnl = await moralisService.getWalletPnl(walletAddress, chain as string);
-      
+
       res.json({
         success: true,
         data: pnl
@@ -722,7 +722,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.get("/api/coinbase/rates", async (req, res) => {
     try {
       const rates = await coinbaseService.getExchangeRates();
-      
+
       res.json({
         success: true,
         data: rates
@@ -740,9 +740,9 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.get("/api/coinbase/price/:currencyPair", async (req, res) => {
     try {
       const { currencyPair } = req.params;
-      
+
       const price = await coinbaseService.getSpotPrice(currencyPair);
-      
+
       res.json({
         success: true,
         data: price
@@ -760,16 +760,16 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.post("/api/coinbase/wallet", async (req, res) => {
     try {
       const { name } = req.body;
-      
+
       if (!name) {
         return res.status(400).json({
           success: false,
           error: 'Wallet name is required'
         });
       }
-      
+
       const wallet = await coinbaseService.createWallet(name);
-      
+
       res.json({
         success: true,
         data: wallet
@@ -787,7 +787,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.get("/api/coinbase/wallets", async (req, res) => {
     try {
       const wallets = await coinbaseService.listWallets();
-      
+
       res.json({
         success: true,
         data: wallets
@@ -805,9 +805,9 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.get("/api/coinbase/wallet/:walletId/balance", async (req, res) => {
     try {
       const { walletId } = req.params;
-      
+
       const balance = await coinbaseService.getWalletBalance(walletId);
-      
+
       res.json({
         success: true,
         data: balance
@@ -825,16 +825,16 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.post("/api/coinbase/transfer", async (req, res) => {
     try {
       const { fromWalletId, toAddress, amount, asset } = req.body;
-      
+
       if (!fromWalletId || !toAddress || !amount || !asset) {
         return res.status(400).json({
           success: false,
           error: 'Missing required fields: fromWalletId, toAddress, amount, asset'
         });
       }
-      
+
       const transfer = await coinbaseService.transfer(fromWalletId, toAddress, amount, asset);
-      
+
       res.json({
         success: true,
         data: transfer
@@ -852,7 +852,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.get("/api/coinbase/assets", async (req, res) => {
     try {
       const assets = await coinbaseService.getAssets();
-      
+
       res.json({
         success: true,
         data: assets
@@ -870,7 +870,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.get("/api/coinbase/networks", async (req, res) => {
     try {
       const networks = await coinbaseService.getNetworks();
-      
+
       res.json({
         success: true,
         data: networks
@@ -888,16 +888,16 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.post("/api/coinbase/stake", async (req, res) => {
     try {
       const { walletId, amount, assetId, mode } = req.body;
-      
+
       if (!walletId || !amount || !assetId || !mode) {
         return res.status(400).json({
           success: false,
           error: 'Missing required fields: walletId, amount, assetId, mode'
         });
       }
-      
+
       const stakingOperation = await coinbaseService.stakeAsset(walletId, amount, assetId, mode);
-      
+
       res.json({
         success: true,
         data: stakingOperation
@@ -915,9 +915,9 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.get("/api/coinbase/rewards/:walletId/:assetId", async (req, res) => {
     try {
       const { walletId, assetId } = req.params;
-      
+
       const rewards = await coinbaseService.getStakingRewards(walletId, assetId);
-      
+
       res.json({
         success: true,
         data: rewards
@@ -935,16 +935,16 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.post("/api/coinbase/faucet", async (req, res) => {
     try {
       const { walletId, assetId } = req.body;
-      
+
       if (!walletId || !assetId) {
         return res.status(400).json({
           success: false,
           error: 'Missing required fields: walletId, assetId'
         });
       }
-      
+
       const faucetTransaction = await coinbaseService.faucetRequest(walletId, assetId);
-      
+
       res.json({
         success: true,
         data: faucetTransaction
@@ -966,14 +966,14 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   const adminAuth = (req: any, res: any, next: any) => {
     const adminAddress = '0xCc380FD8bfbdF0c020de64075b86C84c2BB0AE79';
     const requestAddress = req.headers['x-admin-address'];
-    
+
     if (!requestAddress || requestAddress.toLowerCase() !== adminAddress.toLowerCase()) {
       return res.status(403).json({
         success: false,
         error: 'Admin access required'
       });
     }
-    
+
     next();
   };
 
@@ -982,7 +982,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       await cdpAgentKitService.initialize();
       const actions = cdpAgentKitService.getAgentActions();
-      
+
       res.json({
         success: true,
         data: actions
@@ -1002,7 +1002,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
       await cdpAgentKitService.initialize();
       const config = cdpAgentKitService.getPaymasterConfig();
       const transactions = cdpAgentKitService.getSuperPayTransactions();
-      
+
       res.json({
         success: true,
         data: {
@@ -1024,7 +1024,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
     try {
       await cdpAgentKitService.initialize();
       const metrics = await cdpAgentKitService.getWalletMetrics();
-      
+
       res.json({
         success: true,
         data: metrics
@@ -1063,7 +1063,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
           details: 'All API keys validated'
         }
       ];
-      
+
       res.json({
         success: true,
         data: {
@@ -1084,7 +1084,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.post("/api/admin/agent/execute", adminAuth, async (req, res) => {
     try {
       const { type, params } = req.body;
-      
+
       if (!type) {
         return res.status(400).json({
           success: false,
@@ -1094,7 +1094,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
 
       await cdpAgentKitService.initialize();
       const result = await cdpAgentKitService.executeAgentAction(type, params);
-      
+
       res.json({
         success: true,
         data: result
@@ -1112,7 +1112,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.post("/api/admin/superpay/create", adminAuth, async (req, res) => {
     try {
       const { to, amount, currency, gasless } = req.body;
-      
+
       if (!to || !amount || !currency) {
         return res.status(400).json({
           success: false,
@@ -1127,7 +1127,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
         currency,
         gasless
       });
-      
+
       res.json({
         success: true,
         data: transaction
@@ -1145,10 +1145,10 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.put("/api/admin/paymaster/config", adminAuth, async (req, res) => {
     try {
       const config = req.body;
-      
+
       await cdpAgentKitService.initialize();
       cdpAgentKitService.updatePaymasterConfig(config);
-      
+
       res.json({
         success: true,
         data: cdpAgentKitService.getPaymasterConfig()
@@ -1186,7 +1186,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.post("/api/nvidia/ace/interact", async (req, res) => {
     try {
       const { characterName, userInput } = req.body;
-      
+
       const responses = {
         trader: [
           "I'm analyzing the current CQT/USDC V4 pool. The 125.8% APR looks very attractive with low impermanent loss risk.",
@@ -1397,34 +1397,34 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
         case 'sendPayment':
           result = await mockSuperPayService.sendPayment(params);
           break;
-        
+
         case 'createInvoice':
           result = await mockSuperPayService.createInvoice(params);
           break;
-        
+
         case 'payInvoice':
           result = await mockSuperPayService.payInvoice(params.invoiceId, params.payerAddress);
           break;
-        
+
         case 'getBalance':
           result = await mockSuperPayService.getBalance(params.currency || 'ETH');
           break;
-        
+
         case 'purchaseGameItem':
           result = await mockSuperPayService.purchaseGameItem(params);
           break;
-        
+
         case 'purchaseGuildMembership':
           result = await mockSuperPayService.purchaseGuildMembership(params);
           break;
-        
+
         default:
           return res.status(400).json({
             success: false,
             error: 'Unknown action'
           });
       }
-      
+
       res.json({
         success: true,
         data: result
@@ -1517,7 +1517,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   // Live CQT Price API
   app.get("/api/cqt/price", async (req, res) => {
     const { network } = req.query;
-    
+
     let price, volume;
     if (network === 'polygon') {
       price = 0.2325 + (Math.random() - 0.5) * 0.01;
@@ -1641,7 +1641,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
           }
         }
       ];
-      
+
       // Add more opportunities randomly
       const opportunityCount = 3 + Math.floor(Math.random() * 5);
       for (let i = 1; i < opportunityCount; i++) {
@@ -1653,7 +1653,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
         baseOpportunity.riskScore = 0.1 + Math.random() * 0.3;
         opportunities.push(baseOpportunity);
       }
-      
+
       res.json({ success: true, data: opportunities });
     } catch (error) {
       console.error('Opportunities error:', error);
@@ -1664,19 +1664,19 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.post("/api/arbitrage/execute/:opportunityId", async (req, res) => {
     try {
       const { opportunityId } = req.params;
-      
+
       // Mock execution with realistic delay
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       const success = Math.random() > 0.1; // 90% success rate
-      
+
       const result = {
         success,
         txHash: success ? `0x${Math.random().toString(16).substr(2, 64)}` : undefined,
         error: success ? undefined : 'Execution failed due to network conditions',
         profit: success ? 1000 + Math.random() * 5000 : undefined
       };
-      
+
       res.json({ success: true, data: result });
     } catch (error) {
       console.error('Execute arbitrage error:', error);
@@ -1753,7 +1753,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.post("/api/ai/interact", async (req, res) => {
     try {
       const { query, agentId } = req.body;
-      
+
       if (!query) {
         return res.status(400).json({ success: false, error: 'Query is required' });
       }
@@ -1768,7 +1768,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
         userQuery: query,
         mood: 'helpful'
       };
-      
+
       res.json({ success: true, data: interaction });
     } catch (error) {
       res.status(500).json({ success: false, error: 'Failed to process AI interaction' });
@@ -1778,7 +1778,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
   app.post("/api/ai/generate-video", async (req, res) => {
     try {
       const { topic, style = 'educational' } = req.body;
-      
+
       if (!topic) {
         return res.status(400).json({ success: false, error: 'Topic is required' });
       }
@@ -1791,9 +1791,9 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
       - Interactive elements
       - Clear narration script
       - Technical diagrams and charts
-      
+
       Perfect for users who prefer visual learning over text-based content.`;
-      
+
       res.json({
         success: true,
         data: {
@@ -1834,7 +1834,7 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
           executed: false
         }
       ].slice(0, limit);
-      
+
       res.json({ success: true, data: decisions });
     } catch (error) {
       res.status(500).json({ success: false, error: 'Failed to get AI decisions' });
