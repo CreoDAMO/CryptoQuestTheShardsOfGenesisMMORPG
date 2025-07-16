@@ -11,6 +11,7 @@ import {
 import { moralisService } from "./services/moralis-service.js";
 import { coinbaseService } from "./services/coinbase-service.js";
 import { cdpAgentKitService } from "./services/cdp-agentkit-service.js";
+import { walletRoutes } from "./routes/wallet.js";
 
 // Service imports - these need to be adjusted based on actual lib structure
 interface ArbitrageOpportunity {
@@ -1827,8 +1828,34 @@ export async function registerRoutes(app: Express, server: Server): Promise<void
         "Multi-platform Deployment (Vercel, Cloudflare, GitHub, Replit)",
         "Holographic Visualization Engine",
         "Cross-chain Arbitrage Bot",
-        "Admin Dashboard with dual access control"
+        "Admin Dashboard with dual access control",
+        "Multi-wallet Architecture (Safe Multisig + TotalSig + User Wallets)"
       ]
     });
   });
+
+  // ============================================
+  // WALLET MANAGEMENT API ROUTES
+  // ============================================
+
+  // Get wallet providers
+  app.get("/api/wallet/providers", walletRoutes.getWalletProviders);
+
+  // Get integration status
+  app.get("/api/wallet/status", walletRoutes.getIntegrationStatus);
+
+  // Create user wallet
+  app.post("/api/wallet/user", walletRoutes.createUserWallet);
+
+  // Get user wallet
+  app.get("/api/wallet/user/:userId", walletRoutes.getUserWallet);
+
+  // Get operational flow
+  app.get("/api/wallet/flow", walletRoutes.getOperationalFlow);
+
+  // Admin-only wallet routes
+  app.get("/api/wallet/admin", walletRoutes.getAdminWallets);
+  app.get("/api/wallet/treasury", walletRoutes.getTreasuryMetrics);
+  app.post("/api/wallet/safe", walletRoutes.createSafeMultisig);
+  app.get("/api/wallet/totalsig", walletRoutes.getTotalSigWallets);
 }

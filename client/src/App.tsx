@@ -16,6 +16,7 @@ import { CryptoQuestHeaderLogo } from '@/components/brand/CryptoQuestLogo';
 import { MetaMaskIntegration } from '@/components/wallet/MetaMaskIntegration';
 import { BlockchainDashboard } from '@/components/blockchain/BlockchainDashboard';
 import { UnifiedIntelligenceDashboard } from '@/components/enhanced/UnifiedIntelligenceDashboard';
+import WalletManagement from '@/pages/WalletManagement';
 import { Bot, CreditCard, Gamepad2, TrendingUp, Sparkles, Coins, BookOpen, Eye, Shield, Layers, Wallet, DollarSign, Database, Brain } from 'lucide-react';
 import { Toaster } from "@/components/ui/toaster";
 
@@ -148,7 +149,7 @@ function SuperPayDemo() {
 }
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'game' | 'agent' | 'onramper' | 'arbitrage' | 'nvidia' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'wallet' | 'blockchain' | 'unified'>('whitepaper');
+  const [activeView, setActiveView] = useState<'game' | 'agent' | 'onramper' | 'arbitrage' | 'nvidia' | 'defi' | 'whitepaper' | 'holographic' | 'admin' | 'wallet' | 'blockchain' | 'unified' | 'walletmgmt'>('whitepaper');
 
   const renderView = () => {
     switch (activeView) {
@@ -170,6 +171,8 @@ export default function App() {
         return <UnifiedDeFiDashboard />;
       case 'wallet':
         return <MetaMaskIntegration />;
+      case 'walletmgmt':
+        return <WalletManagement />;
       case 'blockchain':
         return <BlockchainDashboard />;
       case 'unified':
@@ -311,6 +314,17 @@ export default function App() {
           >
             <Database className="w-4 h-4" />
             Blockchain
+          </button>
+          <button
+            onClick={() => setActiveView('walletmgmt')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeView === 'walletmgmt' 
+                ? 'bg-purple-600 text-white' 
+                : 'text-gray-300 hover:bg-slate-700 hover:text-white'
+            }`}
+          >
+            <Wallet className="w-4 h-4" />
+            Multi-Wallet
           </button>
           <button
             onClick={() => setActiveView('admin')}
