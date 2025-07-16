@@ -31,20 +31,19 @@ export class WalletManager {
   private userWallets: Map<string, UserWallet> = new Map();
   
   // Treasury Management Wallets
-  public readonly FOUNDER_WALLET = '0xCc380FD8bfbdF0c020de64075b86C84c2BB0AE79';
+  public readonly OWNER_WALLET = 'PENDING_NEW_ADDRESS'; // To be updated with your new wallet
   
   // Safe Multisig Configuration
   public readonly SAFE_MULTISIG_CONFIG = {
-    address: '', // To be set when created
-    threshold: 3,
+    address: '', // To be set when created via SafeGlobal
+    threshold: 2, // Recommended for 2-of-3 setup initially
     signers: [
-      this.FOUNDER_WALLET,
-      '0x0000000000000000000000000000000000000001', // Developer 1
-      '0x0000000000000000000000000000000000000002', // Developer 2
-      '0x0000000000000000000000000000000000000003', // Treasury Manager
+      this.OWNER_WALLET, // Your new primary wallet
+      'PENDING_SIGNER_2', // Second signature address (if needed)
+      'PENDING_SIGNER_3', // Third signature address (if needed)
     ],
     networks: ['polygon', 'base'],
-    purpose: 'Core game operations, token treasury, LP management'
+    purpose: 'CQT token treasury, LP management, player rewards, smart contract operations'
   };
 
   // TotalSig Configuration

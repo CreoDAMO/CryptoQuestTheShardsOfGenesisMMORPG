@@ -96,13 +96,7 @@ export const CRYPTOQUEST_CONTRACTS = {
     description: 'Token swap contract for CQT',
     polygonscan: 'https://polygonscan.com/address/0x9d1075b41cd80ab08179f36bc17a7ff8708748ba'
   },
-  CQT_TOKENSALE: {
-    address: '0x8206b3a98dBd4e3cd767e0e5CAbA6C6aF68044C8',
-    name: 'CQT Token Sales',
-    type: 'ICO',
-    description: 'Token sales contract for CQT',
-    polygonscan: 'https://polygonscan.com/address/0x8206b3a98dbd4e3cd767e0e5caba6c6af68044c8'
-  },
+  // CQT_TOKENSALE removed - replaced with SafeGlobal MultiSig treasury management
   CQT_BASE: {
     address: '0x9d1075b41cd80ab08179f36bc17a7ff8708748ba',
     name: 'CQT on BASE',

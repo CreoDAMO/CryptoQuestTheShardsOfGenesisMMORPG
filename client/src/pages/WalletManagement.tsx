@@ -9,13 +9,13 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-// Simple implementations for now - will be enhanced with full components
-// import { AdminWalletDashboard } from '../../../components/wallet/AdminWalletDashboard';
-// import { WalletSelectionModal } from '../../../components/wallet/WalletSelectionModal';
+// Import the new SafeMultisig setup component
+import { SafeMultisigSetup } from '../../../components/wallet/SafeMultisigSetup';
 
 function WalletManagement() {
-  const [activeTab, setActiveTab] = useState<'overview' | 'admin' | 'user'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'admin' | 'user' | 'setup'>('overview');
   const [showWalletModal, setShowWalletModal] = useState(false);
+  const [newOwnerAddress, setNewOwnerAddress] = useState('');
 
   // Fetch wallet providers
   const { data: providers } = useQuery({
@@ -55,7 +55,8 @@ function WalletManagement() {
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: <TrendingUp className="w-4 h-4" /> },
-    { id: 'admin', label: 'Treasury Management', icon: <Shield className="w-4 h-4" /> },
+    { id: 'setup', label: 'SafeGlobal Setup', icon: <Shield className="w-4 h-4" /> },
+    { id: 'admin', label: 'Treasury Management', icon: <Settings className="w-4 h-4" /> },
     { id: 'user', label: 'User Wallets', icon: <Users className="w-4 h-4" /> }
   ];
 
@@ -241,6 +242,13 @@ function WalletManagement() {
               )}
             </div>
           </div>
+        )}
+
+        {activeTab === 'setup' && (
+          <SafeMultisigSetup 
+            currentOwnerAddress={newOwnerAddress}
+            onAddressUpdate={setNewOwnerAddress}
+          />
         )}
 
         {activeTab === 'admin' && (

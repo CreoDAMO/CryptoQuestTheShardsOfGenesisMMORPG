@@ -3,7 +3,7 @@ export const LIVE_CONTRACTS = {
   polygon: {
     // Core Gaming Contracts
     mmorpg: '0xe0E1AD6f103DC37FfC7C7F3aFfC1D55Cc7f8BF7F',
-    tokenSale: '0xcd62d6b8c9F6C35b7A6D65DF9a8D2E7C6FbB8A1E',
+    // tokenSale contract removed - replaced with SafeGlobal MultiSig
     token: '0x94ef57abfbff1ad70bd00a921e1d2437f31c1665',
     dao: '0x7C8B2F4a5D8E9C3B6F2A1E4D7C9B8A5E3F6B2D1C',
     timelock: '0x9F5B3E2A8D7C6B1F4E9A2C5D8B7A3E6F1C4B9D2E',

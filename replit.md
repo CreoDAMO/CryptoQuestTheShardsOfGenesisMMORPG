@@ -323,7 +323,7 @@ The platform now demonstrates capabilities that force major gaming companies to 
   - Polygon CQT/WETH: `0xb1e0b26f550203FAb31A0D9C1Eb4FFE330bfE4d0`
   - Polygon CQT/WMATIC: `0x0b3cd8a843DEFDF01564a0342a89ba06c4fC9394`
   - Base CQT/USDC: `0xd874aeaef376229c8d41d392c9ce272bd41e57d6`
-- **Deployment Wallet**: `0xCc380FD8bfbdF0c020de64075b86C84c2BB0AE79` (39.23T CQT balance)
+- **Treasury Management**: SafeGlobal MultiSig wallet (to be configured with new owner address)
 
 ### Nvidia Cloud Integration for Mining & Gaming
 - **GPU Mining**: 4x A100 instances with 245.7 MH/s hashrate and 78.5% utilization
@@ -445,7 +445,7 @@ The platform now demonstrates capabilities that force major gaming companies to 
 - **Ray Tracing Pipeline**: WebGL2-based ray tracing simulation with global illumination
 
 ### Ultimate Admin Dashboard with Dual Access Control
-- **Founder Access**: Complete system control with wallet address authentication (0xCc380FD8bfbdF0c020de64075b86C84c2BB0AE79)
+- **Owner Access**: Complete system control with new wallet address authentication (to be updated)
 - **Developer Access**: Restricted permissions for development and deployment tasks only
 - **Real-Time Monitoring**: Live user activity, security events, system health, and performance metrics
 - **Security Management**: Comprehensive security event tracking, user permission management, and emergency controls
@@ -569,7 +569,7 @@ The CryptoQuest platform now represents the ultimate blockchain gaming ecosystem
 10. **Admin Dashboard** - Dual-access control with comprehensive security management
 
 ### 🔐 **Security & Access Control**
-- **Founder Access**: Complete control via wallet authentication (0xCc380FD8bfbdF0c020de64075b86C84c2BB0AE79)
+- **Owner Access**: Complete control via new wallet authentication (to be updated)
 - **Developer Access**: Restricted permissions for operational tasks
 - **Multi-signature protection** with timelock mechanisms
 - **Real-time security monitoring** and threat detection
