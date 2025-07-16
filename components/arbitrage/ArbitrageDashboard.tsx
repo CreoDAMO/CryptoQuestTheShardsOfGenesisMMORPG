@@ -80,7 +80,7 @@ export function ArbitrageDashboard() {
   const [isConnected, setIsConnected] = useState(true);
   const [botStatus, setBotStatus] = useState<'monitoring' | 'idle' | 'executing'>('monitoring');
   const [autoExecute, setAutoExecute] = useState(false);
-  
+
   const [systemMetrics, setSystemMetrics] = useState<SystemMetrics>({
     totalArbitrages: 1247,
     successfulArbitrages: 1180,
@@ -136,7 +136,7 @@ export function ArbitrageDashboard() {
         method: 'POST'
       });
       const data = await response.json();
-      
+
       if (data.success && data.data.success) {
         console.log('Arbitrage executed successfully:', data.data.txHash);
         // Refresh opportunities after execution
@@ -256,7 +256,7 @@ export function ArbitrageDashboard() {
             Refresh
           </button>
         </div>
-        
+
         <div className="flex flex-wrap gap-4">
           <button 
             onClick={() => handleBotControl('start')}
@@ -265,7 +265,7 @@ export function ArbitrageDashboard() {
             <PlayCircle className="h-4 w-4" />
             Start Bot
           </button>
-          
+
           <button 
             onClick={() => handleBotControl('pause')}
             className="flex items-center gap-2 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-md transition-colors"
@@ -273,7 +273,7 @@ export function ArbitrageDashboard() {
             <PauseCircle className="h-4 w-4" />
             Pause Bot
           </button>
-          
+
           <button 
             onClick={() => handleBotControl('stop')}
             className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors"
@@ -281,7 +281,7 @@ export function ArbitrageDashboard() {
             <Square className="h-4 w-4" />
             Emergency Stop
           </button>
-          
+
           <label className="flex items-center gap-2 ml-4">
             <input 
               type="checkbox" 
@@ -358,7 +358,7 @@ export function ArbitrageDashboard() {
       {/* Live Arbitrage Opportunities */}
       <div className="bg-white p-6 rounded-lg shadow-sm border">
         <h3 className="text-lg font-semibold mb-4">Live Arbitrage Opportunities</h3>
-        
+
         {opportunities.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             <Zap className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -384,11 +384,11 @@ export function ArbitrageDashboard() {
                         {(opportunity.confidence * 100).toFixed(0)}% confidence
                       </span>
                     </div>
-                    
+
                     <div className="text-lg font-semibold">
                       {opportunity.sourcePool.token0}/{opportunity.sourcePool.token1} → {opportunity.targetPool.token0}/{opportunity.targetPool.token1}
                     </div>
-                    
+
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
                         <span className="text-gray-600">Profit: </span>
@@ -408,7 +408,7 @@ export function ArbitrageDashboard() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-col gap-2">
                     <button 
                       onClick={() => executeArbitrage(opportunity.id)}
@@ -440,7 +440,7 @@ export function ArbitrageDashboard() {
       // Fetch live prices from multiple sources
       const polygonPrice = await fetch('/api/cqt/price?network=polygon').then(r => r.json());
       const basePrice = await fetch('/api/cqt/price?network=base').then(r => r.json());
-      
+
       setNetworkStats([
         {
           name: 'Polygon',
@@ -497,10 +497,12 @@ export function ArbitrageDashboard() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-purple-500 rounded-full">
             <TrendingUp className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             CQT Arbitrage Bot
           </h1>
-          <p className="text-xl text-gray-300">Cross-chain arbitrage with AI mining & Nvidia Cloud</p>
+          <p className="text-xl text-gray-300">
+            MultiSig Connected • LSTM ML Models • Live Trading • Real CQT Price
+          </p>
         </div>
 
         {/* Key Metrics */}

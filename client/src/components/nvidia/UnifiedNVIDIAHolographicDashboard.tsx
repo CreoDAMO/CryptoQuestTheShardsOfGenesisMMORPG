@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -284,7 +283,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
   useEffect(() => {
     fetchMetrics();
     updateHolographicData();
-    
+
     if (autoRefresh) {
       const interval = setInterval(() => {
         fetchMetrics();
@@ -313,10 +312,10 @@ export function UnifiedNVIDIAHolographicDashboard() {
             <Cpu className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
-            NVIDIA + Holographic Control Center
+            NVIDIA RTX + Holographic Engine
           </h1>
           <p className="text-xl text-gray-300">
-            RTX Gaming • Cloud AI • Holographic Visualization • Smart Mining
+            DLSS 4.0 • Neural Rendering • ACE AI Characters • Real-time Ray Tracing
           </p>
         </div>
 
@@ -524,7 +523,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                         <div className="text-sm text-gray-400">Frame Time</div>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-gray-300">Ray Tracing</span>
@@ -563,7 +562,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                       </div>
                       <Progress value={metrics.rtx.gpuUtilization} className="h-2" />
                     </div>
-                    
+
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-gray-300">VRAM Usage</span>
@@ -571,7 +570,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                       </div>
                       <Progress value={(metrics.rtx.vramUsage / 24) * 100} className="h-2" />
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div className="flex items-center gap-2">
                         <Thermometer className="w-4 h-4 text-orange-400" />
@@ -628,7 +627,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                           </div>
                         )}
                       </div>
-                      
+
                       <div className="text-sm space-y-2">
                         <div className="flex justify-between">
                           <span className="text-gray-400">Method</span>
@@ -643,7 +642,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                           <span className="text-green-400">{(viz.settings.intensity * 100).toFixed(0)}%</span>
                         </div>
                       </div>
-                      
+
                       <Button 
                         onClick={() => toggleHolographicVisualization(viz.id)}
                         className="w-full bg-purple-600 hover:bg-purple-700"
@@ -701,7 +700,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                       </div>
                       <Progress value={(metrics.cloud.creditsUsed / (metrics.cloud.creditsUsed + metrics.cloud.creditsRemaining)) * 100} className="h-2" />
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <span className="text-gray-400">API Calls</span>
@@ -712,7 +711,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                         <div className="text-green-400 font-semibold">{metrics.cloud.totalComputeHours}</div>
                       </div>
                     </div>
-                    
+
                     <div className="text-center p-3 bg-slate-700/50 rounded-lg">
                       <div className="text-2xl font-bold text-yellow-400">${metrics.cloud.cost}</div>
                       <div className="text-sm text-gray-400">Total Cost</div>
@@ -738,7 +737,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                       <div className="text-3xl font-bold text-green-400">{metrics.mining.hashrate}</div>
                       <div className="text-sm text-gray-400">MH/s Current Hashrate</div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-gray-300">Efficiency</span>
@@ -746,7 +745,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                       </div>
                       <Progress value={metrics.mining.efficiency} className="h-2" />
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <span className="text-gray-400">Total Mined</span>
@@ -772,6 +771,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <div className="flex justify-between">
+```text
                         <span className="text-gray-300">Network Hashrate</span>
                         <span className="text-blue-400">{metrics.mining.networkHashrate} MH/s</span>
                       </div>
@@ -780,12 +780,12 @@ export function UnifiedNVIDIAHolographicDashboard() {
                         <span className="text-purple-400">{metrics.mining.difficulty}T</span>
                       </div>
                     </div>
-                    
+
                     <div className="text-center p-3 bg-slate-700/50 rounded-lg">
                       <div className="text-2xl font-bold text-yellow-400">{metrics.mining.estimatedRewards}</div>
                       <div className="text-sm text-gray-400">ETH Estimated Rewards</div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-gray-300">Power Efficiency</span>
@@ -820,7 +820,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                         <div className="text-sm text-gray-400">Conversations</div>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-gray-300">Response Time</span>
@@ -831,7 +831,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                         <span className="text-purple-400">{metrics.ace.voiceModelAccuracy}%</span>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-gray-300">Context Memory</span>
@@ -859,7 +859,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                       </div>
                       <Badge className="bg-green-600">Active</Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Video className="w-4 h-4 text-purple-400" />
@@ -869,7 +869,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                         {metrics.ace.multimodalEnabled ? 'Enabled' : 'Disabled'}
                       </Badge>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Volume2 className="w-4 h-4 text-yellow-400" />
@@ -879,7 +879,7 @@ export function UnifiedNVIDIAHolographicDashboard() {
                         {metrics.ace.emotionalRangeActive ? 'Active' : 'Inactive'}
                       </Badge>
                     </div>
-                    
+
                     <Button className="w-full bg-orange-600 hover:bg-orange-700">
                       <Bot className="w-4 h-4 mr-2" />
                       Launch Character Studio

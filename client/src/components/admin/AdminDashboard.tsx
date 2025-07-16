@@ -46,7 +46,7 @@ export function AdminDashboard() {
   const [walletAddress, setWalletAddress] = useState('');
   const [autoRefresh, setAutoRefresh] = useState(true);
 
-  // Admin authentication check
+  // Admin authentication check - Updated wallet that holds all CQT tokens and LP NFTs
   const ADMIN_ADDRESS = '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866';
 
   const authenticateAdmin = () => {
@@ -166,7 +166,7 @@ export function AdminDashboard() {
             Admin Control Center
           </h1>
           <p className="text-xl text-gray-300">
-            CDP AgentKit • Paymaster • Super Pay • Wallet Monitoring
+            MultiSig Connected • AI Miner Active • 5 AI Models • Live Contracts • Real-Time CQT Price
           </p>
         </div>
 
@@ -290,7 +290,7 @@ export function AdminDashboard() {
         )}
 
         <Tabs defaultValue="agentkit" className="w-full">
-          <TabsList className="grid w-full grid-cols-6 bg-slate-800 border-slate-700">
+          <TabsList className="grid w-full grid-cols-8 bg-slate-800 border-slate-700">
             <TabsTrigger value="agentkit" className="text-white">AgentKit</TabsTrigger>
             <TabsTrigger value="paymaster" className="text-white">Paymaster</TabsTrigger>
             <TabsTrigger value="superpay" className="text-white">Super Pay</TabsTrigger>

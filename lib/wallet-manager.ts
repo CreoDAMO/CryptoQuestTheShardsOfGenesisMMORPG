@@ -31,7 +31,8 @@ export class WalletManager {
   private userWallets: Map<string, UserWallet> = new Map();
 
   // Treasury Management Wallets
-  public readonly OWNER_WALLET = '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866'; // Your new primary wallet
+  // Owner wallet - controls all operations (holds all CQT tokens and LP NFTs)
+  public readonly OWNER_WALLET = '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866'; // Admin wallet with full control
 
   // Safe Multisig Configuration
   public readonly SAFE_MULTISIG_CONFIG = {

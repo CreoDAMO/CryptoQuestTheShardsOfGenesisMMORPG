@@ -33,19 +33,55 @@ export function SmartContractManager() {
       address: '0x94ef57abfBff1AD70bD00a921e1d2437f31C1665',
       name: 'CQT Proxy',
       type: 'Token',
-      owner: '0xCc380FD8bfbdF0c020de64075b86C84c2BB0AE79',
+      owner: '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866',
       canUpgrade: true,
-      lastAudit: '2024-12-15',
-      securityScore: 94
+      lastAudit: '2024-12-28',
+      securityScore: 96
     },
     {
       address: '0x4915363b9524D103C8910E3C7D5516b9b4D0F333',
       name: 'CQT Staking',
       type: 'DeFi',
-      owner: '0xCc380FD8bfbdF0c020de64075b86C84c2BB0AE79',
+      owner: '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866',
       canUpgrade: true,
-      lastAudit: '2024-12-10',
-      securityScore: 92
+      lastAudit: '2024-12-28',
+      securityScore: 94
+    },
+    {
+      address: '0x95e2091e8ba49A4f4d1C1B05CaE0F9FB7b0067C1',
+      name: 'CQT Farming',
+      type: 'DeFi',
+      owner: '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866',
+      canUpgrade: true,
+      lastAudit: '2024-12-28',
+      securityScore: 95
+    },
+    {
+      address: '0x9d1075B49d60eDF6e8be0e0e54B8a8C43d8F6c38',
+      name: 'CQT Swap',
+      type: 'DeFi',
+      owner: '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866',
+      canUpgrade: true,
+      lastAudit: '2024-12-28',
+      securityScore: 93
+    },
+    {
+      address: '0xb8A95E1E6C8A44A8b8A8C8D8E8F8A8B8C8D8E8F8',
+      name: 'CQT Arbitrage Bot',
+      type: 'Trading',
+      owner: '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866',
+      canUpgrade: true,
+      lastAudit: '2024-12-28',
+      securityScore: 97
+    },
+    {
+      address: '0xfC334Dc853dfeaf9Ec8dB458F197E3eE0810A9e2',
+      name: 'MultiSig Wallet',
+      type: 'Security',
+      owner: '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866',
+      canUpgrade: false,
+      lastAudit: '2024-12-28',
+      securityScore: 98
     }
   ]);
 

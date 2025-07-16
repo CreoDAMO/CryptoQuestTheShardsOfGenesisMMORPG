@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -70,10 +69,10 @@ export function PublicGameHub() {
             <Gamepad2 className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-            CryptoQuest Gaming Hub
+            CryptoQuest Gaming
           </h1>
           <p className="text-xl text-gray-300">
-            Play, Earn, and Compete in the Ultimate Blockchain Gaming Experience
+            NVIDIA RTX Cloud • Holographic Engine • AI NPCs • Cross-Chain Quests
           </p>
         </div>
 
