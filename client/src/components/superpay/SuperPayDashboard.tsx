@@ -1,16 +1,16 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Progress } from '../ui/progress';
+import { Switch } from '../ui/switch';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Progress } from '@/components/ui/progress';
 import { 
   Loader2, 
   CreditCard, 
@@ -138,7 +138,7 @@ export function SuperPayDashboard() {
     try {
       // Simulate payment processing
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       const newTransaction: PaymentTransaction = {
         id: Date.now().toString(),
         type: 'send',
@@ -362,7 +362,7 @@ export function SuperPayDashboard() {
                       required
                     />
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="amount">Amount</Label>
@@ -521,7 +521,7 @@ export function SuperPayDashboard() {
                       className="w-4 h-4"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label>Default Currency</Label>
                     <select className="w-full h-10 px-3 bg-slate-700 border border-slate-600 rounded-md text-white">
@@ -530,7 +530,7 @@ export function SuperPayDashboard() {
                       <option value="USDC">USDC</option>
                     </select>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label>Transaction Confirmation</Label>
                     <select className="w-full h-10 px-3 bg-slate-700 border border-slate-600 rounded-md text-white">

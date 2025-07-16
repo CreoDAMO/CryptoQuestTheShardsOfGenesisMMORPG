@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { Switch } from '@/components/ui/switch';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Progress } from '../ui/progress';
+import { Switch } from '../ui/switch';
 import { 
   Shield, 
   Zap, 
@@ -26,7 +26,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { UnifiedIntelligenceDashboard } from '../enhanced/UnifiedIntelligenceDashboard';
-import { SmartContractManager } from '../../../components/admin/SmartContractManager';
+import { SmartContractManager } from '../../../../components/admin/SmartContractManager';
 import { UnifiedNVIDIAHolographicDashboard } from '../nvidia/UnifiedNVIDIAHolographicDashboard';
 
 interface AdminMetrics {

@@ -709,7 +709,7 @@ export function ArbitrageDashboard() {
             <div className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-gray-300">Cloud Credits</span>
-                <span className="text-yellow-400">{nvidiaStats.cloudCredits.toLocaleString()}</span>
+                <span className="text-yellow-400">{nvidiaStats.cloudCredits.toLocaleString()}}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-300">GPU Instances</span>
@@ -744,3 +744,7 @@ export function ArbitrageDashboard() {
     </div>
   );
 }
+import { Card, CardHeader, CardTitle, CardContent } from '../../client/src/components/ui/card';
+import { Badge } from '../../client/src/components/ui/badge';
+import { Button } from '../../client/src/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../client/src/components/ui/tabs';
