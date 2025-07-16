@@ -29,10 +29,10 @@ export interface UserWallet {
 export class WalletManager {
   private adminWallets: Map<string, AdminWallet> = new Map();
   private userWallets: Map<string, UserWallet> = new Map();
-  
+
   // Treasury Management Wallets
   public readonly OWNER_WALLET = '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866'; // Your new primary wallet
-  
+
   // Safe Multisig Configuration
   public readonly SAFE_MULTISIG_CONFIG = {
     address: '', // To be set when created via SafeGlobal
@@ -134,7 +134,7 @@ export class WalletManager {
       // This would integrate with Safe's SDK to create a new multisig
       // For now, return a placeholder address
       const mockAddress = `0x${Math.random().toString(16).substr(2, 40)}`;
-      
+
       console.log(`Created Safe Multisig on ${networkId}: ${mockAddress}`);
       return mockAddress;
     } catch (error) {
@@ -167,7 +167,7 @@ export class WalletManager {
   // User Wallet Methods
   async createUserWallet(provider: string, userId: string): Promise<UserWallet> {
     const address = `0x${Math.random().toString(16).substr(2, 40)}`;
-    
+
     const userWallet: UserWallet = {
       address,
       provider: provider as any,
@@ -177,7 +177,7 @@ export class WalletManager {
     };
 
     this.userWallets.set(userId, userWallet);
-    
+
     console.log(`Created ${provider} wallet for user ${userId}: ${address}`);
     return userWallet;
   }

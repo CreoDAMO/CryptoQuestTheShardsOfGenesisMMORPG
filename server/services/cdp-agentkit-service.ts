@@ -52,7 +52,7 @@ export class CDPAgentKitService {
     try {
       const apiKey = process.env.COINBASE_API_KEY;
       const apiSecret = process.env.COINBASE_API_SECRET;
-      
+
       if (!apiKey || !apiSecret) {
         throw new Error('Coinbase API credentials not found');
       }
@@ -128,7 +128,7 @@ export class CDPAgentKitService {
       }
 
       const estimatedGas = transaction.gasEstimate || 50000;
-      
+
       if (estimatedGas > this.paymasterConfig.maxGasPerTransaction) {
         return { success: false, error: 'Transaction exceeds gas limit' };
       }
@@ -214,7 +214,7 @@ export class CDPAgentKitService {
   // Private helper methods
   private async performTransfer(params: { to: string; amount: number; asset: string }) {
     if (!this.adminWallet) throw new Error('Wallet not initialized');
-    
+
     return await this.adminWallet.createTransfer({
       amount: params.amount,
       assetId: params.asset,
@@ -224,7 +224,7 @@ export class CDPAgentKitService {
 
   private async deployContract(params: { abi: any; bytecode: string; args: any[] }) {
     if (!this.adminWallet) throw new Error('Wallet not initialized');
-    
+
     return await this.adminWallet.deployContract({
       abi: params.abi,
       bytecode: params.bytecode,
@@ -234,7 +234,7 @@ export class CDPAgentKitService {
 
   private async stakeAsset(params: { amount: number; asset: string; mode: string }) {
     if (!this.adminWallet) throw new Error('Wallet not initialized');
-    
+
     return await this.adminWallet.createStakingOperation({
       amount: params.amount,
       assetId: params.asset,
@@ -256,7 +256,7 @@ export class CDPAgentKitService {
 
   private async requestFaucet(params: { asset: string }) {
     if (!this.adminWallet) throw new Error('Wallet not initialized');
-    
+
     return await this.adminWallet.faucet(params.asset);
   }
 
@@ -273,8 +273,74 @@ export class CDPAgentKitService {
     return this.paymasterConfig;
   }
 
-  updatePaymasterConfig(config: Partial<PaymasterConfig>) {
+  updatePaymasterConfig(config: any): void {
     this.paymasterConfig = { ...this.paymasterConfig, ...config };
+  }
+
+  async transferContractOwnership(contractAddress: string, newOwner: string): Promise<any> {
+    if (!this.isInitialized) {
+      throw new Error('CDP AgentKit not initialized');
+    }
+
+    try {
+      // Simulate contract ownership transfer
+      const transactionHash = `0x${Math.random().toString(16).slice(2, 66)}`;
+
+      const result = {
+        contractAddress,
+        newOwner,
+        transactionHash,
+        status: 'pending',
+        timestamp: new Date().toISOString()
+      };
+
+      this.agentActions.push({
+        type: 'transfer_ownership',
+        contractAddress,
+        newOwner,
+        transactionHash,
+        timestamp: new Date().toISOString(),
+        status: 'completed'
+      });
+
+      return result;
+    } catch (error) {
+      console.error('Contract ownership transfer failed:', error);
+      throw error;
+    }
+  }
+
+  async upgradeContract(contractAddress: string, newImplementation: string): Promise<any> {
+    if (!this.isInitialized) {
+      throw new Error('CDP AgentKit not initialized');
+    }
+
+    try {
+      // Simulate contract upgrade
+      const transactionHash = `0x${Math.random().toString(16).slice(2, 66)}`;
+
+      const result = {
+        contractAddress,
+        newImplementation,
+        transactionHash,
+        status: 'pending',
+        timestamp: new Date().toISOString()
+      };
+
+      this.agentActions.push({
+        type: 'upgrade_contract',
+        contractAddress,
+        newImplementation,
+        transactionHash,
+        timestamp: new Date().toISOString(),
+        status: 'completed'
+      });
+
+      return result;
+    } catch (error) {
+      console.error('Contract upgrade failed:', error);
+      throw error;
+    }
   }
 }
 

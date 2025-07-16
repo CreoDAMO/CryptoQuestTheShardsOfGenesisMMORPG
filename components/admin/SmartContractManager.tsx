@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -51,21 +50,41 @@ export function SmartContractManager() {
   ]);
 
   const [newOwnerAddress, setNewOwnerAddress] = useState('0x67BF9f428d92704C3Db3a08dC05Bc941A8647866');
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [error, setError] = useState('');
 
-  const transferOwnership = async (contractAddress: string) => {
+  const ADMIN_ADDRESS = '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866';
+
+  const transferOwnership = async (contractAddress: string, newOwner: string) => {
     try {
-      console.log(`Transferring ownership of ${contractAddress} to MultiSig: ${newOwnerAddress}`);
-      // This would call the actual smart contract function
-      // await contract.transferOwnership(newOwnerAddress);
-      
-      // Update local state
-      setContracts(prev => prev.map(contract => 
-        contract.address === contractAddress 
-          ? { ...contract, owner: newOwnerAddress }
-          : contract
-      ));
+      setLoading(true);
+
+      const response = await fetch('/api/admin/contracts/transfer-ownership', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-address': ADMIN_ADDRESS
+        },
+        body: JSON.stringify({ contractAddress, newOwner })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setContracts(prev => prev.map(contract => 
+          contract.address === contractAddress 
+            ? { ...contract, owner: newOwner }
+            : contract
+        ));
+        setSuccessMessage(`Ownership transferred to ${newOwner}`);
+      } else {
+        throw new Error(result.error);
+      }
     } catch (error) {
-      console.error('Failed to transfer ownership:', error);
+      setError(error instanceof Error ? error.message : 'Failed to transfer ownership');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,7 +92,7 @@ export function SmartContractManager() {
     try {
       console.log(`Running AI audit on contract: ${contractAddress}`);
       // This would trigger the AI auditing system
-      
+
       const auditResult = {
         securityScore: 96,
         lastAudit: new Date().toISOString().split('T')[0],
@@ -143,15 +162,15 @@ export function SmartContractManager() {
                         <div className="text-sm text-gray-400">{contract.address}</div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-3">
                       <Badge className={contract.owner === newOwnerAddress ? 'bg-green-600' : 'bg-yellow-600'}>
                         {contract.owner === newOwnerAddress ? 'MultiSig Owned' : 'Legacy Owner'}
                       </Badge>
-                      
+
                       {contract.owner !== newOwnerAddress && (
                         <Button
-                          onClick={() => transferOwnership(contract.address)}
+                          onClick={() => transferOwnership(contract.address, newOwnerAddress)}
                           size="sm"
                           className="bg-green-600 hover:bg-green-700"
                         >
@@ -178,7 +197,7 @@ export function SmartContractManager() {
                         <div className="text-sm text-gray-400">Upgradeable via MultiSig</div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-3">
                       <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
                         <Upload className="w-4 h-4 mr-2" />
@@ -216,7 +235,7 @@ export function SmartContractManager() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-3">
                       <Badge className={
                         contract.securityScore >= 95 ? 'bg-green-600' :
@@ -225,7 +244,7 @@ export function SmartContractManager() {
                         {contract.securityScore >= 95 ? 'Excellent' :
                          contract.securityScore >= 90 ? 'Good' : 'Needs Review'}
                       </Badge>
-                      
+
                       <Button
                         onClick={() => auditContract(contract.address)}
                         size="sm"
