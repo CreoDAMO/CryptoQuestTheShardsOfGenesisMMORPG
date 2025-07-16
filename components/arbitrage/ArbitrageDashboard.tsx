@@ -433,22 +433,51 @@ export function ArbitrageDashboard() {
   );
   });
 
-  const [networkStats, setNetworkStats] = useState<NetworkStats[]>([
-    {
-      name: 'Polygon',
-      balance: 39.23,
-      price: 0.2325,
-      volume: 125000,
-      liquidityPool: '0xb1e0b26f550203FAb31A0D9C1Eb4FFE330bfE4d0'
-    },
-    {
-      name: 'Base',
-      balance: 15.67,
-      price: 0.10,
-      volume: 89000,
-      liquidityPool: '0xd874aeaef376229c8d41d392c9ce272bd41e57d6'
+  const [networkStats, setNetworkStats] = useState<NetworkStats[]>([]);
+
+  const fetchLiveCQTPrice = async () => {
+    try {
+      // Fetch live prices from multiple sources
+      const polygonPrice = await fetch('/api/cqt/price?network=polygon').then(r => r.json());
+      const basePrice = await fetch('/api/cqt/price?network=base').then(r => r.json());
+      
+      setNetworkStats([
+        {
+          name: 'Polygon',
+          balance: 39.23,
+          price: polygonPrice.price || 0.2325,
+          volume: polygonPrice.volume || 125000,
+          liquidityPool: '0xb1e0b26f550203FAb31A0D9C1Eb4FFE330bfE4d0'
+        },
+        {
+          name: 'Base',
+          balance: 15.67,
+          price: basePrice.price || 0.10,
+          volume: basePrice.volume || 89000,
+          liquidityPool: '0xd874aeaef376229c8d41d392c9ce272bd41e57d6'
+        }
+      ]);
+    } catch (error) {
+      console.error('Failed to fetch live CQT prices:', error);
+      // Fallback to default values
+      setNetworkStats([
+        {
+          name: 'Polygon',
+          balance: 39.23,
+          price: 0.2325,
+          volume: 125000,
+          liquidityPool: '0xb1e0b26f550203FAb31A0D9C1Eb4FFE330bfE4d0'
+        },
+        {
+          name: 'Base',
+          balance: 15.67,
+          price: 0.10,
+          volume: 89000,
+          liquidityPool: '0xd874aeaef376229c8d41d392c9ce272bd41e57d6'
+        }
+      ]);
     }
-  ]);
+  };
 
   const [nvidiaStats, setNvidiaStats] = useState<NvidiaCloudStats>({
     gpuUtilization: 78.5,

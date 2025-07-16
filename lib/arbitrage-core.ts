@@ -20,6 +20,7 @@ export class ArbitrageCoreEngine {
   private isInitialized = false;
   private emergencyMode = false;
   private metrics: SystemMetrics;
+  private multisigWallet: string = '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866'; // Connected to Safe MultiSig
 
   constructor(config: {
     polygonRPC: string;

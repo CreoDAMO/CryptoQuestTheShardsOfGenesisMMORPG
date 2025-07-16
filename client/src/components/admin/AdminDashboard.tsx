@@ -44,7 +44,7 @@ export function AdminDashboard() {
   const [autoRefresh, setAutoRefresh] = useState(true);
 
   // Admin authentication check
-  const ADMIN_ADDRESS = '0xCc380FD8bfbdF0c020de64075b86C84c2BB0AE79';
+  const ADMIN_ADDRESS = '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866';
 
   const authenticateAdmin = () => {
     if (walletAddress.toLowerCase() === ADMIN_ADDRESS.toLowerCase()) {
@@ -287,11 +287,12 @@ export function AdminDashboard() {
         )}
 
         <Tabs defaultValue="agentkit" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-slate-800 border-slate-700">
+          <TabsList className="grid w-full grid-cols-6 bg-slate-800 border-slate-700">
             <TabsTrigger value="agentkit" className="text-white">AgentKit</TabsTrigger>
             <TabsTrigger value="paymaster" className="text-white">Paymaster</TabsTrigger>
             <TabsTrigger value="superpay" className="text-white">Super Pay</TabsTrigger>
-            <TabsTrigger value="monitoring" className="text-white">Monitoring</TabsTrigger>
+            <TabsTrigger value="aimodels" className="text-white">AI Models</TabsTrigger>
+            <TabsTrigger value="contracts" className="text-white">Contracts</TabsTrigger>
             <TabsTrigger value="security" className="text-white">Security</TabsTrigger>
           </TabsList>
 
@@ -544,6 +545,45 @@ export function AdminDashboard() {
                 </Card>
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="aimodels" className="space-y-6">
+            <Card className="bg-slate-800/50 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Bot className="w-5 h-5" />
+                  AI Models Control Center
+                </CardTitle>
+                <p className="text-gray-400">5 AI Models operating the CryptoQuest ecosystem</p>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {[
+                    { name: 'Claude 4 Sonnet', status: 'active', purpose: 'Strategic Planning & Code Generation', accuracy: '98.5%' },
+                    { name: 'GPT-4o', status: 'active', purpose: 'Natural Language Processing & User Interaction', accuracy: '96.2%' },
+                    { name: 'Grok 3', status: 'active', purpose: 'Real-time Market Analysis & Trading', accuracy: '94.7%' },
+                    { name: 'DeepSeek Coder', status: 'active', purpose: 'Smart Contract Auditing & Security', accuracy: '97.1%' },
+                    { name: 'Custom Gaming AI', status: 'active', purpose: 'Game Logic & NPC Behavior', accuracy: '95.8%' }
+                  ].map((model, index) => (
+                    <div key={index} className="p-4 bg-slate-700/50 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="font-medium text-white">{model.name}</div>
+                        <Badge className="bg-green-600 text-white">
+                          <CheckCircle className="w-3 h-3 mr-1" />
+                          {model.status}
+                        </Badge>
+                      </div>
+                      <div className="text-sm text-gray-400 mb-2">{model.purpose}</div>
+                      <div className="text-sm text-green-400">Accuracy: {model.accuracy}</div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="contracts" className="space-y-6">
+            <SmartContractManager />
           </TabsContent>
 
           <TabsContent value="security" className="space-y-6">

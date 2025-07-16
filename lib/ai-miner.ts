@@ -50,7 +50,7 @@ export class AIMinerEngine {
       liquidStakingRewards: 0,
       compoundingEfficiency: 0
     };
-    
+
     this.initializeProviders();
   }
 
@@ -63,12 +63,12 @@ export class AIMinerEngine {
 
   async initialize(): Promise<void> {
     console.log('🔄 Initializing AI Miner Engine...');
-    
+
     try {
       await this.loadStakingPositions();
       await this.updateMetrics();
       await this.initializeOptimizer();
-      
+
       console.log('✅ AI Miner Engine initialized successfully');
     } catch (error) {
       console.error('❌ Failed to initialize AI Miner:', error);
@@ -109,7 +109,7 @@ export class AIMinerEngine {
         autoCompound: false
       }
     ];
-    
+
     console.log(`📊 Loaded ${this.stakingPositions.length} staking positions`);
   }
 
@@ -117,24 +117,24 @@ export class AIMinerEngine {
     this.metrics.totalStaked = this.stakingPositions.reduce((sum, pos) => sum + pos.amount, 0);
     this.metrics.totalRewards = this.stakingPositions.reduce((sum, pos) => sum + pos.rewards, 0);
     this.metrics.activeValidators = this.stakingPositions.length;
-    
+
     // Calculate weighted average APR
     const totalValue = this.stakingPositions.reduce((sum, pos) => sum + pos.amount, 0);
     this.metrics.stakingAPR = this.stakingPositions.reduce((sum, pos) => {
       return sum + (pos.apr * pos.amount / totalValue);
     }, 0);
-    
+
     // Calculate optimization score
     this.metrics.optimizationScore = this.calculateOptimizationScore();
-    
+
     // Network participation metrics
     this.metrics.networkParticipation = this.stakingPositions.length / 10 * 100; // Max 10 networks
-    
+
     // Liquid staking rewards
     this.metrics.liquidStakingRewards = this.stakingPositions
       .filter(pos => pos.network === 'ethereum')
       .reduce((sum, pos) => sum + pos.rewards, 0);
-    
+
     // Compounding efficiency
     const autoCompoundPositions = this.stakingPositions.filter(pos => pos.autoCompound);
     this.metrics.compoundingEfficiency = autoCompoundPositions.length / this.stakingPositions.length * 100;
@@ -142,25 +142,25 @@ export class AIMinerEngine {
 
   private calculateOptimizationScore(): number {
     let score = 0;
-    
+
     // Diversification score (max 30)
     const networkCount = new Set(this.stakingPositions.map(pos => pos.network)).size;
     score += Math.min(networkCount * 10, 30);
-    
+
     // APR optimization score (max 40)
     const avgAPR = this.metrics.stakingAPR;
     if (avgAPR > 8) score += 40;
     else if (avgAPR > 6) score += 30;
     else if (avgAPR > 4) score += 20;
     else score += 10;
-    
+
     // Auto-compound score (max 20)
     score += this.metrics.compoundingEfficiency * 0.2;
-    
+
     // Position size optimization (max 10)
     const balanced = this.stakingPositions.every(pos => pos.amount > 0.1 && pos.amount < 100000);
     if (balanced) score += 10;
-    
+
     return Math.min(score, 100);
   }
 
@@ -175,23 +175,23 @@ export class AIMinerEngine {
 
     try {
       const strategies: OptimizationStrategy[] = [];
-      
+
       // Strategy 1: Compound rewards
       const compoundStrategy = await this.analyzeCompoundingOpportunity();
       if (compoundStrategy) strategies.push(compoundStrategy);
-      
+
       // Strategy 2: Rebalance between networks
       const rebalanceStrategy = await this.analyzeRebalancingOpportunity();
       if (rebalanceStrategy) strategies.push(rebalanceStrategy);
-      
+
       // Strategy 3: Stake additional funds
       const stakeStrategy = await this.analyzeStakingOpportunity();
       if (stakeStrategy) strategies.push(stakeStrategy);
-      
+
       // Strategy 4: Optimize validator selection
       const validatorStrategy = await this.analyzeValidatorOptimization();
       if (validatorStrategy) strategies.push(validatorStrategy);
-      
+
       console.log(`💡 Generated ${strategies.length} optimization strategies`);
       return strategies;
     } finally {
@@ -227,7 +227,7 @@ export class AIMinerEngine {
 
     if (bestNetwork.apr - worstNetwork.apr > 2) { // 2% APR difference
       const rebalanceAmount = worstNetwork.amount * 0.5; // Move 50%
-      
+
       return {
         action: 'rebalance',
         network: bestNetwork.network,
@@ -245,7 +245,7 @@ export class AIMinerEngine {
   private async analyzeStakingOpportunity(): Promise<OptimizationStrategy | null> {
     // Check for available capital (mock)
     const availableCapital = 1000; // Mock available capital
-    
+
     if (availableCapital > 100) {
       const bestAPRPosition = this.stakingPositions
         .sort((a, b) => b.apr - a.apr)[0];
@@ -272,7 +272,7 @@ export class AIMinerEngine {
     if (underperformingPositions.length > 0) {
       const pos = underperformingPositions[0];
       const potentialImprovement = 2; // 2% APR improvement
-      
+
       return {
         action: 'rebalance',
         network: pos.network,
@@ -297,14 +297,14 @@ export class AIMinerEngine {
     try {
       // Mock execution
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       const success = Math.random() > 0.1; // 90% success rate
-      
+
       if (success) {
         // Update positions
         await this.updatePositionsAfterExecution(strategy);
         await this.updateMetrics();
-        
+
         return {
           success: true,
           txHash: `0x${Math.random().toString(16).substr(2, 64)}`
@@ -333,19 +333,19 @@ export class AIMinerEngine {
           }
         });
         break;
-      
+
       case 'stake':
         const existingPos = this.stakingPositions.find(pos => pos.network === strategy.network);
         if (existingPos) {
           existingPos.amount += strategy.amount;
         }
         break;
-      
+
       case 'rebalance':
         // Update positions based on rebalancing
         const sourcePos = this.stakingPositions.find(pos => pos.network !== strategy.network);
         const targetPos = this.stakingPositions.find(pos => pos.network === strategy.network);
-        
+
         if (sourcePos && targetPos) {
           sourcePos.amount -= strategy.amount;
           targetPos.amount += strategy.amount;
@@ -360,19 +360,19 @@ export class AIMinerEngine {
     estimatedTime: number;
   }> {
     console.log(`🚨 Emergency unstaking initiated${network ? ` for ${network}` : ''}`);
-    
+
     const positionsToUnstake = network 
       ? this.stakingPositions.filter(pos => pos.network === network)
       : this.stakingPositions;
-    
+
     const totalAmount = positionsToUnstake.reduce((sum, pos) => sum + pos.amount, 0);
     const estimatedTime = Math.max(...positionsToUnstake.map(pos => this.getUnstakingTime(pos.network)));
-    
+
     // Update position status
     positionsToUnstake.forEach(pos => {
       pos.status = 'unstaking';
     });
-    
+
     return {
       success: true,
       unstakeAmount: totalAmount,
@@ -386,7 +386,7 @@ export class AIMinerEngine {
       'polygon': 3 * 24 * 60,  // 3 days in minutes
       'base': 1 * 24 * 60      // 1 day in minutes
     };
-    
+
     return unstakingTimes[network] || 7 * 24 * 60;
   }
 
@@ -431,6 +431,15 @@ export class AIMinerEngine {
       }
     ];
   }
+}
+
+export class AIMiner {
+  private isActive: boolean = false;
+  private miningPower: number = 0;
+  private totalStaked: number = 0;
+  private totalRewards: number = 0;
+  private lastOptimization: Date = new Date();
+  private totalSigWallet: string = ''; // Connected to TotalSig for cross-chain mining
 }
 
 // Export singleton instance

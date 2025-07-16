@@ -31,7 +31,7 @@ export class WalletManager {
   private userWallets: Map<string, UserWallet> = new Map();
   
   // Treasury Management Wallets
-  public readonly OWNER_WALLET = 'PENDING_NEW_ADDRESS'; // To be updated with your new wallet
+  public readonly OWNER_WALLET = '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866'; // Your new primary wallet
   
   // Safe Multisig Configuration
   public readonly SAFE_MULTISIG_CONFIG = {
@@ -39,8 +39,8 @@ export class WalletManager {
     threshold: 2, // Recommended for 2-of-3 setup initially
     signers: [
       this.OWNER_WALLET, // Your new primary wallet
-      'PENDING_SIGNER_2', // Second signature address (if needed)
-      'PENDING_SIGNER_3', // Third signature address (if needed)
+      '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866', // Primary signer
+      '', // Optional additional signer
     ],
     networks: ['polygon', 'base'],
     purpose: 'CQT token treasury, LP management, player rewards, smart contract operations'
