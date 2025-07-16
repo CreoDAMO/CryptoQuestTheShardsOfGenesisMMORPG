@@ -1,3 +1,4 @@
+
 modules = ["nodejs-20", "dotnet-7.0", "c-clang14", "web"]
 run = "npm run dev"
 hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
@@ -34,3 +35,93 @@ author = "agent"
 task = "shell.exec"
 args = "npm run dev"
 waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Production Build"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run build"
+
+[[workflows.workflow]]
+name = "Production Start"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run start"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Database Setup"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run db:push"
+
+[[workflows.workflow]]
+name = "System Check"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run health-check"
+
+[unitTest]
+language = "nodejs"
+
+[packager]
+language = "nodejs"
+
+[packager.features]
+packageSearch = true
+guessImports = true
+enabledForHosting = false
+
+[languages]
+
+[languages.javascript]
+pattern = "**/{*.js,*.jsx,*.ts,*.tsx,*.mjs}"
+
+[languages.javascript.languageServer]
+start = "typescript-language-server --stdio"
+
+[languages.typescript]
+pattern = "**/{*.ts,*.tsx}"
+
+[languages.typescript.languageServer]
+start = "typescript-language-server --stdio"
+
+[languages.css]
+pattern = "**/{*.css,*.scss,*.sass,*.less}"
+
+[languages.css.languageServer]
+start = "vscode-css-language-server --stdio"
+
+[languages.html]
+pattern = "**/*.html"
+
+[languages.html.languageServer]
+start = "vscode-html-language-server --stdio"
+
+[languages.json]
+pattern = "**/*.json"
+
+[languages.json.languageServer]
+start = "vscode-json-language-server --stdio"
+
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix"]
+
+[env]
+NODE_ENV = "development"
+PORT = "5000"
+HOST = "0.0.0.0"
+
+[secrets]
+DATABASE_URL = ""
+MORALIS_API = ""
+DEEPSEEK_API_KEY = ""
+COINBASE_API_KEY = ""
