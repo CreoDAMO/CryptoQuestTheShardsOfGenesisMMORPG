@@ -1,20 +1,53 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  images: {
+    domains: ['localhost', 'replit.dev'],
+    unoptimized: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
   experimental: {
     appDir: true,
   },
-  typescript: {
-    // Temporarily ignore build errors during migration
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    // Temporarily ignore linting errors during migration
-    ignoreDuringBuilds: true,
-  },
-  // Configure for Replit deployment
-  trailingSlash: false,
-  output: 'standalone',
-}
+  webpack: (config, { isServer }) => {
+    // Handle SVG imports
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    });
 
-module.exports = nextConfig
+    // Handle other assets
+    config.module.rules.push({
+      test: /\.(png|jpe?g|gif|webp)$/,
+      use: {
+        loader: 'file-loader',
+        options: {
+          publicPath: '/_next/static/images/',
+          outputPath: 'static/images/',
+        },
+      },
+    });
+
+    return config;
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: '/api/:path*',
+      },
+    ];
+  },
+  env: {
+    CUSTOM_KEY: process.env.CUSTOM_KEY,
+  },
+};
+
+module.exports = nextConfig;
