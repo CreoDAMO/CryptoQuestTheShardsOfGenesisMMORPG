@@ -84,7 +84,11 @@ export function serveStatic(app: Express) {
   app.use(express.static(distPath));
 
   // fall through to index.html if the file doesn't exist
-  app.use("*", (_req, res) => {
+  const fallbackLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 50, // max 50 requests per windowMs
+  });
+  app.use("*", fallbackLimiter, (_req, res) => {
     res.sendFile(path.resolve(distPath, "index.html"));
   });
 }
