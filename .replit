@@ -15,7 +15,7 @@ localPort = 5000
 externalPort = 80
 
 [workflows]
-runButton = "Next.js Development"
+runButton = "Next.js Development Server"
 
 [[workflows.workflow]]
 name = "Project"
@@ -70,6 +70,15 @@ args = "npm run health-check"
 
 [[workflows.workflow]]
 name = "Next.js Development"
+author = 45162535
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+
+[[workflows.workflow]]
+name = "Next.js Development Server"
 author = 45162535
 mode = "sequential"
 

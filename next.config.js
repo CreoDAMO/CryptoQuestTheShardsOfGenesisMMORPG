@@ -4,7 +4,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['localhost', 'replit.dev'],
+    domains: ['localhost', 'replit.dev', '0.0.0.0'],
     unoptimized: true,
   },
   typescript: {
@@ -50,4 +50,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
