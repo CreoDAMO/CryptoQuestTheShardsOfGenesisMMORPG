@@ -7,6 +7,8 @@ const nextConfig = {
     domains: ['localhost', 'replit.dev', '0.0.0.0'],
     unoptimized: true,
   },
+  
+  allowedDevOrigins: ['replit.dev', 'replit.co'],
   typescript: {
     ignoreBuildErrors: false,
   },
