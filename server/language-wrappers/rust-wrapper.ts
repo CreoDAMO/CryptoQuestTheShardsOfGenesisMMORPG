@@ -189,7 +189,7 @@ use std::sync::Arc;
 use std::time::Instant;
 
 let tasks = vec![
-    ${tasks.map((task, i) => `"${task.replace(/"/g, '\\"')}"`).join(',\n    ')}
+    ${tasks.map((task, i) => `"${task.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`).join(',\n    ')}
 ];
 
 println!("🚀 Executing {} tasks concurrently", tasks.len());
