@@ -247,6 +247,13 @@ router.post('/market-visualization', async (req: Request, res: Response) => {
 
     // Adjust intensity
     if (intensity && intensity !== 1.0) {
+      if (!Array.isArray(hologramData.amplitude)) {
+        throw new Error('Invalid hologram data: amplitude is not an array');
+      }
+      const MAX_LENGTH = 10000; // Define a reasonable maximum length
+      if (hologramData.amplitude.length > MAX_LENGTH) {
+        throw new Error(`Invalid hologram data: amplitude length exceeds ${MAX_LENGTH}`);
+      }
       for (let i = 0; i < hologramData.amplitude.length; i++) {
         hologramData.amplitude[i] *= intensity;
       }
