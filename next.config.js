@@ -2,7 +2,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
+  
   images: {
     domains: ['localhost', 'replit.dev', '0.0.0.0'],
     unoptimized: true,
@@ -13,9 +13,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
-  experimental: {
-    appDir: true,
-  },
+  
   webpack: (config, { isServer }) => {
     // Handle SVG imports
     config.module.rules.push({

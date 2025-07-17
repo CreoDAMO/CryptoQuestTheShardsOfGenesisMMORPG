@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import UnifiedIntelligenceDashboard from '../client/src/components/enhanced/UnifiedIntelligenceDashboard';
 
