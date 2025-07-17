@@ -1,0 +1,1 @@
+{"dev": "npx tsx server/index.ts", "build": "echo Build step placeholder", "start": "node server/index.js", "db:push": "npx drizzle-kit push", "health-check": "curl -f http://localhost:5000/api/healthz || exit 1"}
