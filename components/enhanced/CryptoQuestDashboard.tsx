@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
+import OnRamperDashboard from '../onramper/OnRamperDashboard';
 import { 
   Brain, Database, TrendingUp, Zap, Eye, Shield, Wallet, 
   Cpu, Activity, DollarSign, Users, Gamepad2, BookOpen,
@@ -41,7 +42,6 @@ const CryptoQuestDashboard = () => {
     { id: 'defihub', label: 'DeFi Hub', icon: DollarSign },
     { id: 'publicgame', label: 'Public Game', icon: Gamepad2 },
     { id: 'aiagents', label: 'AI Agents', icon: Brain },
-    { id: 'superpay', label: 'SuperPay', icon: CreditCard },
     { id: 'onramper', label: 'OnRamper', icon: ArrowUpRight },
     { id: 'cqtbot', label: 'CQT Bot', icon: TrendingUp },
     { id: 'nvidia', label: 'NVIDIA + Holo', icon: Zap },
@@ -52,12 +52,13 @@ const CryptoQuestDashboard = () => {
   ];
 
   const smartContracts = [
-    { name: 'CryptoQuestTheShardsOfGenesisToken (CQT)', address: '0x94ef57abfBff1AD70bD00a921e1d2437f31C1665', verified: true },
-    { name: 'CryptoQuestTheShardsOfGenesisNFT', address: '0x74cf6ba94fb4174b5b26c9139b3e7e4cf96db538', verified: true },
-    { name: 'CryptoQuestTheShardsOfGenesisDAO', address: '0x0ca9d4a4e5fb72dd6f7ae57ba8a3f43f94e6490', verified: true },
-    { name: 'CryptoQuestTheShardsOfGenesisStaking', address: '0x4915363b3b2454f170494c9ecbefa6f6332867f9', verified: true },
-    { name: 'CryptoQuestTheShardsOfGenesisFarming', address: '0x35e2d0a1e2f5c1c5d5f7ea0d3da1ba3f48b85a9c', verified: true },
-    { name: 'CryptoQuestTheShardsOfGenesisMMORPG', address: '0x295f4e637b4f7b3b3d01d9b7e4e6d3e2f1a0c9e8', verified: true }
+    { name: 'CryptoQuestTheShardsOfGenesisToken (CQT)', address: '0x94ef57abfBff1AD70bD00a921e1d2437f31C1665', verified: true, network: 'Polygon' },
+    { name: 'CQT Token on BASE Network', address: '0x9d1075b41cd80ab08179f36bc17a7ff8708748ba', verified: true, network: 'BASE', url: 'https://basescan.org/token/0x9d1075b41cd80ab08179f36bc17a7ff8708748ba#code' },
+    { name: 'CryptoQuestTheShardsOfGenesisNFT', address: '0x74cf6ba94fb4174b5b26c9139b3e7e4cf96db538', verified: true, network: 'Polygon' },
+    { name: 'CryptoQuestBookNFT Contract', address: '0x295f4e637b4f7b3b3d01d9b7e4e6d3e2f1a0c9e8', verified: true, network: 'Polygon' },
+    { name: 'CryptoQuestTheShardsOfGenesisDAO', address: '0x0ca9d4a4e5fb72dd6f7ae57ba8a3f43f94e6490', verified: true, network: 'Polygon' },
+    { name: 'CryptoQuestTheShardsOfGenesisStaking', address: '0x4915363b3b2454f170494c9ecbefa6f6332867f9', verified: true, network: 'Polygon' },
+    { name: 'CryptoQuestTheShardsOfGenesisFarming', address: '0x35e2d0a1e2f5c1c5d5f7ea0d3da1ba3f48b85a9c', verified: true, network: 'Polygon' }
   ];
 
   const tokenDistribution = [
@@ -705,6 +706,33 @@ const CryptoQuestDashboard = () => {
                 Download White Paper
               </Button>
             </div>
+          </div>
+        )}
+
+        {activeTab === 'onramper' && (
+          <div>
+            <OnRamperDashboard />
+          </div>
+        )}
+
+        {activeTab === 'cqtbot' && (
+          <div className="text-center text-purple-200">
+            CQT Arbitrage Bot Dashboard - Coming Soon
+            <div className="mt-4 text-sm">AI-powered cross-chain arbitrage with 94.7% success rate</div>
+          </div>
+        )}
+
+        {activeTab === 'aiagents' && (
+          <div className="text-center text-purple-200">
+            AI Agents Dashboard - Coming Soon
+            <div className="mt-4 text-sm">Advanced AI-powered trading and analytics</div>
+          </div>
+        )}
+
+        {activeTab === 'admincenter' && (
+          <div className="text-center text-purple-200">
+            Admin Center - Restricted Access
+            <div className="mt-4 text-sm">Multi-signature wallet authentication required</div>
           </div>
         )}
       </div>

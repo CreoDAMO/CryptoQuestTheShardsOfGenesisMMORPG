@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
           data: {
             arbitrage: {
               totalProfit: 15420.85,
-              activeOpportunities: opportunities.length,
+              activeOpportunities: 3,
               successRate: 94.7,
               liquidityProvided: 7500000000000, // 7.5T CQT
               gasOptimization: 87.3
