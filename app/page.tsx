@@ -1,12 +1,12 @@
 "use client";
 
 import React from 'react';
-import UnifiedIntelligenceDashboard from '../components/enhanced/UnifiedIntelligenceDashboard';
+import CryptoQuestDashboard from '../components/enhanced/CryptoQuestDashboard';
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-background">
-      <UnifiedIntelligenceDashboard />
+    <main className="min-h-screen">
+      <CryptoQuestDashboard />
     </main>
   );
 }
