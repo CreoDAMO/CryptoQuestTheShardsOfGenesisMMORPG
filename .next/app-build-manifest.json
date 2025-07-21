@@ -1,62 +1,20 @@
 {
   "pages": {
-    "/_not-found/page": [
-      "static/chunks/webpack-8082250f593e6671.js",
-      "static/chunks/3bbc4bb0-919b6765e835fee7.js",
-      "static/chunks/938-9f4e090fb4f1062f.js",
-      "static/chunks/main-app-99afc488fff2cb8f.js",
-      "static/chunks/app/_not-found/page-edc39bae02fd7a70.js"
+    "/api/healthz/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/healthz/route.js"
     ],
     "/layout": [
-      "static/chunks/webpack-8082250f593e6671.js",
-      "static/chunks/3bbc4bb0-919b6765e835fee7.js",
-      "static/chunks/938-9f4e090fb4f1062f.js",
-      "static/chunks/main-app-99afc488fff2cb8f.js",
-      "static/css/931b179cff3131dc.css",
-      "static/chunks/app/layout-06ef6c20eb14eb51.js"
-    ],
-    "/api/agentkit/route": [
-      "static/chunks/webpack-8082250f593e6671.js",
-      "static/chunks/3bbc4bb0-919b6765e835fee7.js",
-      "static/chunks/938-9f4e090fb4f1062f.js",
-      "static/chunks/main-app-99afc488fff2cb8f.js",
-      "static/chunks/app/api/agentkit/route-db62208131e5e1c4.js"
-    ],
-    "/api/arbitrage/route": [
-      "static/chunks/webpack-8082250f593e6671.js",
-      "static/chunks/3bbc4bb0-919b6765e835fee7.js",
-      "static/chunks/938-9f4e090fb4f1062f.js",
-      "static/chunks/main-app-99afc488fff2cb8f.js",
-      "static/chunks/app/api/arbitrage/route-db62208131e5e1c4.js"
-    ],
-    "/api/healthz/route": [
-      "static/chunks/webpack-8082250f593e6671.js",
-      "static/chunks/3bbc4bb0-919b6765e835fee7.js",
-      "static/chunks/938-9f4e090fb4f1062f.js",
-      "static/chunks/main-app-99afc488fff2cb8f.js",
-      "static/chunks/app/api/healthz/route-db62208131e5e1c4.js"
-    ],
-    "/api/nvidia/route": [
-      "static/chunks/webpack-8082250f593e6671.js",
-      "static/chunks/3bbc4bb0-919b6765e835fee7.js",
-      "static/chunks/938-9f4e090fb4f1062f.js",
-      "static/chunks/main-app-99afc488fff2cb8f.js",
-      "static/chunks/app/api/nvidia/route-db62208131e5e1c4.js"
-    ],
-    "/api/superpay/route": [
-      "static/chunks/webpack-8082250f593e6671.js",
-      "static/chunks/3bbc4bb0-919b6765e835fee7.js",
-      "static/chunks/938-9f4e090fb4f1062f.js",
-      "static/chunks/main-app-99afc488fff2cb8f.js",
-      "static/chunks/app/api/superpay/route-db62208131e5e1c4.js"
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
     ],
     "/page": [
-      "static/chunks/webpack-8082250f593e6671.js",
-      "static/chunks/3bbc4bb0-919b6765e835fee7.js",
-      "static/chunks/938-9f4e090fb4f1062f.js",
-      "static/chunks/main-app-99afc488fff2cb8f.js",
-      "static/chunks/457-939ebbcfa5475740.js",
-      "static/chunks/app/page-46669a1e1cdd52e9.js"
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
     ]
   }
 }

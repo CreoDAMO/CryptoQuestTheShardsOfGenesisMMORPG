@@ -1,9 +1,4 @@
 {
   "/api/healthz/route": "app/api/healthz/route.js",
-  "/page": "app/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/agentkit/route": "app/api/agentkit/route.js",
-  "/api/arbitrage/route": "app/api/arbitrage/route.js",
-  "/api/nvidia/route": "app/api/nvidia/route.js",
-  "/api/superpay/route": "app/api/superpay/route.js"
+  "/page": "app/page.js"
 }
