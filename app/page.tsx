@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import UnifiedIntelligenceDashboard from '../client/src/components/enhanced/UnifiedIntelligenceDashboard';
+import UnifiedIntelligenceDashboard from '../components/enhanced/UnifiedIntelligenceDashboard';
 
 export default function HomePage() {
   return (

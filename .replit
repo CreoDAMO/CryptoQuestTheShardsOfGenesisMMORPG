@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "dotnet-7.0", "c-clang14", "web"]
+modules = ["nodejs-20", "dotnet-7.0", "web", "c-clang14"]
 run = "npm run dev"
 hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
@@ -8,14 +8,14 @@ channel = "stable-24_05"
 [deployment]
 deploymentTarget = "autoscale"
 build = ["npm", "run", "build"]
-run = ["sh", "-c", "npm run start"]
+run = ["npm", "run", "start"]
 
 [[ports]]
 localPort = 5000
 externalPort = 80
 
 [workflows]
-runButton = "Next.js Development Server"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "Project"
