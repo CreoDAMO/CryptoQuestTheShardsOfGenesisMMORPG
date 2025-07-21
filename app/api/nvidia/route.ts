@@ -26,8 +26,36 @@ class NVIDIACloudService {
     };
   }
 
+  async getMiningMetrics() {
+    return {
+      gpuUtilization: 85 + Math.random() * 10,
+      hashrate: 450 + Math.random() * 100,
+      powerConsumption: 220 + Math.random() * 30,
+      temperature: 65 + Math.random() * 10,
+      efficiency: 87.3 + Math.random() * 5
+    };
+  }
+
+  async getGamingAIMetrics() {
+    return {
+      dlssPerformance: 95.2 + Math.random() * 3,
+      aiCharactersActive: 3,
+      neuralRenderingLoad: 72 + Math.random() * 15,
+      frameGeneration: 4.2 + Math.random() * 0.8
+    };
+  }
+
+  async getCloudResourceUsage() {
+    return {
+      creditsUsed: 1247,
+      creditsRemaining: 8753,
+      apiCallsToday: 342,
+      activeInstances: 2,
+      totalComputeHours: 48.7
+    };
+  }
+
   async processHolographicData(data: any) {
-    // Simulate holographic processing
     return {
       success: true,
       processedFrames: data.frames?.length || 0,
@@ -35,65 +63,26 @@ class NVIDIACloudService {
       quality: 'ultra'
     };
   }
+
+  async initializeGPUMining() {
+    return {
+      status: 'initialized',
+      expectedHashrate: 500,
+      estimatedRevenue: 12.45
+    };
+  }
+
+  async scaleMiningOperations(targetHashrate: number) {
+    return {
+      status: 'scaling',
+      currentHashrate: 450,
+      targetHashrate,
+      eta: '5 minutes'
+    };
+  }
 }
 
 const nvidiaCloudService = new NVIDIACloudService();
-
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const type = searchParams.get('type');
-
-    if (type === 'performance') {
-      const metrics = await nvidiaCloudService.getPerformanceMetrics();
-      return NextResponse.json({
-        success: true,
-        data: metrics
-      });
-    }
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        status: 'NVIDIA services online',
-        features: ['RTX', 'ACE', 'Holographic Rendering'],
-        version: '1.0.0'
-      }
-    });
-  } catch (error) {
-    console.error('NVIDIA API error:', error);
-    return NextResponse.json({
-      success: false,
-      error: 'NVIDIA service unavailable'
-    }, { status: 500 });
-  }
-}
-
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { action, data } = body;
-
-    if (action === 'processHolographic') {
-      const result = await nvidiaCloudService.processHolographicData(data);
-      return NextResponse.json({
-        success: true,
-        data: result
-      });
-    }
-
-    return NextResponse.json({
-      success: false,
-      error: 'Unknown action'
-    }, { status: 400 });
-  } catch (error) {
-    console.error('NVIDIA API POST error:', error);
-    return NextResponse.json({
-      success: false,
-      error: 'Failed to process request'
-    }, { status: 500 });
-  }
-}
 
 interface NvidiaRequest {
   action: 'mining' | 'gaming' | 'scale' | 'predict' | 'optimize';
@@ -153,7 +142,7 @@ export async function GET(request: NextRequest) {
         }, { status: 400 });
     }
   } catch (error) {
-    console.error('Nvidia API error:', error);
+    console.error('NVIDIA API error:', error);
     return NextResponse.json({
       success: false,
       error: 'Internal server error'
@@ -188,24 +177,19 @@ export async function POST(request: NextRequest) {
         });
 
       case 'gaming':
-        const enhanceResult = await nvidiaCloudService.enhanceGameplayAI(body.playerData || {});
+        const performanceData = await nvidiaCloudService.getPerformanceMetrics();
         return NextResponse.json({
           success: true,
-          data: enhanceResult
-        });
-
-      case 'predict':
-        const predictions = await nvidiaCloudService.predictMarketTrends(body.historicalData || []);
-        return NextResponse.json({
-          success: true,
-          data: predictions
+          data: performanceData
         });
 
       case 'optimize':
-        const optimization = await nvidiaCloudService.optimizeArbitrageStrategy(body);
         return NextResponse.json({
           success: true,
-          data: optimization
+          data: {
+            optimized: true,
+            improvements: ['DLSS enabled', 'Frame generation active', 'Neural rendering optimized']
+          }
         });
 
       default:
@@ -215,10 +199,10 @@ export async function POST(request: NextRequest) {
         }, { status: 400 });
     }
   } catch (error) {
-    console.error('Nvidia POST error:', error);
+    console.error('NVIDIA API POST error:', error);
     return NextResponse.json({
       success: false,
-      error: 'Internal server error'
+      error: 'Failed to process request'
     }, { status: 500 });
   }
 }
