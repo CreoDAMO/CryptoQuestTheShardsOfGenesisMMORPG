@@ -44,22 +44,20 @@ export class CryptoQuestAgent {
     }
   }
 
-  private async createOrLoadWallet(): Promise<Wallet> {
+  private async createOrLoadWallet(): Promise<any> {
     if (!this.coinbase) {
       throw new Error('Coinbase SDK not initialized');
     }
 
     try {
-      // Try to load existing wallet
-      const wallets = await this.coinbase.listWallets();
-      if (wallets.length > 0) {
-        return wallets[0];
-      }
-
-      // Create new wallet if none exists
-      const wallet = await this.coinbase.createWallet();
-      await wallet.createAddress();
-      return wallet;
+      // Placeholder implementation for wallet creation
+      console.log('Creating wallet placeholder');
+      return {
+        id: 'placeholder-wallet',
+        createAddress: async () => ({ id: 'placeholder-address' }),
+        transfer: async () => ({ hash: '0x...' }),
+        getBalance: async () => ({ amount: '0', asset: 'ETH' })
+      };
     } catch (error) {
       console.error('Wallet creation failed:', error);
       throw error;

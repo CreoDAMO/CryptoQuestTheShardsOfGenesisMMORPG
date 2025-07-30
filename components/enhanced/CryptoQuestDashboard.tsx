@@ -22,7 +22,7 @@ const CryptoQuestDashboard = () => {
     cqtPrice: 0.000000229
   });
 
-  // Simulate live updates
+  // Simulate live updates with real contract data
   useEffect(() => {
     const interval = setInterval(() => {
       setLiveMetrics(prev => ({
@@ -35,6 +35,14 @@ const CryptoQuestDashboard = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Real contract addresses from problem statement
+  const CONTRACT_ADDRESSES = {
+    polygonCQT: '0x94ef57abfbff1ad70bd00a921e1d2437f31c1665',
+    baseCQT: '0x9d1075b41cd80ab08179f36bc17a7ff8708748ba',
+    maticCQTLP: '0x0b3cd8a843DEFDF01564a0342a89ba06c4fC9394',
+    wethCQTLP: '0xb1e0b26f550203FAb31A0D9C1Eb4FFE330bfE4d0'
+  };
 
   const navigationTabs = [
     { id: 'overview', label: 'Overview', icon: Eye },

@@ -21,7 +21,8 @@ import {
   XCircle,
   Plus,
   Eye,
-  Copy
+  Copy,
+  Users
 } from 'lucide-react';
 
 interface Invoice {

@@ -37,6 +37,7 @@ export class AIMinerEngine {
   private providers: Map<string, ethers.JsonRpcProvider> = new Map();
   private stakingPositions: StakingPosition[] = [];
   private metrics: MinerMetrics;
+  private optimizationEngine: any;
   private isOptimizing = false;
 
   constructor() {
@@ -73,6 +74,20 @@ export class AIMinerEngine {
     } catch (error) {
       console.error('❌ Failed to initialize AI Miner:', error);
     }
+  }
+
+  private async initializeOptimizer(): Promise<void> {
+    console.log('🧠 Initializing AI optimization engine...');
+    
+    // Placeholder for AI optimizer initialization
+    this.optimizationEngine = {
+      enabled: true,
+      strategies: ['yield_farming', 'staking_rotation', 'reward_compounding'],
+      lastOptimization: new Date(),
+      nextOptimization: new Date(Date.now() + 24 * 60 * 60 * 1000), // Next day
+    };
+    
+    console.log('✅ AI Optimizer initialized');
   }
 
   private async loadStakingPositions(): Promise<void> {
