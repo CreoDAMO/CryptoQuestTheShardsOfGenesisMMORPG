@@ -1,245 +1,60 @@
 import { ethers } from 'ethers';
 
-export interface WalletProvider {
-  id: string;
+export interface WalletConfig {
+  address: string;
   name: string;
-  type: 'admin' | 'user';
-  networks: string[];
-  purpose: string;
-  features: string[];
-}
-
-export interface AdminWallet {
-  address: string;
-  type: 'safe' | 'totalsig';
-  signers: string[];
-  threshold: number;
-  networks: string[];
-  purpose: string;
-}
-
-export interface UserWallet {
-  address: string;
-  provider: 'privy' | 'coinbase' | 'circle' | 'walletconnect' | 'metamask';
-  userId: string;
-  createdAt: Date;
-  lastUsed: Date;
+  type: 'creator' | 'owner' | 'multisig';
+  chainId?: number;
 }
 
 export class WalletManager {
-  private adminWallets: Map<string, AdminWallet> = new Map();
-  private userWallets: Map<string, UserWallet> = new Map();
-
-  // Treasury Management Wallets
-  // Owner wallet - controls all operations (holds all CQT tokens and LP NFTs)
-  public readonly OWNER_WALLET = '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866'; // Admin wallet with full control
-
-  // Safe Multisig Configuration
-  public readonly SAFE_MULTISIG_CONFIG = {
-    address: '', // To be set when created via SafeGlobal
-    threshold: 2, // Recommended for 2-of-3 setup initially
-    signers: [
-      this.OWNER_WALLET, // Your new primary wallet
-      '0x67BF9f428d92704C3Db3a08dC05Bc941A8647866', // Primary signer
-      '', // Optional additional signer
-    ],
-    networks: ['polygon', 'base'],
-    purpose: 'CQT token treasury, LP management, player rewards, smart contract operations'
-  };
-
-  // TotalSig Configuration
-  public readonly TOTALSIG_CONFIG = {
-    networks: ['bitcoin', 'ethereum', 'tron', 'bnb', 'solana', 'dogecoin'],
-    purpose: 'AI mining operations, cross-chain asset management',
-    features: [
-      'Multi-chain mining rewards collection',
-      'Asset conversion to USDC',
-      'Automated bridging to Safe Multisig',
-      'Portfolio diversification'
-    ]
-  };
-
-  // Wallet Provider Configurations
-  public readonly WALLET_PROVIDERS: Record<string, WalletProvider> = {
-    safe: {
-      id: 'safe',
-      name: 'Safe Multisig',
-      type: 'admin',
-      networks: ['polygon', 'base', 'ethereum'],
-      purpose: 'Treasury management and core game operations',
-      features: ['Multi-signature security', 'Timelock protection', 'Smart contract interactions']
-    },
-    totalsig: {
-      id: 'totalsig',
-      name: 'TotalSig',
-      type: 'admin',
-      networks: ['bitcoin', 'ethereum', 'tron', 'bnb', 'solana', 'dogecoin'],
-      purpose: 'AI mining and cross-chain operations',
-      features: ['Multi-chain support', 'Threshold signatures', 'Automated operations']
-    },
-    privy: {
-      id: 'privy',
-      name: 'Privy',
-      type: 'user',
-      networks: ['polygon', 'base', 'ethereum'],
-      purpose: 'Easy onboarding with social login',
-      features: ['Email/SMS/social login', 'Embedded wallets', 'Gasless transactions']
-    },
-    coinbase: {
-      id: 'coinbase',
-      name: 'Coinbase Wallet SDK',
-      type: 'user',
-      networks: ['polygon', 'base', 'ethereum'],
-      purpose: 'Mainstream crypto users',
-      features: ['Mobile/desktop integration', 'Familiar UI', 'Built-in fiat onramps']
-    },
-    circle: {
-      id: 'circle',
-      name: 'Circle Programmable Wallets',
-      type: 'user',
-      networks: ['polygon', 'base', 'ethereum'],
-      purpose: 'USDC-focused gaming payments',
-      features: ['Low fees', 'Programmable policies', 'Enterprise security']
-    },
-    walletconnect: {
-      id: 'walletconnect',
-      name: 'WalletConnect',
-      type: 'user',
-      networks: ['polygon', 'base', 'ethereum', 'arbitrum', 'optimism'],
-      purpose: 'Universal wallet compatibility',
-      features: ['MetaMask support', 'Rainbow wallet', 'Trust Wallet', 'DeFi integration']
-    }
-  };
+  private wallets: Map<string, WalletConfig> = new Map();
 
   constructor() {
-    this.initializeWalletManager();
+    this.initializeWallets();
   }
 
-  private initializeWalletManager() {
-    // Initialize admin wallets
-    this.adminWallets.set('safe-multisig', {
-      address: this.SAFE_MULTISIG_CONFIG.address,
-      type: 'safe',
-      signers: this.SAFE_MULTISIG_CONFIG.signers,
-      threshold: this.SAFE_MULTISIG_CONFIG.threshold,
-      networks: this.SAFE_MULTISIG_CONFIG.networks,
-      purpose: this.SAFE_MULTISIG_CONFIG.purpose
+  private initializeWallets() {
+    // Creator Wallet (Original)
+    this.wallets.set('creator', {
+      address: '0x1234567890123456789012345678901234567890', // Replace with actual creator address
+      name: 'Creator Wallet',
+      type: 'creator'
     });
 
-    console.log('Wallet Manager initialized with multi-wallet architecture');
+    // Current Owner Wallet (holds CQT)
+    this.wallets.set('owner', {
+      address: '0x9876543210987654321098765432109876543210', // Replace with actual owner address  
+      name: 'Current Owner',
+      type: 'owner'
+    });
+
+    // Safe Multisig
+    this.wallets.set('multisig', {
+      address: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd', // Replace with actual Safe address
+      name: 'Safe Multisig',
+      type: 'multisig'
+    });
   }
 
-  // Admin Wallet Methods
-  async createSafeMultisig(networkId: string): Promise<string> {
-    try {
-      // This would integrate with Safe's SDK to create a new multisig
-      // For now, return a placeholder address
-      const mockAddress = `0x${Math.random().toString(16).substr(2, 40)}`;
-
-      console.log(`Created Safe Multisig on ${networkId}: ${mockAddress}`);
-      return mockAddress;
-    } catch (error) {
-      console.error('Failed to create Safe Multisig:', error);
-      throw error;
-    }
+  getWallet(key: string): WalletConfig | undefined {
+    return this.wallets.get(key);
   }
 
-  async getTotalSigWallets(): Promise<any[]> {
-    try {
-      // This would integrate with TotalSig's API
-      return [
-        {
-          network: 'bitcoin',
-          address: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
-          balance: '0.5 BTC'
-        },
-        {
-          network: 'ethereum',
-          address: '0x742d35Cc6634C0532925a3b8D4C9db96C4b5c2b4',
-          balance: '10.5 ETH'
-        }
-      ];
-    } catch (error) {
-      console.error('Failed to fetch TotalSig wallets:', error);
-      return [];
-    }
+  getAllWallets(): WalletConfig[] {
+    return Array.from(this.wallets.values());
   }
 
-  // User Wallet Methods
-  async createUserWallet(provider: string, userId: string): Promise<UserWallet> {
-    const address = `0x${Math.random().toString(16).substr(2, 40)}`;
-
-    const userWallet: UserWallet = {
-      address,
-      provider: provider as any,
-      userId,
-      createdAt: new Date(),
-      lastUsed: new Date()
-    };
-
-    this.userWallets.set(userId, userWallet);
-
-    console.log(`Created ${provider} wallet for user ${userId}: ${address}`);
-    return userWallet;
+  getCreatorWallet(): WalletConfig | undefined {
+    return this.wallets.get('creator');
   }
 
-  getUserWallet(userId: string): UserWallet | undefined {
-    return this.userWallets.get(userId);
+  getOwnerWallet(): WalletConfig | undefined {
+    return this.wallets.get('owner');
   }
 
-  // Treasury Operations
-  async getOperationalFlow(): Promise<any> {
-    return {
-      step1: 'AI Mining (TotalSig) collects assets across 6+ blockchains',
-      step2: 'Weekly conversion to USDC for stability',
-      step3: 'Safe Multisig receives USDC and creates CQT liquidity pools',
-      step4: 'CQT distribution to user wallets for gameplay',
-      step5: 'LP fees fund game development and player rewards'
-    };
-  }
-
-  // Wallet Provider Information
-  getWalletProvider(providerId: string): WalletProvider | undefined {
-    return this.WALLET_PROVIDERS[providerId];
-  }
-
-  getAllWalletProviders(): WalletProvider[] {
-    return Object.values(this.WALLET_PROVIDERS);
-  }
-
-  getAdminWallets(): AdminWallet[] {
-    return Array.from(this.adminWallets.values());
-  }
-
-  getUserWallets(): UserWallet[] {
-    return Array.from(this.userWallets.values());
-  }
-
-  // Access Control
-  isFounderWallet(address: string): boolean {
-    return address.toLowerCase() === this.FOUNDER_WALLET.toLowerCase();
-  }
-
-  isAdminWallet(address: string): boolean {
-    return this.SAFE_MULTISIG_CONFIG.signers.includes(address) || 
-           this.isFounderWallet(address);
-  }
-
-  // Wallet Integration Status
-  getIntegrationStatus(): any {
-    return {
-      adminWallets: {
-        safe: { integrated: true, networks: ['polygon', 'base'] },
-        totalsig: { integrated: true, networks: ['bitcoin', 'ethereum', 'tron', 'bnb', 'solana', 'dogecoin'] }
-      },
-      userWallets: {
-        privy: { integrated: false, status: 'pending_implementation' },
-        coinbase: { integrated: true, status: 'active' },
-        circle: { integrated: false, status: 'pending_implementation' },
-        walletconnect: { integrated: true, status: 'active' },
-        metamask: { integrated: true, status: 'active' }
-      }
-    };
+  getMultisigWallet(): WalletConfig | undefined {
+    return this.wallets.get('multisig');
   }
 }
 
