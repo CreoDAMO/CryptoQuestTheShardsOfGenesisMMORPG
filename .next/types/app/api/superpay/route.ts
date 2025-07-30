@@ -1,4 +1,4 @@
-// File: /home/runner/workspace/app/api/superpay/route.ts
+// File: /home/runner/work/CryptoQuestTheShardsOfGenesisMMORPG/CryptoQuestTheShardsOfGenesisMMORPG/app/api/superpay/route.ts
 import * as entry from '../../../../../app/api/superpay/route.js'
 import type { NextRequest } from 'next/server.js'
 

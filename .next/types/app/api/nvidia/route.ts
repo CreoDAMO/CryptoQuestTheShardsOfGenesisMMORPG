@@ -1,4 +1,4 @@
-// File: /home/runner/workspace/app/api/nvidia/route.ts
+// File: /home/runner/work/CryptoQuestTheShardsOfGenesisMMORPG/CryptoQuestTheShardsOfGenesisMMORPG/app/api/nvidia/route.ts
 import * as entry from '../../../../../app/api/nvidia/route.js'
 import type { NextRequest } from 'next/server.js'
 

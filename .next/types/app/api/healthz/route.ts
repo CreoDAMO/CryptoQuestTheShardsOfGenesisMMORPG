@@ -1,4 +1,4 @@
-// File: /home/runner/workspace/app/api/healthz/route.ts
+// File: /home/runner/work/CryptoQuestTheShardsOfGenesisMMORPG/CryptoQuestTheShardsOfGenesisMMORPG/app/api/healthz/route.ts
 import * as entry from '../../../../../app/api/healthz/route.js'
 import type { NextRequest } from 'next/server.js'
 

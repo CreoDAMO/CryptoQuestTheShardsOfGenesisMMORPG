@@ -1,4 +1,4 @@
-// File: /home/runner/workspace/app/api/agentkit/route.ts
+// File: /home/runner/work/CryptoQuestTheShardsOfGenesisMMORPG/CryptoQuestTheShardsOfGenesisMMORPG/app/api/agentkit/route.ts
 import * as entry from '../../../../../app/api/agentkit/route.js'
 import type { NextRequest } from 'next/server.js'
 
