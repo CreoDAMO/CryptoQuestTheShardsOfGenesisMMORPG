@@ -150,6 +150,65 @@ export interface StakingReward {
   validator?: string;
 }
 
+export interface MinerMetrics {
+  totalStaked: number;
+  totalRewards: number;
+  stakingAPR: number;
+  optimizationScore: number;
+  activeMines: number;
+  hashRate: number;
+  powerConsumption: number;
+  efficiency: number;
+  activeValidators: number;
+  networkParticipation: number;
+  liquidStakingRewards: number;
+  compoundingEfficiency: number;
+}
+
+export interface LiquidityMetrics {
+  totalProvided: number;
+  totalFees: number;
+  poolCount: number;
+  averageAPR: number;
+  impermanentLoss: number;
+  activePositions: number;
+  totalVolume: number;
+  impermanentLossTotal: number;
+  rebalanceCount: number;
+  efficiency: number;
+}
+
+export interface OptimizationStrategy {
+  id: string;
+  name: string;
+  description: string;
+  parameters: Record<string, any>;
+  expectedImpact: number;
+  riskLevel: 'low' | 'medium' | 'high';
+  timeframe: number;
+}
+
+export interface LiquidityStrategy {
+  id: string;
+  poolAddress: string;
+  network: string;
+  allocation: number;
+  targetAPR: number;
+  riskProfile: 'conservative' | 'moderate' | 'aggressive';
+  rebalanceThreshold: number;
+}
+
+export interface PoolAnalysis {
+  address: string;
+  network: string;
+  tvl: number;
+  volume24h: number;
+  apr: number;
+  volatility: number;
+  riskScore: number;
+  recommendation: 'strong_buy' | 'buy' | 'hold' | 'sell' | 'strong_sell';
+}
+
 export interface AIMinerConfig {
   enabled: boolean;
   networks: string[];

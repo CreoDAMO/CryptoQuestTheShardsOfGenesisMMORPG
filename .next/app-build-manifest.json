@@ -1,0 +1,62 @@
+{
+  "pages": {
+    "/_not-found/page": [
+      "static/chunks/webpack-cd4f9e9c11ea14c8.js",
+      "static/chunks/4bd1b696-2385f465b218746f.js",
+      "static/chunks/964-f06ccb1d60ddb80d.js",
+      "static/chunks/main-app-4977d661ebe63db0.js",
+      "static/chunks/app/_not-found/page-bb3746ba0ae531ad.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-cd4f9e9c11ea14c8.js",
+      "static/chunks/4bd1b696-2385f465b218746f.js",
+      "static/chunks/964-f06ccb1d60ddb80d.js",
+      "static/chunks/main-app-4977d661ebe63db0.js",
+      "static/css/ef46db3751d8e999.css",
+      "static/chunks/app/layout-b60fc147b670c1b2.js"
+    ],
+    "/api/agentkit/route": [
+      "static/chunks/webpack-cd4f9e9c11ea14c8.js",
+      "static/chunks/4bd1b696-2385f465b218746f.js",
+      "static/chunks/964-f06ccb1d60ddb80d.js",
+      "static/chunks/main-app-4977d661ebe63db0.js",
+      "static/chunks/app/api/agentkit/route-673b4805b7cdb01c.js"
+    ],
+    "/api/arbitrage/route": [
+      "static/chunks/webpack-cd4f9e9c11ea14c8.js",
+      "static/chunks/4bd1b696-2385f465b218746f.js",
+      "static/chunks/964-f06ccb1d60ddb80d.js",
+      "static/chunks/main-app-4977d661ebe63db0.js",
+      "static/chunks/app/api/arbitrage/route-673b4805b7cdb01c.js"
+    ],
+    "/api/healthz/route": [
+      "static/chunks/webpack-cd4f9e9c11ea14c8.js",
+      "static/chunks/4bd1b696-2385f465b218746f.js",
+      "static/chunks/964-f06ccb1d60ddb80d.js",
+      "static/chunks/main-app-4977d661ebe63db0.js",
+      "static/chunks/app/api/healthz/route-673b4805b7cdb01c.js"
+    ],
+    "/api/nvidia/route": [
+      "static/chunks/webpack-cd4f9e9c11ea14c8.js",
+      "static/chunks/4bd1b696-2385f465b218746f.js",
+      "static/chunks/964-f06ccb1d60ddb80d.js",
+      "static/chunks/main-app-4977d661ebe63db0.js",
+      "static/chunks/app/api/nvidia/route-673b4805b7cdb01c.js"
+    ],
+    "/api/superpay/route": [
+      "static/chunks/webpack-cd4f9e9c11ea14c8.js",
+      "static/chunks/4bd1b696-2385f465b218746f.js",
+      "static/chunks/964-f06ccb1d60ddb80d.js",
+      "static/chunks/main-app-4977d661ebe63db0.js",
+      "static/chunks/app/api/superpay/route-673b4805b7cdb01c.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-cd4f9e9c11ea14c8.js",
+      "static/chunks/4bd1b696-2385f465b218746f.js",
+      "static/chunks/964-f06ccb1d60ddb80d.js",
+      "static/chunks/main-app-4977d661ebe63db0.js",
+      "static/chunks/429-84642f4be4ba9817.js",
+      "static/chunks/app/page-493acc625a50192d.js"
+    ]
+  }
+}

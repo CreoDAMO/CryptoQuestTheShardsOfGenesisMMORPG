@@ -217,7 +217,7 @@ export class WalletManager {
 
   // Access Control
   isFounderWallet(address: string): boolean {
-    return address.toLowerCase() === this.FOUNDER_WALLET.toLowerCase();
+    return address.toLowerCase() === this.OWNER_WALLET.toLowerCase();
   }
 
   isAdminWallet(address: string): boolean {

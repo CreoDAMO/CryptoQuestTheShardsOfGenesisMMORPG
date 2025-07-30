@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Progress } from "../ui/progress";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Switch } from "../ui/switch";
+import { Slider } from "../ui/slider";
 import { 
   Activity, 
   TrendingUp, 
@@ -209,6 +209,10 @@ export function EnhancedArbitrageDashboard({ className }: EnhancedArbitrageDashb
     totalRewards: 8750.45,
     stakingAPR: 12.4,
     optimizationScore: 89.5,
+    activeMines: 12,
+    hashRate: 2450.5,
+    powerConsumption: 85.2,
+    efficiency: 94.7,
     activeValidators: 8,
     networkParticipation: 85.2,
     liquidStakingRewards: 3420.15,
@@ -220,6 +224,8 @@ export function EnhancedArbitrageDashboard({ className }: EnhancedArbitrageDashb
     totalFees: 12450.75,
     poolCount: 8,
     averageAPR: 125.8,
+    impermanentLoss: -2.3,
+    activePositions: 8,
     totalVolume: 8450000,
     impermanentLossTotal: -2.3,
     rebalanceCount: 45,

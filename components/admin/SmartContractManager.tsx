@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../../client/src/components/ui/card';
-import { Button } from '../../client/src/components/ui/button';
-import { Badge } from '../../client/src/components/ui/badge';
-import { Input } from '../../client/src/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../client/src/components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
+import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
+import { Input } from '../ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { 
   Shield, 
   Settings, 
